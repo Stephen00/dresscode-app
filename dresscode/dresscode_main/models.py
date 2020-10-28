@@ -25,3 +25,15 @@ class Poll(models.Model):
     answer2 = models.TextField()
     answer = models.TextField()
     tags = models.ManyToManyField(Tags)
+
+
+class Media(models.Model):
+    video = models.FileField()
+    image = models.ImageField()
+
+class Article(models.Model):
+    title = models.TextField()
+    media1 = models.ForeignKey(Article, on_delete=models.SET_NULL)
+    paragraph = models.TextField()
+    tags = models.ManyToManyField(Tags)
+    
