@@ -5,8 +5,12 @@ from django.db import models
 class Tags(models.Model):
     tag = models.CharField(max_length=128)
 
+class Media(models.Model):
+    video = models.FileField()
+    image = models.ImageField()
 
 class QuizQuestions(models.Model):
+    media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
     answer = models.TextField()
     other1 = models.TextField()
@@ -20,20 +24,16 @@ class Quizzes(models.Model):
 
 
 class Poll(models.Model):
-    question = models.ManyToManyField(QuizQuestions)
+    media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
+    question = models.TextField()
     answer1 = models.TextField()
     answer2 = models.TextField()
     answer = models.TextField()
     tags = models.ManyToManyField(Tags)
 
-
-class Media(models.Model):
-    video = models.FileField()
-    image = models.ImageField()
-
 class Article(models.Model):
     title = models.TextField()
-    media1 = models.ForeignKey(Article, on_delete=models.SET_NULL)
+    media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
     paragraph = models.TextField()
     tags = models.ManyToManyField(Tags)
     
