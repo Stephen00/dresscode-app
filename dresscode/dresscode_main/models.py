@@ -19,6 +19,19 @@ class QuizQuestions(models.Model):
     other2 = models.TextField()
     other3 = models.TextField()
     
+    def get_randomised_answers(self):
+        ans=[self.answer, self.other1, self.other2, self.other3]
+        for i in range(10):
+            x=random.randint(len(ans))
+            y=random.randint(len(ans))
+            ans[x], ans[y] = ans[y], ans[x]
+            
+    def check_answer(self, guess):
+        if guess==answer:
+            return True
+        else:
+            return False
+    
 
 class Quizzes(models.Model):
     questions = models.ManyToManyField(QuizQuestions)
@@ -30,8 +43,19 @@ class Poll(models.Model):
     question = models.TextField()
     answer1 = models.TextField()
     answer2 = models.TextField()
-    answer = models.TextField()
+    answer3 = models.TextField()
+    counter1=models.IntegerField()
+    counter2=models.IntegerField()
+    counter3=models.IntegerField()
     tags = models.ManyToManyField(Tags)
+    
+    def vote_poll(self, answer):
+        if self.answer1==answer:
+            counter1+=1
+        if self.answer2==answer:
+            counter2+=1
+        if self.answer3==answer:
+            counter3+=1
 
 
 class Article(models.Model):
@@ -62,3 +86,12 @@ class Post(models.Model):
             
     def full_title(self):
         return self.post_type()+" : "+self.title()
+        
+    def react1(self):
+        reaction1_counter+=1
+        
+    def react2(self):
+        reaction2_counter+=1
+        
+    def react3(self):
+        reaction3_counter+=1
