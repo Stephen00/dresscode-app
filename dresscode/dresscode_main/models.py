@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 
 # Create your models here.
-class Tags(models.Model):
+class Tag(models.Model):
     tag = models.CharField(max_length=128)
 
 class Media(models.Model):
@@ -12,7 +12,7 @@ class Media(models.Model):
     image = models.ImageField()
 
 class QuizQuestion(models.Model):
-    media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
+    media = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
     answer = models.TextField()
     other1 = models.TextField()
@@ -34,8 +34,8 @@ class QuizQuestion(models.Model):
     
 
 class Quiz(models.Model):
-    questions = models.ManyToManyField(QuizQuestions)
-    tags = models.ManyToManyField(Tags)
+    questions = models.ManyToManyField(QuizQuestion)
+    tags = models.ManyToManyField(Tag)
 
 
 class Poll(models.Model):
@@ -44,10 +44,10 @@ class Poll(models.Model):
     answer1 = models.TextField()
     answer2 = models.TextField()
     answer3 = models.TextField()
-    counter1=models.IntegerField()
-    counter2=models.IntegerField()
-    counter3=models.IntegerField()
-    tags = models.ManyToManyField(Tags)
+    counter1=models.IntegerField(default=0)
+    counter2=models.IntegerField(default=0)
+    counter3=models.IntegerField(default=0)
+    tags = models.ManyToManyField(Tag)
     
     def vote_poll(self, answer):
         if self.answer1==answer:
@@ -62,15 +62,15 @@ class Article(models.Model):
     title = models.TextField()
     media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
     paragraph = models.TextField()
-    tags = models.ManyToManyField(Tags)
+    tags = models.ManyToManyField(Tag)
     
     
 class Post(models.Model):
     author=models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     description=models.TextField()
-    reaction1_counter=models.IntegerField()
-    reaction2_counter=models.IntegerField()
-    reaction3_counter=models.IntegerField()
+    reaction1_counter=models.IntegerField(default=0)
+    reaction2_counter=models.IntegerField(default=0)
+    reaction3_counter=models.IntegerField(default=0)
     content_type=models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id=models.PositiveIntegerField()
     content=GenericForeignKey('content_type', 'object_id')
