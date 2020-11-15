@@ -8,11 +8,8 @@ django.setup()
 
 from django.contrib.auth.models import User
 
-<<<<<<< HEAD
-from dresscode_main.models import Tags, Media, Quiz, QuizQuestion, Poll, Article
-=======
-from dresscode_main.models import Tag, Media, Quiz, QuizQuestion, Poll, Article, Post
->>>>>>> 40a70351b882c3a0171afe016faad93b282a9949
+from dresscode_main.models import Tags, Media, Quiz, QuizQuestion, Poll, Article, Post
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 temp = os.path.join(BASE_DIR, 'temp.jpg')
