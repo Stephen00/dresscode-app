@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 from django.core.files.base import ContentFile
 
-from core.models import Tags, Media, Quiz, QuizQuestion, Poll, Article, Post
+from dresscode_main.models import Tag, Media, Quiz, QuizQuestion, Poll, Article, Post
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 temp=os.path.join(BASE_DIR, 'temp.jpg')

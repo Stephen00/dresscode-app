@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 
 # Create your models here.
-class Tags(models.Model):
+class Tag(models.Model):
     tag = models.CharField(max_length=128)
 
 class Media(models.Model):
@@ -34,8 +34,8 @@ class QuizQuestion(models.Model):
     
 
 class Quiz(models.Model):
-    questions = models.ManyToManyField(QuizQuestions)
-    tags = models.ManyToManyField(Tags)
+    questions = models.ManyToManyField(QuizQuestion)
+    tags = models.ManyToManyField(Tag)
 
 
 class Poll(models.Model):
@@ -47,7 +47,7 @@ class Poll(models.Model):
     counter1=models.IntegerField()
     counter2=models.IntegerField()
     counter3=models.IntegerField()
-    tags = models.ManyToManyField(Tags)
+    tags = models.ManyToManyField(Tag)
     
     def vote_poll(self, answer):
         if self.answer1==answer:
@@ -62,7 +62,7 @@ class Article(models.Model):
     title = models.TextField()
     media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
     paragraph = models.TextField()
-    tags = models.ManyToManyField(Tags)
+    tags = models.ManyToManyField(Tag)
     
     
 class Post(models.Model):
