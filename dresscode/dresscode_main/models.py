@@ -36,6 +36,13 @@ class QuizQuestion(models.Model):
 class Quiz(models.Model):
     questions = models.ManyToManyField(QuizQuestion)
     tags = models.ManyToManyField(Tag)
+    
+    def get_tags(self):
+        tags=self.tags
+        for q in self.questions.all():
+            tags = tags | q.tags
+        return tags
+
 
 
 class Poll(models.Model):
@@ -67,7 +74,7 @@ class Article(models.Model):
     
 class Post(models.Model):
     author=models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    description=models.TextField()
+    description=models.TextField(null=True)
     reaction1_counter=models.IntegerField(default=0)
     reaction2_counter=models.IntegerField(default=0)
     reaction3_counter=models.IntegerField(default=0)

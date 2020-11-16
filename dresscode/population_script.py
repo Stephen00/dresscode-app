@@ -6,8 +6,9 @@ import django
 
 django.setup()
 
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-
+from django.contrib.contenttypes.fields import GenericForeignKey
 from dresscode_main.models import Tag, Media, Quiz, QuizQuestion, Poll, Article, Post
 
 
@@ -24,6 +25,7 @@ def main():
         QuizQuestion.objects.all().delete()
         Poll.objects.all().delete()
         Article.objects.all().delete()
+        Post.objects.all.delete()
         print("Table cleaned")
 
     ### Create users
@@ -118,7 +120,14 @@ def main():
             q.tags.add(tag)
         q.save()
     print("Quiz Questions made")
-
+    
+    q=Quiz()
+    q.save()
+    q.questions.add(QuizQuestion.objects.all()[0])
+    q.questions.add(QuizQuestion.objects.all()[1])
+    q.questions.add(QuizQuestion.objects.all()[2])
+    q.save()
+    print("Quiz Made")
 
 if __name__ == '__main__':
     main()
