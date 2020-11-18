@@ -18,6 +18,7 @@ class QuizQuestion(models.Model):
     other1 = models.TextField()
     other2 = models.TextField()
     other3 = models.TextField()
+    tags=models.ManyToManyField(Tag)
     
     def get_randomised_answers(self):
         ans=[self.answer, self.other1, self.other2, self.other3]
