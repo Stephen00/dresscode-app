@@ -23,4 +23,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('discover/articles/', views.get_all_articles),
+    path('discover/polls/', views.get_all_polls),
+    path('discover/quizzes/', views.get_all_quizzes),
+    path('api/tags/', views.get_all_tags),
 ]
