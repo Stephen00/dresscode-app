@@ -59,11 +59,11 @@ class Poll(models.Model):
     
     def vote_poll(self, answer):
         if self.answer1==answer:
-            counter1+=1
+            self.counter1+=1
         if self.answer2==answer:
-            counter2+=1
+            self.counter2+=1
         if self.answer3==answer:
-            counter3+=1
+            self.counter3+=1
 
 
 class Article(models.Model):
