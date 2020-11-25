@@ -1,8 +1,10 @@
 from django.test import TestCase
+from dresscode_main.models import Poll, Article, Tag, QuizQuestion, Post
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
-from dresscode_main.models import Poll, Article, Tag, QuizQuestion
 
-
+# Create initial test data
 class testAttributes(TestCase):
 
     def setUp(self):
@@ -36,6 +38,10 @@ class testAttributes(TestCase):
                                          other3="int var ==1;")
         qq.save()
 
+
+
+
+
     # Test Cases here
     def testPollQuestion(self):
         test_poll = Poll.objects.all()[0]
@@ -43,12 +49,15 @@ class testAttributes(TestCase):
 
     def testPollReaction(self):
         test_poll = Poll.objects.all()[0]
-
-        self.assertEquals(test_poll.counter1, 7)
+        test_poll.vote_poll("Python")  # Increment each poll vote by one
+        test_poll.vote_poll("Java")
+        test_poll.vote_poll("C++")
+        self.assertEquals(test_poll.counter1, 8)
+        self.assertEquals(test_poll.counter2, 10)
+        self.assertEquals(test_poll.counter3, 12)
 
     def testPollAnswer(self):
         test_poll = Poll.objects.all()[0]
-        test_poll.vote_poll("Python")
         self.assertEquals(test_poll.answer1, "Python")
 
     def testArticleTitle(self):
@@ -70,5 +79,23 @@ class testAttributes(TestCase):
 
     def testQuizQuestionAnswer(self):
         test_question = QuizQuestion.objects.all()[0]
-        #print(test_question.check_answer("int var = 1;"))
+        test_question.check_answer("int var = 1;")
         self.assertEquals(test_question.answer, "int var = 1;")
+        self.assertEquals(test_question.check_answer("an incorrect answer"), False)
+
+    def testRandomizedAnswers(self):
+        test_question = QuizQuestion.objects.all()[0]
+        question_matched = False
+
+        while not question_matched:
+            rnd1, rnd2 = test_question.get_randomised_answers()
+            if rnd1 == test_question.answer:
+                rnd1 = True
+                self.assertEquals(rnd1, True)
+                question_matched = True
+            elif rnd2 == test_question.answer:
+                rnd2 = True
+                self.assertEquals(rnd2, True)
+                question_matched = True
+
+
