@@ -96,10 +96,10 @@ class Post(models.Model):
         return self.post_type()+" : "+self.title()
         
     def react1(self):
-        reaction1_counter+=1
+        self.reaction1_counter+=1
         
     def react2(self):
-        reaction2_counter+=1
+        self.reaction2_counter+=1
         
     def react3(self):
-        reaction3_counter+=1
+        self.reaction3_counter+=1
