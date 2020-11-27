@@ -1,8 +1,7 @@
 from django.test import TestCase
-from dresscode_main.models import Poll, Article, Tag, QuizQuestion, Post
-from django.contrib.contenttypes.fields import GenericForeignKey
+from dresscode_main.models import Poll, Article, Tag, QuizQuestion, Quiz, Post
 from django.contrib.contenttypes.models import ContentType
-
+from django.db import models
 
 # Create initial test data
 class testAttributes(TestCase):
@@ -17,9 +16,7 @@ class testAttributes(TestCase):
             tag.save()
 
         # Create tasks to be used in test data
-        java_tag = Tag.objects.get(tag="Java")
         c_tag = Tag.objects.get(tag="C")
-        python_tag = Tag.objects.get(tag="Python")
 
         # Create test poll
         p = Poll.objects.create(media=None, question="What is your favourite programming language?", answer1="Python",
@@ -28,24 +25,40 @@ class testAttributes(TestCase):
 
         # Create test articles
         a = Article.objects.create(media1=None, title="Why Java is awesome",
-                                   paragraph="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus.")
+                                   paragraph="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem "
+                                             "mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis "
+                                             "diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. "
+                                             "Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean "
+                                             "quis leo in orci laoreet ullamcorper at nec lectus.")
         a.save()
 
-        # Create test  quiz question
+        # Create test quiz question
         qq = QuizQuestion.objects.create(media=None,
                                          question="What is the correct way to declare an integer variable equal to 1 in C#",
                                          answer="int var = 1;", other1="var = 1", other2="int var =1",
                                          other3="int var ==1;")
+        qq.tags.set([c_tag])
         qq.save()
 
+        # Code below currently broken and doesn't work, unable to link a content type instance to the Post.content_type
 
-
-
+        # # Create a content type instance
+        # ct = ContentType.objects.get(app_label='dresscode', model='QuizQuestion')
+        # ct_class = ct.model_class()
+        # ct_instance = ct_class()
+        # ct_instance.save()
+        #
+        # # Create test post
+        # post = Post()
+        # post.object_id = qq.pk
+        # post.content_type = ct_instance
+        # post.save()
 
     # Test Cases here
     def testPollQuestion(self):
         test_poll = Poll.objects.all()[0]
-        self.assertEquals(test_poll.question, "What is your favourite programming language?")
+        self.assertEquals(test_poll.question, "What is your favourite p"
+                                              "rogramming language?")
 
     def testPollReaction(self):
         test_poll = Poll.objects.all()[0]
@@ -97,5 +110,3 @@ class testAttributes(TestCase):
                 rnd2 = True
                 self.assertEquals(rnd2, True)
                 question_matched = True
-
-
