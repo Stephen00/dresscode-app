@@ -4,6 +4,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+from django.template.defaultfilters import slugify
+
 
 # Create your models here.
 class Tag(models.Model):
@@ -37,17 +39,23 @@ class QuizQuestion(models.Model):
             return True
         else:
             return False
-
+            
 
 class Quiz(models.Model):
     questions = models.ManyToManyField(QuizQuestion)
     tags = models.ManyToManyField(Tag)
+    slug=models.SlugField(unique=True)
 
     def get_tags(self):
         tags = self.tags
         for q in self.questions.all():
             tags = tags | q.tags
         return tags
+        
+    def save(self, *args, **kwargs):
+        if self.id:
+            self.slug=slugify(self.id)
+        super(Quiz, self).save(*args, **kwargs)
 
 
 class Poll(models.Model):
@@ -60,6 +68,7 @@ class Poll(models.Model):
     counter2 = models.IntegerField(default=0)
     counter3 = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag)
+    slug=models.SlugField(unique=True)
 
     def vote_poll(self, answer):
         if self.answer1 == answer:
@@ -68,13 +77,24 @@ class Poll(models.Model):
             self.counter2 += 1
         if self.answer3 == answer:
             self.counter3 += 1
+            
+    def save(self, *args, **kwargs):
+        if self.question:
+            self.slug=slugify(self.question)
+        super(Poll, self).save(*args, **kwargs)
 
 
 class Article(models.Model):
-    title = models.TextField()
+    title = models.TextField(unique=True)
     media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
     paragraph = models.TextField()
     tags = models.ManyToManyField(Tag)
+    slug=models.SlugField(unique=True)
+    
+    def save(self, *args, **kwargs):
+        if self.title:
+            self.slug=slugify(self.title)
+        super(Article, self).save(*args, **kwargs)
 
 
 class Post(models.Model):

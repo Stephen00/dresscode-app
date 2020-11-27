@@ -23,7 +23,7 @@ def get_all_tags(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])
-def get_all_quizzes(request):
+def discover_quizzes(request):
     if request.method == 'GET':
         data = Quiz.objects.all()
 
@@ -40,7 +40,7 @@ def get_all_quizzes(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 @api_view(['GET', 'POST'])
-def get_all_polls(request):
+def discover_polls(request):
     if request.method == 'GET':
         data = Poll.objects.all()
 
@@ -58,7 +58,7 @@ def get_all_polls(request):
 
 
 @api_view(['GET', 'POST'])
-def get_all_articles(request):
+def discover_articles(request):
     if request.method == 'GET':
         data = Article.objects.all()
 
