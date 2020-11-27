@@ -25,7 +25,8 @@ def main():
         QuizQuestion.objects.all().delete()
         Poll.objects.all().delete()
         Article.objects.all().delete()
-        Post.objects.all.delete()
+        Post.objects.all().delete()
+        ContentType.objects.all().delete()
         print("Table cleaned")
 
     ### Create users
@@ -45,7 +46,13 @@ def main():
     user4.save()
     user5.save()
     print("Users made")
-
+    
+    post_enabled_models=['Quiz', 'Poll', 'Article']
+    for m in post_enabled_models:
+        c=ContentType.objects.get_or_create(app_label='dresscode_main', model=m)[0]
+        c.save()
+    print("ContentType mades")
+    
     ##Creating tags
     tags=['Java','Databases','C','Python','Algorithms','Sigma16','Deep Neural Networks','WebApp','Game Dev','Back-End','Front-End','Threading','Django','AJAX','React','SQL','Functional Programming','Machine Learning','C++']
     #Here we create the tags
@@ -62,16 +69,16 @@ def main():
         {'title': "Why Java is awesome",
          'paragraph': "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus. Nam sit amet tristique sem. Mauris dignissim eros dignissim, suscipit tellus id, ornare dui. Nullam ac varius nibh. Ut ac molestie metus, eu scelerisque lacus. Maecenas velit quam, interdum quis tempus id, feugiat eu ex. In eget dui a turpis maximus cursus. Nulla congue non lectus quis sagittis. Morbi non pretium lacus.",
          'media': None, 'tags': [java_tag]},
-        {'title': "Why Python is awesome",
+        {'title': "Why Python is cool",
          'paragraph': "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam faucibus vel mi vitae varius. Praesent at erat magna. Praesent condimentum imperdiet nisl at varius. Etiam quis arcu ligula. Aenean efficitur neque in ultrices rhoncus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Suspendisse semper nisl vel tellus lobortis sollicitudin. Vestibulum vehicula massa eros, quis luctus enim rutrum sit amet. Aenean placerat turpis vel erat sodales pulvinar.",
          'media': None, 'tags': [python_tag]},
-        {'title': "Why C is awesome",
+        {'title': "Why C is incredible",
          'paragraph': "Fusce vulputate, libero ac ornare elementum, urna mauris rhoncus neque, non sagittis nibh magna nec orci. Nunc mauris nunc, viverra a efficitur ut, dictum at eros. Sed imperdiet nisl turpis, a imperdiet lorem feugiat non. Aliquam viverra commodo purus, in fermentum nunc maximus eu. Integer rutrum tincidunt metus vel viverra. Nulla pellentesque purus ex, in luctus arcu hendrerit at. Praesent ac gravida nisi. Etiam risus nibh, ullamcorper sed erat vel, ultricies aliquam risus. Vivamus augue quam, accumsan ac suscipit eget, fringilla ac sem.",
          'media': None, 'tags': [c_tag]},
-        {'title': "Why JavaScript is awesome",
+        {'title': "Why JavaScript is amazing",
          'paragraph': "Aliquam viverra nisi eu fringilla volutpat. Etiam eget dui sodales, consectetur metus sed, maximus est. Fusce porta tellus sed augue pretium fringilla. Aliquam mollis rhoncus posuere. In finibus nunc lorem, sit amet elementum dui tempus ac. Etiam volutpat maximus ligula, vitae eleifend dui hendrerit a. Maecenas augue ipsum, accumsan vel elementum ut, molestie eget risus. Vestibulum pharetra ligula ac nunc laoreet scelerisque. Aenean vel quam a tortor dictum elementum non congue dui. Mauris justo leo, convallis nec tellus eu, blandit sodales justo. Nunc laoreet sapien nec turpis finibus, et volutpat lacus condimentum. Nunc sed magna bibendum, feugiat enim quis, imperdiet odio. Integer consectetur mi et nisl tempus dictum. Praesent finibus mauris est, et condimentum magna eleifend eu. Aenean consequat maximus ante in venenatis.",
          'media': None, 'tags': []},
-        {'title': "Why C++ is awesome",
+        {'title': "Why C++ is terrific",
          'paragraph': "Praesent eu rutrum lectus, sit amet tempor sem. Nam varius, risus at sodales consectetur, sapien magna suscipit metus, non congue orci purus a nibh. Nulla est sem, dictum non interdum et, luctus at lacus. Pellentesque sollicitudin congue rhoncus. Donec porta laoreet sollicitudin. Fusce lacinia eleifend arcu et eleifend. Aenean in tempus mi, ac mattis enim. Ut a facilisis orci. Nunc interdum lobortis lacus, at tristique nisl placerat sit amet. Nullam a mattis quam.",
          'media': None, 'tags': []},
     ]
