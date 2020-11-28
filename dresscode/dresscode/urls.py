@@ -27,5 +27,7 @@ urlpatterns = [
     path('discover/polls/', views.discover_polls),
     path('discover/quizzes/', views.discover_quizzes),
     path('discover/articles/<slug:article_slug>/', views.get_custom_article),
+    path('discover/quizzes/<slug:quiz_slug>/', views.get_custom_quiz),
+    path('discover/polls/<slug:poll_slug>/', views.get_custom_poll),
     path('api/tags/', views.get_all_tags),
 ]
