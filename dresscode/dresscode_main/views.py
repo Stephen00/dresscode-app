@@ -5,6 +5,36 @@ from rest_framework import status
 from .models import *
 from .serializers import *
 
+@api_view(['GET'])
+def get_custom_article(request, article_slug):
+    if request.method == 'GET':
+        try:
+            article=Article.objects.get(slug=article_slug)
+            serializer = ArticleSerializer(article, context={'request': request})
+            return Response(serializer.data)
+        except:
+            return Response("no article found", status=status.HTTP_204_NO_CONTENT)
+            
+@api_view(['GET'])
+def get_custom_quiz(request, quiz_slug):
+    if request.method == 'GET':
+        try:
+            quiz=Quiz.objects.get(slug=quiz_slug)
+            serializer = QuizSerializer(quiz, context={'request': request})
+            return Response(serializer.data)
+        except:
+            return Response("no quiz found", status=status.HTTP_204_NO_CONTENT)
+            
+@api_view(['GET'])
+def get_custom_poll(request, poll_slug):
+    if request.method == 'GET':
+        try:
+            poll=Poll.objects.get(slug=poll_slug)
+            serializer = PollSerializer(poll, context={'request': request})
+            return Response(serializer.data)
+        except:
+            return Response("no poll found", status=status.HTTP_204_NO_CONTENT)
+
 @api_view(['GET', 'POST'])
 def get_all_tags(request):
     if request.method == 'GET':
