@@ -14,12 +14,12 @@ class QuizQuestionSerializer(serializers.ModelSerializer):
 class QuizSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quiz 
-        fields = ('pk', 'questions', 'tags')
+        fields = ('pk', 'questions', 'tags', 'slug')
         
 class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll 
-        fields = ('pk', 'question', 'media', 'answer1', 'answer2', 'answer3', 'counter1', 'counter2', 'counter3',)
+        fields = ('pk', 'question', 'media', 'answer1', 'answer2', 'answer3', 'counter1', 'counter2', 'counter3', 'slug')
         
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,7 +29,7 @@ class TagSerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article 
-        fields = ('pk', 'title', 'media1', 'paragraph', 'tags')
+        fields = ('pk', 'title', 'media1', 'paragraph', 'tags', 'slug')
         
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
