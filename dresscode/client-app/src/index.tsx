@@ -5,6 +5,7 @@ import 'semantic-ui-css/semantic.min.css'
 import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
   <BrowserRouter>

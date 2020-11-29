@@ -1,0 +1,32 @@
+.card {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: #74529E;
+    padding-bottom: 10px;
+}
+
+.image-section {
+    text-align: center;
+}
+
+img{
+    width: 600px;
+    height: 400px;
+}
+
+.text {
+    color: #74529E;
+}
+
+span {
+    color: #74529E;
+}
+
+span {
+    padding-right: 10px;
+    padding-left: 10px; 
+}
+
+.border-secondary {
+    color: #74529E;
+}
