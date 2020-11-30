@@ -21,9 +21,9 @@ class QuizQuestion(models.Model):
     media = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
     answer = models.TextField()
-    other1 = models.TextField()
-    other2 = models.TextField()
-    other3 = models.TextField()
+    other1 = models.JSONField()
+    #other2 = models.TextField()
+    #other3 = models.TextField()
     tags = models.ManyToManyField(Tag)
 
     def get_randomised_answers(self):
@@ -61,12 +61,12 @@ class Quiz(models.Model):
 class Poll(models.Model):
     media = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
-    answer1 = models.TextField()
-    answer2 = models.TextField()
-    answer3 = models.TextField()
-    counter1 = models.IntegerField(default=0)
-    counter2 = models.IntegerField(default=0)
-    counter3 = models.IntegerField(default=0)
+    answer1 = models.JSONField()
+    #answer2 = models.TextField()
+    #answer3 = models.TextField()
+    counter1 = models.JSONField
+    #counter2 = models.IntegerField(default=0)
+    #counter3 = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag)
     slug=models.SlugField(unique=True)
 
@@ -87,7 +87,7 @@ class Poll(models.Model):
 class Article(models.Model):
     title = models.TextField(unique=True)
     media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
-    paragraph = models.TextField()
+    paragraph = models.JSONField
     tags = models.ManyToManyField(Tag)
     slug=models.SlugField(unique=True)
     
