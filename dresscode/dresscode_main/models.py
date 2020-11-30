@@ -22,8 +22,8 @@ class QuizQuestion(models.Model):
     question = models.TextField()
     answer = models.TextField()
     other1 = models.JSONField()
-    #other2 = models.TextField()
-    #other3 = models.TextField()
+    other2 = models.JSONField()
+    other3 = models.JSONField()
     tags = models.ManyToManyField(Tag)
 
     def get_randomised_answers(self):
@@ -67,11 +67,11 @@ class Poll(models.Model):
     media = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
     answer1 = models.JSONField()
-    #answer2 = models.TextField()
-    #answer3 = models.TextField()
+    answer2 = models.JSONField()
+    answer3 = models.JSONField()
     counter1 = models.JSONField
-    #counter2 = models.IntegerField(default=0)
-    #counter3 = models.IntegerField(default=0)
+    counter2 = models.IntegerField(default=0)
+    counter3 = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag)
     slug=models.SlugField(unique=True)
 
