@@ -69,7 +69,7 @@ class Poll(models.Model):
     answer1 = models.JSONField()
     answer2 = models.JSONField()
     answer3 = models.JSONField()
-    counter1 = models.JSONField
+    counter1 = models.IntegerField(default=0)
     counter2 = models.IntegerField(default=0)
     counter3 = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag)
@@ -97,7 +97,7 @@ class Poll(models.Model):
 class Article(models.Model):
     title = models.TextField(unique=True)
     media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
-    paragraph = models.JSONField
+    paragraph = models.JSONField()
     tags = models.ManyToManyField(Tag)
     slug=models.SlugField(unique=True)
     
