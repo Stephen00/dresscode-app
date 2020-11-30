@@ -22,8 +22,8 @@ class QuizQuestion(models.Model):
     question = models.TextField()
     answer = models.TextField()
     other1 = models.JSONField()
-    #other2 = models.TextField()
-    #other3 = models.TextField()
+    other2 = models.JSONField()
+    other3 = models.JSONField()
     tags = models.ManyToManyField(Tag)
 
     def get_randomised_answers(self):
@@ -53,20 +53,25 @@ class Quiz(models.Model):
         return tags
         
     def save(self, *args, **kwargs):
+        mk_post=True
         if self.id:
+            mk_post=False
             self.slug=slugify(self.id)
         super(Quiz, self).save(*args, **kwargs)
+        if mk_post==True:
+            post = Post(content=self)
+            post.save()
 
 
 class Poll(models.Model):
     media = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
     answer1 = models.JSONField()
-    #answer2 = models.TextField()
-    #answer3 = models.TextField()
-    counter1 = models.JSONField
-    #counter2 = models.IntegerField(default=0)
-    #counter3 = models.IntegerField(default=0)
+    answer2 = models.JSONField()
+    answer3 = models.JSONField()
+    counter1 = models.IntegerField(default=0)
+    counter2 = models.IntegerField(default=0)
+    counter3 = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag)
     slug=models.SlugField(unique=True)
 
@@ -79,22 +84,32 @@ class Poll(models.Model):
             self.counter3 += 1
             
     def save(self, *args, **kwargs):
+        mk_post=True
         if self.question:
+            mk_post=False
             self.slug=slugify(self.question)
         super(Poll, self).save(*args, **kwargs)
+        if mk_post==True:
+            postpoll=Post(content=self)
+            postpoll.save()
 
 
 class Article(models.Model):
     title = models.TextField(unique=True)
     media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
-    paragraph = models.JSONField
+    paragraph = models.JSONField()
     tags = models.ManyToManyField(Tag)
     slug=models.SlugField(unique=True)
     
     def save(self, *args, **kwargs):
+        mk_post=True
         if self.title:
+            mk_post=False
             self.slug=slugify(self.title)
         super(Article, self).save(*args, **kwargs)
+        if mk_post==True:
+            postart=Post(content=self)
+            postart.save()
 
 
 class Post(models.Model):
