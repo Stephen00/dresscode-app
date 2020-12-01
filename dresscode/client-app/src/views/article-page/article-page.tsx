@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { IArticle } from "../../app/models/article";
 import Picture from "../../assets/shutterstock_256173265_edit.jpg"
@@ -19,7 +19,6 @@ const ArticlePage = () => {
 
     return (
         <div>
-            <h1>Article Page</h1>
             <div className="container">
                 {articles.map((article: any) => (
                     <div className="card" style={{borderColor: "#74529E"}} key={article.pk} >
