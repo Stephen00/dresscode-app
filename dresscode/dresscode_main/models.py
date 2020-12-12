@@ -61,6 +61,9 @@ class Quiz(models.Model):
         if mk_post==True:
             post = Post(content=self)
             post.save()
+    
+    def __str__(self):
+        return "Quiz "+str(self.id)
 
 
 class Poll(models.Model):
@@ -75,6 +78,9 @@ class Poll(models.Model):
     tags = models.ManyToManyField(Tag)
     slug=models.SlugField(unique=True)
 
+    def __str__(self):
+        return self.question
+    
     def vote_poll(self, answer):
         if self.answer1 == answer:
             self.counter1 += 1
@@ -84,9 +90,12 @@ class Poll(models.Model):
             self.counter3 += 1
             
     def save(self, *args, **kwargs):
-        mk_post=True
-        if self.question:
+        try:
+            Poll    .objects.get(pk=self.id)
             mk_post=False
+        except:
+            mk_post=True
+        if self.question:
             self.slug=slugify(self.question)
         super(Poll, self).save(*args, **kwargs)
         if mk_post==True:
@@ -102,14 +111,20 @@ class Article(models.Model):
     slug=models.SlugField(unique=True)
     
     def save(self, *args, **kwargs):
-        mk_post=True
-        if self.title:
+        try:
+            Article.objects.get(pk=self.id)
             mk_post=False
+        except:
+            mk_post=True
+        if self.title:
             self.slug=slugify(self.title)
         super(Article, self).save(*args, **kwargs)
         if mk_post==True:
             postart=Post(content=self)
             postart.save()
+    
+    def __str__(self):
+        return self.title
 
 
 class Post(models.Model):

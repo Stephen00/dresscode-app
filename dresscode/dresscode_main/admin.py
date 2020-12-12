@@ -35,7 +35,10 @@ class ArticleAdmin(admin.ModelAdmin):
     list_display=('title', 'paragraph', 'media1', 'tagged_as')
     
     def tagged_as(self, obj):
-        return " / \n".join([tag.tag for tag in obj.tags.all()])     
+        return " / \n".join([tag.tag for tag in obj.tags.all()]) 
+
+class PostAdmin(admin.ModelAdmin):
+    list_display=('author', 'description', 'content', 'content_type', 'reaction1_counter', 'reaction2_counter', 'reaction3_counter',)
     
 admin.site.register(Media, MediaAdmin)
 admin.site.register(Quiz, QuizAdmin)
@@ -43,3 +46,4 @@ admin.site.register(QuizQuestion, QuizQuestionAdmin)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Poll, PollAdmin)
 admin.site.register(Tag, TagAdmin)
+admin.site.register(Post, PostAdmin)
