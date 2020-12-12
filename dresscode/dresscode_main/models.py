@@ -10,6 +10,9 @@ from django.template.defaultfilters import slugify
 # Create your models here.
 class Tag(models.Model):
     tag = models.CharField(max_length=128)
+    
+    def __str__(self):
+        return self.tag
 
 
 class Media(models.Model):
@@ -39,6 +42,9 @@ class QuizQuestion(models.Model):
             return True
         else:
             return False
+    
+    def __str__(self):
+        return self.question
             
 
 class Quiz(models.Model):
@@ -107,7 +113,7 @@ class Article(models.Model):
     title = models.TextField(unique=True)
     media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
     paragraph = models.JSONField()
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, null=True)
     slug=models.SlugField(unique=True)
     
     def save(self, *args, **kwargs):
