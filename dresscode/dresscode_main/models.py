@@ -21,13 +21,10 @@ class Media(models.Model):
 
 
 class QuizQuestion(models.Model):
-    media = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
+    media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
-    answer = models.TextField()
-    other1 = models.JSONField()
-    other2 = models.JSONField()
-    other3 = models.JSONField()
-    tags = models.ManyToManyField(Tag)
+    answers = models.JSONField()
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def get_randomised_answers(self):
         ans = [self.answer, self.other1, self.other2, self.other3]
@@ -49,7 +46,7 @@ class QuizQuestion(models.Model):
 
 class Quiz(models.Model):
     questions = models.ManyToManyField(QuizQuestion)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
     slug=models.SlugField(unique=True)
 
     def get_tags(self):
@@ -73,16 +70,11 @@ class Quiz(models.Model):
 
 
 class Poll(models.Model):
-    media = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
+    media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
-    answer1 = models.JSONField()
-    answer2 = models.JSONField()
-    answer3 = models.JSONField()
-    counter1 = models.IntegerField(default=0)
-    counter2 = models.IntegerField(default=0)
-    counter3 = models.IntegerField(default=0)
-    tags = models.ManyToManyField(Tag)
-    slug=models.SlugField(unique=True)
+    answers = models.JSONField()
+    tags = models.ManyToManyField(Tag, blank=True)
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
         return self.question
@@ -111,9 +103,9 @@ class Poll(models.Model):
 
 class Article(models.Model):
     title = models.TextField(unique=True)
-    media1 = models.ForeignKey(Media, null=True, on_delete=models.SET_NULL)
-    paragraph = models.JSONField()
-    tags = models.ManyToManyField(Tag, null=True)
+    media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
+    text = models.JSONField()
+    tags = models.ManyToManyField(Tag, blank=True)
     slug=models.SlugField(unique=True)
     
     def save(self, *args, **kwargs):
@@ -134,7 +126,7 @@ class Article(models.Model):
 
 
 class Post(models.Model):
-    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     description = models.TextField(null=True)
     reaction1_counter = models.IntegerField(default=0)
     reaction2_counter = models.IntegerField(default=0)

@@ -1,18 +1,19 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
 from dresscode_main.models import *
+from django import forms
+
 
 class TagAdmin(admin.ModelAdmin):
     list_display=('tag',)
 
 class QuizQuestionAdmin(admin.ModelAdmin):
-    list_display = ('question', 'answer', 'other1', 'other2', 'other3', 'tagged_as')
-    
+    list_display = ('question', 'answers', 'tagged_as')
+
     def tagged_as(self, obj):
         return " / \n".join([tag.tag for tag in obj.tags.all()])
-    
+        
 class QuizAdmin(admin.ModelAdmin):
     list_display=('has_questions', 'tagged_as')
     
@@ -23,7 +24,7 @@ class QuizAdmin(admin.ModelAdmin):
         return " / \n".join([tag.tag for tag in obj.tags.all()])
     
 class PollAdmin(admin.ModelAdmin):
-    list_display=('question', 'answer1', 'answer2', 'answer3', 'media', 'tagged_as')
+    list_display=('question', 'answers', 'media', 'tagged_as')
     
     def tagged_as(self, obj):
         return " / \n".join([tag.tag for tag in obj.tags.all()])
@@ -32,7 +33,7 @@ class MediaAdmin(admin.ModelAdmin):
     list_display=('video', 'image')
     
 class ArticleAdmin(admin.ModelAdmin):
-    list_display=('title', 'paragraph', 'media1', 'tagged_as')
+    list_display=('title', 'text', 'media', 'tagged_as')
     
     def tagged_as(self, obj):
         return " / \n".join([tag.tag for tag in obj.tags.all()]) 
