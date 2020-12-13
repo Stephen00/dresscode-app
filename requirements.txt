@@ -1,9 +1,13 @@
 asgiref==3.2.10
 certifi==2020.6.20
 Django==3.1.2
+django-admin-json-editor==0.2.3
 django-cors-headers==3.5.0
 djangorestframework==3.12.1
+future==0.18.2
 Pillow==8.0.1
 pytz==2020.1
+six==1.15.0
 sqlparse==0.4.1
+standardjson==0.3.1
 wincertstore==0.2
