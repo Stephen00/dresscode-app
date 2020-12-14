@@ -3,6 +3,7 @@ import axios from "axios";
 import { IArticle } from "../../app/models/article";
 import Picture from "../../assets/shutterstock_256173265_edit.jpg"
 import './article-page.css';
+import { Button, Card, Col, Row } from 'react-bootstrap';
 
 const ArticlePage = () => {
     const [articles, setArticles] = useState<IArticle[]>([]);
@@ -20,39 +21,39 @@ const ArticlePage = () => {
     return (
         <div>
             <div className="container">
-                {articles.map((article: any) => (
-                    <div className="card" style={{borderColor: "#74529E"}} key={article.pk} >
-                        <div className="card-body">
-                            <h5 className="text" style={{textAlign: "right"}}>21/10/2020</h5>
-                            <h3 className="card-title text">{article.title}</h3>
-                            <div className="image-section">
-                                <img src={Picture} alt="no picture found" />
-                            </div>
+                {articles.map((article: any) => (  
+                    <Card key={article.pk}>
+                        <Card.Title className="date-style text-color" style={{textAlign: "right"}}>21/10/2020</Card.Title>
+                        <Card.Title className="text-color">{article.title}</Card.Title>
+                        <div className="image-section">
+                            <img src={Picture} alt="no picture found" />
                         </div>
-                        <div className="row">
-                            <div className="col-4" style={{textAlign: "center"}}>
-                                <span  style={{color: "#74529E"}}>
-                                    <i className="far fa-heart fa-2x">
-                                        <span>264</span>
-                                    </i>
-                                </span>
-                            </div>
-                            <div className="col-4" style={{textAlign: "center"}}>
-                                <span  style={{color: "#74529E"}}>
-                                    <i className="far fa-star fa-2x">
-                                        <span>25</span>
-                                    </i>
-                                </span>
-                            </div>
-                            <div className="col-4" style={{textAlign: "center"}}>
-                                <span  style={{color: "#74529E"}}>
-                                    <i className="far fa-share-square fa-2x">
-                                        <span>4</span>
-                                    </i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                        <Card.Body>
+                            <Row>
+                                <Col className="icon-style">
+                                    <span className="text-color">
+                                        <i className="far fa-star fa-2x">
+                                            <span>25</span>
+                                        </i>
+                                    </span>
+                                </Col>
+                                <Col className="icon-style">
+                                    <span className="text-color">
+                                        <i className="far fa-star fa-2x">
+                                            <span>25</span>
+                                        </i>
+                                    </span>
+                                </Col>
+                                <Col className="icon-style">
+                                    <span className="text-color">
+                                        <i className="far fa-share-square fa-2x">
+                                            <span>4</span>
+                                        </i>
+                                    </span>
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
                 ))}
             </div>
         </div>
