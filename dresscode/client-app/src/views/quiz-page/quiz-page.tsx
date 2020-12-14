@@ -1,7 +1,7 @@
 import React from "react";
-import './article-page.css';
+import './quiz-page.css';
 
-const ArticlePage = () => {
+const QuizPage = () => {
 
     return (
         <div>
@@ -10,4 +10,4 @@ const ArticlePage = () => {
     )
 }
 
-export default ArticlePage;
+export default QuizPage;
