@@ -1,0 +1,43 @@
+.image-section {
+    text-align: center;
+}
+
+img{
+    width: 600px;
+    height: 400px;
+}
+
+.text-color {
+    color: #74529E;
+}
+
+span {
+    padding-right: 10px;
+    padding-left: 10px; 
+}
+
+.icon-style {
+    text-align: center;
+}
+
+.date-style {
+    text-align: right;
+}
+
+card.title {
+    font-size: 100px;
+}
+
+.h5 {
+    font-size: 30px;
+}
+
+.card-title {
+    padding-left: 14%;
+}
+
+.card {
+    width: 90%;
+    border-color: #74529E;
+    padding: 10px 10px;
+}
