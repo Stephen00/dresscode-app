@@ -9,13 +9,15 @@ class MediaSerializer(serializers.ModelSerializer):
 
 
 class TagSerializer(serializers.ModelSerializer):
-    tag = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
     class Meta:
         model = Tag
         fields = ('pk', 'tag')
 
 
 class QuizQuestionSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True)
+    media = MediaSerializer()
+    
     class Meta:
         model = QuizQuestion
         media = MediaSerializer()
@@ -24,6 +26,8 @@ class QuizQuestionSerializer(serializers.ModelSerializer):
 
 
 class QuizSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True)
+    
     class Meta:
         model = Quiz
         questions = QuizQuestionSerializer(many=True)
@@ -31,18 +35,21 @@ class QuizSerializer(serializers.ModelSerializer):
 
 
 class PollSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True)
+    media = MediaSerializer()
+    
     class Meta:
         model = Poll
-        media = MediaSerializer()
-        tags = TagSerializer(many=True, read_only=True)
         fields = ('pk', 'question', 'media', 'answers', 'slug')
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True)
+    media = MediaSerializer()
+        
     class Meta:
         model = Article
-        media = MediaSerializer()
-        tags = TagSerializer(many=True, read_only=True)
+        depth=1
         fields = ('pk', 'title', 'media', 'text', 'tags', 'slug')
 
 
