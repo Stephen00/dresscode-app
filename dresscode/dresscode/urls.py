@@ -26,6 +26,7 @@ urlpatterns = [
     path('discover/articles/', views.discover_articles),
     path('discover/polls/', views.discover_polls),
     path('discover/quizzes/', views.discover_quizzes),
+    path('discover/posts/', views.discover_posts),
     path('discover/articles/<slug:article_slug>/', views.get_custom_article),
     path('discover/quizzes/<slug:quiz_slug>/', views.get_custom_quiz),
     path('discover/polls/<slug:poll_slug>/', views.get_custom_poll),
