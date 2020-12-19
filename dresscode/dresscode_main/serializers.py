@@ -67,11 +67,11 @@ class PostContentRelatedField(serializers.RelatedField):
         if isinstance(value, Quiz):
             serializer  = QuizSerializer(value)
         elif isinstance(value, QuizQuestion):
-            serializer  = QuizQuestionSerializer()
+            serializer  = QuizQuestionSerializer(value)
         elif isinstance(value, Article):
             serializer  = ArticleSerializer(value)
         elif isinstance(value, Poll):
-            serializer  = PollSerializer()
+            serializer  = PollSerializer(value)
         else:
             raise Exception('Unexpected type of content attached to Post.')
         return serializer.data
