@@ -6,6 +6,16 @@ from .models import *
 from .serializers import *
 
 @api_view(['GET'])
+def home(request):
+    if request.method == 'GET':
+        try:
+            post=Post.objects.all().order_by('-created_at')
+            serializer = PostSerializer(post, context={'request': request}, many=True)
+            return Response(serializer.data)
+        except:
+            return Response("no posts found", status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
 def get_custom_article(request, article_slug):
     if request.method == 'GET':
         try:
