@@ -81,6 +81,4 @@ class PostSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Post
-        fields = (
-            'pk', 'author', 'description', 'reaction1_counter', 'reaction2_counter', 'reaction3_counter', 'content',
-            'content_type', 'object_id')
+        fields = ('__all__')
