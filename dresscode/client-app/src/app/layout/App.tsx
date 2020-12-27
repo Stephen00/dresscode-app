@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import "./App.css";
 import axios from "axios";
 import { IArticle } from "../models/article";
 import NavBar from "../../features/navbar/NavBar";
-import Container from "../../features/container/container";
+import AppContainer from "../../features/container/container";
 
 const App = () => {
   const [articles, setArticles] = useState<IArticle[]>([]);
@@ -15,15 +15,10 @@ const App = () => {
   }, []);
 
   return (
-    <div>
+    <Fragment>
       <NavBar />
-      <Container />
-      {/* <ul>
-        {articles.map((article: any) => (
-          <li key={article.pk}>{article.title}</li>
-        ))}
-      </ul> */}
-    </div>
+      <AppContainer />
+    </Fragment>
   );
 };
 
