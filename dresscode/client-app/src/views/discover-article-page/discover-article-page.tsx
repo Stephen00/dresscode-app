@@ -42,7 +42,7 @@ const DiscoverArticlePage = () => {
             <Row>
               <Col className="icon-style">
                 <span className="text-color">
-                  <i className="far fa-star fa-2x">
+                  <i className="far fa-heart fa-2x">
                     <span>25</span>
                   </i>
                 </span>
