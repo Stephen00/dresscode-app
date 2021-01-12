@@ -1,26 +1,23 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from dresscode_main.models import Poll, Article, Tag, QuizQuestion, Quiz, Post
 from django.contrib.contenttypes.models import ContentType
-from django.db import models
+
 
 # Create initial test data
 class testAttributes(TestCase):
 
     def setUp(self):
-        # Initialise Tags
-        tags = ['Java', 'Databases', 'C', 'Python', 'Algorithms', 'Sigma16', 'Deep Neural Networks', 'WebApp',
-                'Game Dev', 'Back-End', 'Front-End', 'Threading', 'Django', 'AJAX', 'React', 'SQL',
-                'Functional Programming', 'Machine Learning', 'C++']
-        for t in tags:
-            tag = Tag(tag=t)
-            tag.save()
+        tag = Tag(tag='C')
+        tag.save()
 
         # Create tasks to be used in test data
         c_tag = Tag.objects.get(tag="C")
 
         # Create test poll
-        p = Poll.objects.create(media=None, question="What is your favourite programming language?", answers = {'answer1': 'Python', 'answer2': "Java", 'answer3': "C++", 'vote1': 7, 'vote2': 9, 'vote3': 11})
-
+        p = Poll.objects.create(media=None, question="What is your favourite programming language?",
+                                answers={'answer1': 'Python', 'answer2': "Java", 'answer3': "C++", 'vote1': 7,
+                                         'vote2': 9, 'vote3': 11})
         p.save()
 
         # Create test articles
@@ -35,24 +32,24 @@ class testAttributes(TestCase):
         # Create test quiz question
         qq = QuizQuestion.objects.create(media=None,
                                          question="What is the correct way to declare an integer variable equal to 1 in C#",
-                                         answers= {"answer": "int var = 1;", "other1":"var = 1", "other2":"int var =1",
-                                         "other3":"int var ==1;"})
+                                         answers={"answer": "int var = 1;", "other1": "var = 1", "other2": "int var =1",
+                                                 "other3": "int var ==1;"})
         qq.tags.set([c_tag])
         qq.save()
 
-        # Code below currently broken and doesn't work, unable to link a content type instance to the Post.content_type
+        # Create a test user
+        self.user = User.objects.create_user(username='testuser', password='12345')
 
-        # # Create a content type instance
-        # ct = ContentType.objects.get(app_label='dresscode', model='QuizQuestion')
-        # ct_class = ct.model_class()
-        # ct_instance = ct_class()
-        # ct_instance.save()
-        #
-        # # Create test post
-        # post = Post()
-        # post.object_id = qq.pk
-        # post.content_type = ct_instance
-        # post.save()
+        # Create test post
+        post = Post(author=self.user, description="This is a test post, here is some text", reaction1_counter=10,
+                    reaction2_counter=12, reaction3_counter=4, object_id=p.pk, content_type=ContentType.objects.get_or_create(app_label='dresscode_main', model='Poll')[0])
+        post.save()
+
+        # Create test Quiz/Post
+        quiz = Quiz.objects.create()
+        quiz.tags.set([c_tag])
+        quiz.questions.add(QuizQuestion.objects.all()[0])
+        quiz.save()
 
     # Test Cases here
     def testPollQuestion(self):
@@ -110,3 +107,25 @@ class testAttributes(TestCase):
                 rnd2 = True
                 self.assertEquals(rnd2, True)
                 question_matched = True
+
+    def testPostType(self):
+        test_post = Post.objects.all()[0]
+        post_c = test_post.post_type()
+        title = test_post.title()
+        full_title = test_post.full_title()
+        self.assertEquals(post_c, "poll")
+        self.assertEquals(title,"What is your favourite programming language?")
+        self.assertEquals(full_title, "poll : What is your favourite programming language?")
+
+    def testQuizType(self):
+        test_post = Post.objects.all()[3]
+        qq_c = test_post.post_type()
+        self.assertEquals(qq_c, 'quiz')
+
+    def testPostReact(self):
+        test_post = Post.objects.all()[2]
+        test_post.react1()
+        test_post.react2()
+        test_post.react3()
+        tot = test_post.reaction1_counter + test_post.reaction2_counter + test_post.reaction3_counter
+        self.assertEquals(tot, 29)
