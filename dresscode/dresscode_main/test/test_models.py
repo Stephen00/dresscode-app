@@ -19,13 +19,13 @@ class testAttributes(TestCase):
         c_tag = Tag.objects.get(tag="C")
 
         # Create test poll
-        p = Poll.objects.create(media=None, question="What is your favourite programming language?", answer1="Python",
-                                answer2="Java", answer3="C++", counter1=7, counter2=9, counter3=11)
+        p = Poll.objects.create(media=None, question="What is your favourite programming language?", answers = {'answer1': 'Python', 'answer2': "Java", 'answer3': "C++", 'vote1': 7, 'vote2': 9, 'vote3': 11})
+
         p.save()
 
         # Create test articles
-        a = Article.objects.create(media1=None, title="Why Java is awesome",
-                                   paragraph="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem "
+        a = Article.objects.create(media=None, title="Why Java is awesome",
+                                   text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem "
                                              "mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis "
                                              "diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. "
                                              "Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean "
@@ -35,8 +35,8 @@ class testAttributes(TestCase):
         # Create test quiz question
         qq = QuizQuestion.objects.create(media=None,
                                          question="What is the correct way to declare an integer variable equal to 1 in C#",
-                                         answer="int var = 1;", other1="var = 1", other2="int var =1",
-                                         other3="int var ==1;")
+                                         answers= {"answer": "int var = 1;", "other1":"var = 1", "other2":"int var =1",
+                                         "other3":"int var ==1;"})
         qq.tags.set([c_tag])
         qq.save()
 
@@ -65,13 +65,13 @@ class testAttributes(TestCase):
         test_poll.vote_poll("Python")  # Increment each poll vote by one
         test_poll.vote_poll("Java")
         test_poll.vote_poll("C++")
-        self.assertEquals(test_poll.counter1, 8)
-        self.assertEquals(test_poll.counter2, 10)
-        self.assertEquals(test_poll.counter3, 12)
+        self.assertEquals(test_poll.answers["vote1"], 8)
+        self.assertEquals(test_poll.answers["vote2"], 10)
+        self.assertEquals(test_poll.answers["vote3"], 12)
 
     def testPollAnswer(self):
         test_poll = Poll.objects.all()[0]
-        self.assertEquals(test_poll.answer1, "Python")
+        self.assertEquals(test_poll.answers["answer1"], "Python")
 
     def testArticleTitle(self):
         test_article = Article.objects.all()[0]
@@ -79,7 +79,7 @@ class testAttributes(TestCase):
 
     def testArticleParagraph(self):
         test_article = Article.objects.all()[0]
-        self.assertEquals(test_article.paragraph, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem "
+        self.assertEquals(test_article.text, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem "
                                                   "mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis "
                                                   "diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. "
                                                   "Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. "
@@ -93,7 +93,7 @@ class testAttributes(TestCase):
     def testQuizQuestionAnswer(self):
         test_question = QuizQuestion.objects.all()[0]
         test_question.check_answer("int var = 1;")
-        self.assertEquals(test_question.answer, "int var = 1;")
+        self.assertEquals(test_question.answers["answer"], "int var = 1;")
         self.assertEquals(test_question.check_answer("an incorrect answer"), False)
 
     def testRandomizedAnswers(self):
@@ -102,11 +102,11 @@ class testAttributes(TestCase):
 
         while not question_matched:
             rnd1, rnd2 = test_question.get_randomised_answers()
-            if rnd1 == test_question.answer:
+            if rnd1 == test_question.answers["answer"]:
                 rnd1 = True
                 self.assertEquals(rnd1, True)
                 question_matched = True
-            elif rnd2 == test_question.answer:
+            elif rnd2 == test_question.answers["answer"]:
                 rnd2 = True
                 self.assertEquals(rnd2, True)
                 question_matched = True

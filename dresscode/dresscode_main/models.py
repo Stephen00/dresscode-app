@@ -27,7 +27,7 @@ class QuizQuestion(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
 
     def get_randomised_answers(self):
-        ans = [self.answer, self.other1, self.other2, self.other3]
+        ans = [self.answers["answer"], self.answers["other1"], self.answers["other2"], self.answers["other3"]]
         for i in range(10):
             x = random.randrange(len(ans))
             y = random.randrange(len(ans))
@@ -35,7 +35,7 @@ class QuizQuestion(models.Model):
             return ans[x], ans[y]
 
     def check_answer(self, guess):
-        if guess == self.answer:
+        if guess == self.answers["answer"]:
             return True
         else:
             return False
@@ -80,12 +80,12 @@ class Poll(models.Model):
         return self.question
     
     def vote_poll(self, answer):
-        if self.answer1 == answer:
-            self.counter1 += 1
-        if self.answer2 == answer:
-            self.counter2 += 1
-        if self.answer3 == answer:
-            self.counter3 += 1
+        if self.answers["answer1"] == answer:
+            self.answers["vote1"] += 1
+        if self.answers["answer2"] == answer:
+            self.answers["vote2"] += 1
+        if self.answers["answer3"] == answer:
+            self.answers["vote3"] += 1
             
     def save(self, *args, **kwargs):
         try:
