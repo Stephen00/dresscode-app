@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Nav, Navbar, Container } from "react-bootstrap";
+import { Nav, Navbar, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import "./NavBar.css";
@@ -9,7 +9,7 @@ const NavBar = () => {
     <Navbar collapseOnSelect fixed="top" expand="lg">
       <LinkContainer to="/latest">
         <Navbar.Brand>
-          <img src="/assets/logo.svg" alt="dressCode logo" />
+          <img className="logo-style" src="/assets/logo.svg" alt="dressCode logo" />
         </Navbar.Brand>
       </LinkContainer>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
