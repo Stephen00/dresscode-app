@@ -23,7 +23,10 @@ class Media(models.Model):
 class QuizQuestion(models.Model):
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
-    answers = models.JSONField()
+    answer = models.CharField(max_length=128)
+    mistake1 = models.CharField(max_length=128)
+    mistake2 = models.CharField(max_length=128)
+    mistake3 = models.CharField(max_length=128)
     tags = models.ManyToManyField(Tag, blank=True)
 
     def get_randomised_answers(self):
