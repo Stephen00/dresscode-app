@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import "./container.css";
 
@@ -16,6 +16,9 @@ const AppContainer = () => {
   return (
     <Container className="body-container">
       <Switch>
+        <Route exact path="/">
+          <Redirect to="/latest" />
+        </Route>
         <Route path="/latest" component={Home} />
         <Route path="/discover/articles" component={DiscoverArticle} />
         <Route path="/article/:slug" component={Article} />
