@@ -1,7 +1,5 @@
 #root {
   background-color: #fffbf6;
-  /* margin-top: 90px; */
-  margin-top: 59px;
-  width: 100vw;
-  height: 100vh;
+  padding-top: 59px;
+  min-height: 100vh;
 }

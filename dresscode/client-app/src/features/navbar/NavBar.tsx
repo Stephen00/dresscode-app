@@ -1,30 +1,35 @@
 import React from "react";
 import { Col, Nav, Navbar, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 import "./NavBar.css";
 
 const NavBar = () => {
   return (
-    <Navbar fixed="top" expand="lg">
-      <Navbar.Brand href="#home">
-        <img src="/assets/logo.svg" alt="dressCode logo" />
-      </Navbar.Brand>
+    <Navbar collapseOnSelect fixed="top" expand="lg">
+      <LinkContainer to="/latest">
+        <Navbar.Brand>
+          <img src="/assets/logo.svg" alt="dressCode logo" />
+        </Navbar.Brand>
+      </LinkContainer>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Container>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link as={Link} to="/">
-              Latest
-            </Nav.Link>
-            <Nav.Link as={Link} to="/discover/articles">
-              Discover
-            </Nav.Link>
-            <Nav.Link as={Link} to="/people">
-              People
-            </Nav.Link>
-            <Nav.Link as={Link} to="/more">
-              More
-            </Nav.Link>
+            <LinkContainer to="/latest">
+              <Nav.Link>Latest</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/discover/articles">
+              <Nav.Link>Discover</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/people">
+              <Nav.Link>People</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/more">
+              <Nav.Link as={Link} to="/more">
+                More
+              </Nav.Link>
+            </LinkContainer>
           </Nav>
         </Navbar.Collapse>
       </Container>

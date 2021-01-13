@@ -16,7 +16,7 @@ const AppContainer = () => {
   return (
     <Container className="body-container">
       <Switch>
-        <Route exact path="/" component={Home} />
+        <Route path="/latest" component={Home} />
         <Route path="/discover/articles" component={DiscoverArticle} />
         <Route path="/article/:slug" component={Article} />
         <Route path="/discover/quiz" component={DiscoverQuiz} />
