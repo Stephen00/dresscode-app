@@ -9,7 +9,7 @@ class TagAdmin(admin.ModelAdmin):
     list_display=('tag',)
 
 class QuizQuestionAdmin(admin.ModelAdmin):
-    list_display = ('question', 'answers', 'tagged_as')
+    list_display = ('question', 'answer', 'mistake1', 'mistake2', 'mistake3', 'tagged_as')
 
     def tagged_as(self, obj):
         return " / \n".join([tag.tag for tag in obj.tags.all()])
