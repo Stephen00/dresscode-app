@@ -26,3 +26,9 @@ class TestUrls(TestCase):
     def test_discover_quizzes(self):
         path = reverse('discover_quizzes')
         self.assertEqual(discover_quizzes, resolve(path).func)
+
+    def test_api_tags(self):
+        path = reverse('api_tags')
+        self.assertEqual(get_all_tags, resolve(path).func)
+
+
