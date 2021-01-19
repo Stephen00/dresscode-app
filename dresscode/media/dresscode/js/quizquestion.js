@@ -1,14 +1,12 @@
 (function($) {
     $(function() {
         var wrong1 = $('#id_mistake1');
-			
 		var wrong2 = $('#id_mistake2');
-			
 		var wrong3 = $('#id_mistake3');
 			
 
         function toggleVerified(current, next) {
-            if (current != ' ') {
+            if (current != '') {
                 next.show();
             } else {
                 next.hide();
@@ -22,13 +20,10 @@
 
         // show/hide on change
         wrong1.change(function() {
-            toggleVerified($(this).val());
+            toggleVerified($(this).val(), wrong2);
         });
 		wrong2.change(function() {
-            toggleVerified($(this).val());
-        });
-		wrong3.change(function() {
-            toggleVerified($(this).val());
+            toggleVerified($(this).val(), wrong3);
         });
     });
 })(django.jQuery);

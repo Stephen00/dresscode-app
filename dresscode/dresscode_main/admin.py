@@ -13,6 +13,10 @@ class TagAdmin(admin.ModelAdmin):
 class QuizQuestionAdmin(admin.ModelAdmin):
     list_display = ('question', 'answer', 'mistake1', 'mistake2', 'mistake3', 'tagged_as')
     
+    def tagged_as(self, obj):
+        return " / \n".join([tag.tag for tag in obj.tags.all()])
+        
+        
     fieldsets = (
         ('Question', {
             'fields': ('question',),
@@ -40,8 +44,9 @@ class QuizQuestionAdmin(admin.ModelAdmin):
         })
     )
     
-    def tagged_as(self, obj):
-        return " / \n".join([tag.tag for tag in obj.tags.all()])
+    class Media:
+        js=('media/dresscode/js/quizquestion.js')
+    
 
     
 

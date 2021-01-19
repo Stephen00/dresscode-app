@@ -25,8 +25,8 @@ class QuizQuestion(models.Model):
     question = models.TextField()
     answer = models.CharField(max_length=128)
     mistake1 = models.CharField(max_length=128)
-    mistake2 = models.CharField(max_length=128)
-    mistake3 = models.CharField(max_length=128)
+    mistake2 = models.CharField(max_length=128, blank=True, null=True)
+    mistake3 = models.CharField(max_length=128, blank=True, null=True)
     tags = models.ManyToManyField(Tag, blank=True)
 
     def get_randomised_answers(self):
