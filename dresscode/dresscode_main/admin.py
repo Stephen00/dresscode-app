@@ -8,11 +8,46 @@ from django import forms
 class TagAdmin(admin.ModelAdmin):
     list_display=('tag',)
 
+
+
 class QuizQuestionAdmin(admin.ModelAdmin):
     list_display = ('question', 'answer', 'mistake1', 'mistake2', 'mistake3', 'tagged_as')
-
+    
+    fieldsets = (
+        ('Question', {
+            'fields': ('question',),
+            'classes': ('question',)
+        }),
+        ('Answer', {
+            'fields': ('answer',),
+            'classes': ('answer',)
+        }),
+        ('Mistakes', {
+            'fields': ('mistake1',),
+            'classes': ('mistakes','mistake1',)
+        }),
+        (None, {
+            'fields': ('mistake2',),
+            'classes': ('mistakes','mistake2',)
+        }),
+        (None, {
+            'fields': ('mistake3',),
+            'classes': ('mistakes','mistake3',)
+        }),
+        ('Tags', {
+            'fields': ('tags',),
+            'classes': ('tags',)
+        })
+    )
+    
     def tagged_as(self, obj):
         return " / \n".join([tag.tag for tag in obj.tags.all()])
+
+    
+
+
+
+
         
 class QuizAdmin(admin.ModelAdmin):
     list_display=('has_questions', 'tagged_as')
