@@ -1,9 +1,7 @@
-from django.contrib.auth.models import User
 from django.test import TestCase
 from dresscode.urls import *
 from django.urls import resolve, reverse
 from dresscode_main.views import *
-from django.contrib.auth import login
 
 class TestUrls(TestCase):
 
