@@ -55,3 +55,7 @@ span {
 .text-color {
   color: #74529e;
 }
+
+.far{
+  font-family: "Font Awesome 5 Free" !important;
+}
