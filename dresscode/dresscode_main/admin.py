@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from dresscode_main.models import *
 from django import forms
+from dresscode import settings
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -45,7 +46,7 @@ class QuizQuestionAdmin(admin.ModelAdmin):
     )
     
     class Media:
-        js=('media/dresscode/js/quizquestion.js')
+        js=(settings.MEDIA_ROOT+'dresscode/js/quizquestion.js')
     
 
     
