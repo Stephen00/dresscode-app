@@ -45,8 +45,8 @@ class testViews(TestCase):
 
     def test_custom_discover_poll_view_status_200(self):
         p = Poll.objects.create(media=None, question="What is your favourite programming language?",
-                                answers={'answer1': 'Python', 'answer2': "Java", 'answer3': "C++", 'vote1': 7,
-                                         'vote2': 9, 'vote3': 11})
+                                answer1 = 'Python', answer2 = "Java", answer3 = "C++", vote1 = 7,
+                                         vote2 = 9, vote3 = 11)
         p.save()
-        response = self.client.get('/discover/polls/what-is-your-favourite-programming-language/', follow=True)
+        response = self.client.get('/discover/polls/'+p.slug, follow=True)
         self.assertEquals(response.status_code, 200)

@@ -75,7 +75,14 @@ class Quiz(models.Model):
 class Poll(models.Model):
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
-    answers = models.JSONField()
+    answer1 = models.CharField(max_length=128)
+    answer2 = models.CharField(max_length=128, blank=True, null=True)
+    answer3 = models.CharField(max_length=128, blank=True, null=True)
+    answer4 = models.CharField(max_length=128, blank=True, null=True) 
+    vote1=models.IntegerField(default=0)
+    vote2=models.IntegerField(default=0)
+    vote3=models.IntegerField(default=0)
+    vote4=models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag, blank=True)
     slug = models.SlugField(unique=True)
 
@@ -83,12 +90,12 @@ class Poll(models.Model):
         return self.question
     
     def vote_poll(self, answer):
-        if self.answers["answer1"] == answer:
-            self.answers["vote1"] += 1
-        if self.answers["answer2"] == answer:
-            self.answers["vote2"] += 1
-        if self.answers["answer3"] == answer:
-            self.answers["vote3"] += 1
+        if self.answer1 == answer:
+            self.vote1 += 1
+        if self.answer2 == answer:
+            self.vote2 += 1
+        if self.answer3 == answer:
+            self.vote3 += 1
             
     def save(self, *args, **kwargs):
         try:
@@ -107,7 +114,7 @@ class Poll(models.Model):
 class Article(models.Model):
     title = models.TextField(unique=True)
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
-    text = models.JSONField()
+    text = models.TextField()
     tags = models.ManyToManyField(Tag, blank=True)
     slug=models.SlugField(unique=True)
     
