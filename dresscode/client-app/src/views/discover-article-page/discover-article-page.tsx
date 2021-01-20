@@ -3,11 +3,11 @@ import axios from "axios";
 import { IArticle } from "../../app/models/article";
 import Picture from "../../assets/shutterstock_256173265_edit.jpg";
 import "./discover-article-page.css";
-import { Card, Col, Container, Nav, Row } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 
 const DiscoverArticle = () => {
   const [articles, setArticles] = useState<IArticle[]>([]);
+  const [visible, setVisible] = React.useState(false)
 
   useEffect(() => {
     axios
