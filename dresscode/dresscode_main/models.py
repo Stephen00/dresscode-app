@@ -30,7 +30,7 @@ class QuizQuestion(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
 
     def get_randomised_answers(self):
-        ans = [self.answers["answer"], self.answers["other1"], self.answers["other2"], self.answers["other3"]]
+        ans = [self.answer, self.mistake1, self.mistake2, self.mistake3]
         for i in range(10):
             x = random.randrange(len(ans))
             y = random.randrange(len(ans))
@@ -38,7 +38,7 @@ class QuizQuestion(models.Model):
             return ans[x], ans[y]
 
     def check_answer(self, guess):
-        if guess == self.answers["answer"]:
+        if guess == self.answer:
             return True
         else:
             return False
