@@ -118,18 +118,28 @@ def main():
 
     quiz_questions = [
         {'media': None, 'question': "What is the correct way to declare an integer variable equal to 1 in C#?",
-         'answers': {'answer':'int var = 1;', 'other1': 'var = 1', 'other2': 'int var =1', 'other3': 'int var == 1;'}, 
+        'answer': 'int var = 1;',
+        'mistake1': 'var = 1',
+        'mistake2': 'int var =1',
+        'mistake3': 'int var == 1;',
         'tags':[]},
-        {'media': None, 'question': "When was C# released?", 
-        'answers': {'answer': "1998", 'other1': "1801", 'other2': "2001", 'other3': "2000"}, 
+        {'media': None, 'question': "When was C# released?",
+        'answer': "1998",
+        'mistake1': "1801",
+        'mistake2': "2001",
+        'mistake3': "2000",
         'tags':[]},
         {'media': None, 'question': "What is the correct structure to hold an array of strings in C#",
-         'answers': {'answer': "string []", 'other1': "string {}", 'other2': "str []", 'other3': "str <>"},
+         'answer': "string []",
+         'mistake1': "string {}",
+         'mistake2': "str []",
+         'mistake3': "str <>",
          'tags':[]},
     ]
 
     for qq in quiz_questions:
-        q = QuizQuestion(media=qq['media'], question=qq['question'], answers=qq['answers'])
+        q = QuizQuestion(media=qq['media'], question=qq['question'], answer=qq['answer'], mistake1=qq['mistake1'],
+        mistake2=qq['mistake2'], mistake3=qq['mistake3'])
         q.save()
         for tag in qq['tags']:
             q.tags.add(tag)
