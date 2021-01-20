@@ -10,7 +10,6 @@ class TagAdmin(admin.ModelAdmin):
     list_display=('tag',)
 
 
-
 class QuizQuestionAdmin(admin.ModelAdmin):
     list_display = ('question', 'answer', 'mistake1', 'mistake2', 'mistake3', 'tagged_as')
     
@@ -45,16 +44,7 @@ class QuizQuestionAdmin(admin.ModelAdmin):
         })
     )
     
-    class Media:
-        js=(settings.MEDIA_ROOT+'dresscode/js/quizquestion.js')
     
-
-    
-
-
-
-
-        
 class QuizAdmin(admin.ModelAdmin):
     list_display=('has_questions', 'tagged_as')
     
@@ -63,21 +53,25 @@ class QuizAdmin(admin.ModelAdmin):
     
     def tagged_as(self, obj):
         return " / \n".join([tag.tag for tag in obj.tags.all()])
-    
+
+
 class PollAdmin(admin.ModelAdmin):
-    list_display=('question', 'answers', 'media', 'tagged_as')
+    list_display=('question', 'answer1', 'answer2', 'answer3', 'answer4', 'media', 'tagged_as')
     
     def tagged_as(self, obj):
         return " / \n".join([tag.tag for tag in obj.tags.all()])
 
+
 class MediaAdmin(admin.ModelAdmin):
     list_display=('video', 'image')
+
     
 class ArticleAdmin(admin.ModelAdmin):
     list_display=('title', 'text', 'media', 'tagged_as')
     
     def tagged_as(self, obj):
         return " / \n".join([tag.tag for tag in obj.tags.all()]) 
+
 
 class PostAdmin(admin.ModelAdmin):
     list_display=('author', 'description', 'content', 'content_type', 'reaction1_counter', 'reaction2_counter', 'reaction3_counter',)

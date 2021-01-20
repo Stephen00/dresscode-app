@@ -67,24 +67,19 @@ def main():
     ### Create Articles
     articles = [
         {'title': "Why Java is awesome",
-         'text': {'Paragraph1' : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus. Nam sit amet tristique sem. Mauris dignissim eros dignissim, suscipit tellus id, ornare dui. Nullam ac varius nibh. Ut ac molestie metus, eu scelerisque lacus. Maecenas velit quam, interdum quis tempus id, feugiat eu ex. In eget dui a turpis maximus cursus. Nulla congue non lectus quis sagittis. Morbi non pretium lacus.', 
-            'Paragraph2' : 'Weeee it works!!!'},
+         'text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus. Nam sit amet tristique sem. Mauris dignissim eros dignissim, suscipit tellus id, ornare dui. Nullam ac varius nibh. Ut ac molestie metus, eu scelerisque lacus. Maecenas velit quam, interdum quis tempus id, feugiat eu ex. In eget dui a turpis maximus cursus. Nulla congue non lectus quis sagittis. Morbi non pretium lacus.',
          'media': None, 'tags': [java_tag]},
         {'title': "Why Python is cool",
-         'text': {'Paragraph1' : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus. Nam sit amet tristique sem. Mauris dignissim eros dignissim, suscipit tellus id, ornare dui. Nullam ac varius nibh. Ut ac molestie metus, eu scelerisque lacus. Maecenas velit quam, interdum quis tempus id, feugiat eu ex. In eget dui a turpis maximus cursus. Nulla congue non lectus quis sagittis. Morbi non pretium lacus.', 
-            'Paragraph2' : 'Weeee it works!!!'},
+         'text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus. Nam sit amet tristique sem. Mauris dignissim eros dignissim, suscipit tellus id, ornare dui. Nullam ac varius nibh. Ut ac molestie metus, eu scelerisque lacus. Maecenas velit quam, interdum quis tempus id, feugiat eu ex. In eget dui a turpis maximus cursus. Nulla congue non lectus quis sagittis. Morbi non pretium lacus.',
          'media': None, 'tags': [python_tag]},
         {'title': "Why C is incredible",
-         'text': {'Paragraph1' : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus. Nam sit amet tristique sem. Mauris dignissim eros dignissim, suscipit tellus id, ornare dui. Nullam ac varius nibh. Ut ac molestie metus, eu scelerisque lacus. Maecenas velit quam, interdum quis tempus id, feugiat eu ex. In eget dui a turpis maximus cursus. Nulla congue non lectus quis sagittis. Morbi non pretium lacus.', 
-            'Paragraph2' : 'Weeee it works!!!'},
+         'text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus. Nam sit amet tristique sem. Mauris dignissim eros dignissim, suscipit tellus id, ornare dui. Nullam ac varius nibh. Ut ac molestie metus, eu scelerisque lacus. Maecenas velit quam, interdum quis tempus id, feugiat eu ex. In eget dui a turpis maximus cursus. Nulla congue non lectus quis sagittis. Morbi non pretium lacus.',
          'media': None, 'tags': [c_tag]},
         {'title': "Why JavaScript is amazing",
-         'text': {'Paragraph1' : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus. Nam sit amet tristique sem. Mauris dignissim eros dignissim, suscipit tellus id, ornare dui. Nullam ac varius nibh. Ut ac molestie metus, eu scelerisque lacus. Maecenas velit quam, interdum quis tempus id, feugiat eu ex. In eget dui a turpis maximus cursus. Nulla congue non lectus quis sagittis. Morbi non pretium lacus.', 
-            'Paragraph2' : 'Weeee it works!!!'},
+         'text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus. Nam sit amet tristique sem. Mauris dignissim eros dignissim, suscipit tellus id, ornare dui. Nullam ac varius nibh. Ut ac molestie metus, eu scelerisque lacus. Maecenas velit quam, interdum quis tempus id, feugiat eu ex. In eget dui a turpis maximus cursus. Nulla congue non lectus quis sagittis. Morbi non pretium lacus.',
          'media': None, 'tags': []},
         {'title': "Why C++ is terrific",
-         'text': {'Paragraph1' : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus. Nam sit amet tristique sem. Mauris dignissim eros dignissim, suscipit tellus id, ornare dui. Nullam ac varius nibh. Ut ac molestie metus, eu scelerisque lacus. Maecenas velit quam, interdum quis tempus id, feugiat eu ex. In eget dui a turpis maximus cursus. Nulla congue non lectus quis sagittis. Morbi non pretium lacus.', 
-            'Paragraph2' : 'Weeee it works!!!'},         
+         'text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean quis leo in orci laoreet ullamcorper at nec lectus. Nam sit amet tristique sem. Mauris dignissim eros dignissim, suscipit tellus id, ornare dui. Nullam ac varius nibh. Ut ac molestie metus, eu scelerisque lacus. Maecenas velit quam, interdum quis tempus id, feugiat eu ex. In eget dui a turpis maximus cursus. Nulla congue non lectus quis sagittis. Morbi non pretium lacus.',
          'media': None, 'tags': []},
     ]
 
@@ -98,18 +93,18 @@ def main():
 
     polls = [
         {'media': None, 'question': "What is your favourite programming language?", 
-         'answers': {'answer1': 'Python', 'answer2': "Java", 'answer3': "C++", 'vote1': 7, 'vote2': 9, 'vote3': 11,}, 
+         'answer1': 'Python', 'answer2': "Java", 'answer3': "C++", 'vote1': 7, 'vote2': 9, 'vote3': 11, 
          'tags':[]},
         {'media': None, 'question': "What is your least favourite programming language?", 
-         'answers': {'answer1': 'AJAX', 'answer2': "JavaScript", 'answer3': "Sigma16", 'vote1': 32, 'vote2': 19, 'vote3': 21,},
+         'answer1': 'AJAX', 'answer2': "JavaScript", 'answer3': "Sigma16", 'vote1': 32, 'vote2': 19, 'vote3': 21,
          'tags':[]},
         {'media': None, 'question': "Should children learn coding in primary school?",
-         'answers': {'answer1': 'Yes, definitely', 'answer2': "Yes, but just the basics", 'answer3': "No.", 'vote1': 92, 'vote2': 119, 'vote3': 11,},
+         'answer1': 'Yes, definitely', 'answer2': "Yes, but just the basics", 'answer3': "No.", 'vote1': 92, 'vote2': 119, 'vote3': 11,
          'tags':[]}
     ]
 
     for poll in polls:
-        p = Poll.objects.get_or_create(media=poll['media'], question=poll['question'], answers=poll['answers'],)[0]
+        p = Poll.objects.get_or_create(media=poll['media'], question=poll['question'], answer1=poll['answer1'], answer2=poll['answer2'], answer3=poll['answer3'], vote1=poll['vote1'], vote2=poll['vote2'], vote3=poll['vote3'])[0]
         p.save()
         for tag in poll['tags']:
             p.tags.add(tag)
