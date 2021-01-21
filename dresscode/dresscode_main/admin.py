@@ -67,7 +67,7 @@ class MediaAdmin(admin.ModelAdmin):
 
     
 class ArticleAdmin(admin.ModelAdmin):
-    list_display=('title', 'text', 'media', 'tagged_as')
+    list_display=('title', 'media', 'tagged_as')
     
     def tagged_as(self, obj):
         return " / \n".join([tag.tag for tag in obj.tags.all()]) 
