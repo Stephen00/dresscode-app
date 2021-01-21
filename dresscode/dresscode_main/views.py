@@ -168,4 +168,26 @@ def add_share_reaction(request, slug):
         messages.info(request, "Share reaction added to this post")
         return redirect("discover/posts/", slug=slug)
 
+def add_poll_vote(request, slug):
+    if request.method == 'POST':
+        poll = get_object_or_404(Poll, slug=slug)
+        poll.vote_poll()
+        poll.save()
+        messages.info(request, "Successfully voted")
+        return redirect("discover/polls/", slug=slug) 
+
+# needs more work: 
+def answer_quiz(request, slug):
+    if request.method == 'POST':
+        quiz = get_object_or_404(Quiz, slug=slug)
+        questions = quiz.questions.all()   #might need to pass pk of some sort here or in next line
+        for question in questions:
+            guess = "C#" # place holder; not sure how to get guess
+            if question.check_answer(guess):
+                quiz.score() # need to update models to include way to evaluate quiz
+        quiz.save()
+        msg = "Quiz result: " + quiz.score.get()
+        messages.info(request, msg)
+        return redirect("discover/quizzes/", slug=slug)
+
 # Create your views here.
