@@ -152,11 +152,11 @@ class Post(models.Model):
     def full_title(self):
         return self.post_type() + " : " + self.title()
 
-    def react1(self):
+    def heart(self):
         self.reaction1_counter += 1
 
-    def react2(self):
+    def star(self):
         self.reaction2_counter += 1
 
-    def react3(self):
+    def share(self):
         self.reaction3_counter += 1
