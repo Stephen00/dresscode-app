@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from tinymce.models import HTMLField
 
 from django.template.defaultfilters import slugify
 
@@ -18,6 +19,9 @@ class Tag(models.Model):
 class Media(models.Model):
     video = models.FileField()
     image = models.ImageField()
+    
+    class Meta:
+        verbose_name_plural = "Media"
 
 
 class QuizQuestion(models.Model):
@@ -28,7 +32,11 @@ class QuizQuestion(models.Model):
     mistake2 = models.CharField(max_length=128, blank=True, null=True)
     mistake3 = models.CharField(max_length=128, blank=True, null=True)
     tags = models.ManyToManyField(Tag, blank=True)
-
+    
+    class Meta:
+        verbose_name="Quiz Question"
+        verbose_name_plural = "Quiz Questions"
+    
     def get_randomised_answers(self):
         ans = [self.answer, self.mistake1, self.mistake2, self.mistake3]
         for i in range(10):
@@ -51,6 +59,9 @@ class Quiz(models.Model):
     questions = models.ManyToManyField(QuizQuestion)
     tags = models.ManyToManyField(Tag, blank=True)
     slug=models.SlugField(unique=True)
+    
+    class Meta:
+        verbose_name_plural = "Quizzes"
 
     def get_tags(self):
         tags = self.tags
@@ -112,9 +123,9 @@ class Poll(models.Model):
 
 
 class Article(models.Model):
-    title = models.TextField(unique=True)
+    title = models.CharField(unique=True, max_length=256)
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
-    text = models.TextField()
+    text = HTMLField()
     tags = models.ManyToManyField(Tag, blank=True)
     slug=models.SlugField(unique=True)
     
