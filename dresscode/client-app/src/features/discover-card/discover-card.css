@@ -1,0 +1,57 @@
+.card {
+    width: 60%;
+    border-color: #74529e;
+    padding: 10px 0px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media only screen and (max-width: 700px) {
+    .card {
+        width: 100%;
+    }
+}
+
+.card-title {
+    padding-left: 10%;
+}
+
+.date-style {
+    text-align: right;
+    padding-right: 5%;
+    font-weight: 700;
+}
+
+.far {
+    font-family: "Font Awesome 5 Free" !important;
+}
+
+.h5 {
+    font-size: 1.6rem;
+}
+
+.icon-style {
+    text-align: center;
+}
+
+.image-section {
+    text-align: center;
+}
+
+.overview-image {
+    margin-left: auto;
+    margin-right: auto;
+
+    max-width: 100%;
+    height: auto;
+}
+
+span {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.text-color {
+    color: #74529e;
+}

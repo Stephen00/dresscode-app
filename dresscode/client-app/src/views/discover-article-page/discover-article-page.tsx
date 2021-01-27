@@ -7,7 +7,6 @@ import { Card, Col, Row } from "react-bootstrap";
 
 const DiscoverArticle = () => {
   const [articles, setArticles] = useState<IArticle[]>([]);
-  const [visible, setVisible] = React.useState(false)
 
   useEffect(() => {
     axios
