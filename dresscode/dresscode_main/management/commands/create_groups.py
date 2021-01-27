@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group, Permission
 import logging
 
 groups = ['staff', 'admin']
-models = ['post', 'poll', 'article', 'quiz']
+models = ['post', 'poll', 'article', 'quiz', 'quiz question']
 permissions = ['view', 'delete', 'add', 'change'] # List of permissions for each group
 
 # a simple command to create the models with their associated permissions
