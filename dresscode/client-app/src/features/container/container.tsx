@@ -8,7 +8,6 @@ import Quiz from "../../views/quiz-page/quiz-page";
 import DiscoverArticle from "../../views/discover-article-page/discover-article-page";
 import DiscoverQuiz from "../../views/discover-quiz-page/discover-quiz-page";
 import DiscoverPoll from "../../views/discover-poll-page/discover-poll-page";
-import Discover from "../../views/discover-page/discover-page";
 import Error404Page from "../../views/error-404-page/error-404-page"
 import Home from "../../views/home-page/home-page";
 import More from "../../views/more-page/more-page";
@@ -23,6 +22,9 @@ const AppContainer = () => {
         </Route>
         <Route path="/latest" component={Home} />
         <Route path="/article/:slug" component={Article} />
+        <Route path="/discover/articles" component={DiscoverArticle} />
+        <Route path="/discover/quizzes" component={DiscoverQuiz} />
+        <Route path="/discover/polls" component={DiscoverPoll} />
         <Route path="/quiz/:slug" component={Quiz} />
         <Route path="/more" component={More} />
         <Route path="/people" component={People} />
