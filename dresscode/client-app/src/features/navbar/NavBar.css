@@ -10,10 +10,11 @@
   width: 200px;
 }
 
-.navbar-light .navbar-nav .nav-link {
-  font-size: 1.8rem;
+.navbar-light .navbar-nav .nav-link,
+.navbar-light .navbar-nav .show > .nav-link {
+  font-size: 1.6rem;
   padding: 0.3rem 1.1rem;
-  font-weight: 700;
+  font-weight: 800;
   color: #f9b222;
 }
 
@@ -21,4 +22,4 @@
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link.active {
   color: #ed6b4b;
-} 
+}

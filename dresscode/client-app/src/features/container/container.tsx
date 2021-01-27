@@ -22,13 +22,9 @@ const AppContainer = () => {
           <Redirect to="/latest" />
         </Route>
         <Route path="/latest" component={Home} />
-        <Route path="/discover/articles" component={DiscoverArticle} />
         <Route path="/article/:slug" component={Article} />
-        <Route path="/discover/quizzes" component={DiscoverQuiz} />
         <Route path="/quiz/:slug" component={Quiz} />
-        <Route path="/discover/polls" component={DiscoverPoll} />
         <Route path="/more" component={More} />
-        <Route path="/discover" component={Discover} />
         <Route path="/people" component={People} />
         <Route path="*" component={Error404Page} />
       </Switch>
