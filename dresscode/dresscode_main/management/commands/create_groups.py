@@ -19,9 +19,9 @@ class Command(BaseCommand):
                     name = 'Can {} {}'.format(permission, model)
                     # Try creating the permission, otherwise return an error
                     try:
-                        model_add_perm = Permission.objects.get(name=name)
+                        perm = Permission.objects.get(name=name)
                     except Permission.DoesNotExist:
                         logging.warning("Permission not found: " + name)
                         continue
-                    new_group.permissions.add(model_add_perm)
+                    new_group.permissions.add(perm)
         print("Permission groups created\n")
