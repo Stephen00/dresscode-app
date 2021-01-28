@@ -1,6 +1,6 @@
 test-job:
   stage: test
   tags:
-    -docker
+    - docker
   script:
     - echo "Hello world"
