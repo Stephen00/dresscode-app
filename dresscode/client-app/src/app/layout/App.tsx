@@ -1,19 +1,10 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { Fragment } from "react";
 import "./App.css";
-import axios from "axios";
-import { IArticle } from "../models/article";
 import NavBar from "../../features/navbar/NavBar";
 import AppContainer from "../../features/container/container";
+import { observer } from "mobx-react-lite";
 
 const App = () => {
-  const [articles, setArticles] = useState<IArticle[]>([]);
-
-  useEffect(() => {
-    axios.get("http://127.0.0.1:8000/discover/articles/").then((response) => {
-      setArticles(response.data);
-    });
-  }, []);
-
   return (
     <Fragment>
       <NavBar />
@@ -22,4 +13,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default observer(App);

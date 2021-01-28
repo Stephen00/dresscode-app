@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import "./container.css";
 
@@ -11,8 +11,9 @@ import DiscoverPoll from "../../views/discover-poll-page/discover-poll-page";
 import Home from "../../views/home-page/home-page";
 import More from "../../views/more-page/more-page";
 import People from "../../views/people-page/people-page";
+import { observer } from "mobx-react-lite";
 
-const AppContainer = () => {
+const AppContainer: React.FC = () => {
   return (
     <Container className="body-container">
       <Switch>
@@ -32,4 +33,4 @@ const AppContainer = () => {
   );
 };
 
-export default AppContainer;
+export default withRouter(observer(AppContainer));
