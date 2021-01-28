@@ -1,4 +1,0 @@
-test-job:
-  stage: test
-  script:
-    - echo "Hello world"
