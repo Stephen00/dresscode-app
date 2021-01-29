@@ -16,9 +16,13 @@ def home(request):
             return Response("no posts found", status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
-def get_custom_article(request, article_slug):
+def get_custom_article(request):
     if request.method == 'GET':
         try:
+            if 'slug' in request.GET:
+                article_slug = request.GET['slug']
+            else:
+                article_slug = ''
             article=Article.objects.get(slug=article_slug)
             serializer = ArticleSerializer(article, context={'request': request})
             return Response(serializer.data)

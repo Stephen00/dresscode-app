@@ -3,8 +3,9 @@ import axios from "axios";
 import { IArticle } from "../../app/models/article";
 import Picture from "../../assets/shutterstock_256173265_edit.jpg";
 import "./discover-article-page.css";
-import { Card, Col, Container, Nav, Row } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import { Card, Col, Container, Nav, Row, Button } from "react-bootstrap";
+import {Link} from 'react-router-dom'
+import { LinkContainer} from "react-router-bootstrap";
 
 const DiscoverArticlePage = () => {
   const [articles, setArticles] = useState<IArticle[]>([]);
@@ -45,7 +46,10 @@ const DiscoverArticlePage = () => {
                 >
                   21/10/2020
                 </Card.Title>
-                <Card.Title className="text-color">{article.title}</Card.Title>
+                <Card.Title className="text-color"><LinkContainer to="/article/${article.slug}">
+                <Nav.Link>{article.title}</Nav.Link>
+                </LinkContainer></Card.Title>
+
                 <div className="image-section">
                   <img
                     src={Picture}
