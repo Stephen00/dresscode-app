@@ -4,6 +4,11 @@ from django.shortcuts import render
 from dresscode_main.models import *
 from django import forms
 from dresscode import settings
+from django.urls import reverse
+from django.utils.http import urlencode
+
+from django.contrib.admin.options import get_content_type_for_model
+from django.utils.html import format_html
 
 admin.site.site_header = "Dresscode Admin"
 
@@ -132,9 +137,33 @@ class ArticleAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         }),
     )
-
+    
+    #Post connection to save
+    def save_model(self, request, obj, form, change): 
+        obj.save()
+        try:
+            post=Post.objects.get(object_id=obj.pk, content_type=get_content_type_for_model(obj))
+            post.author=request.user
+            post.save()
+        except:
+            pass
+            
+            
 class PostAdmin(admin.ModelAdmin):
-    list_display=('author', 'description', 'content', 'content_type', 'reaction1_counter', 'reaction2_counter', 'reaction3_counter',)
+    list_display=('content', 'view_content_link', 'author', 'description', 'created_at', 'updated_at', 'reaction1_counter', 'reaction2_counter', 'reaction3_counter')
+    exclude=('content_type', 'object_id',)
+    
+    def view_content_link(self, obj):
+        content_type=obj.content_type.name
+        link=reverse("admin:dresscode_main_"+content_type+"_change", args=[obj.object_id])
+        return format_html('<a href="%s">%s</a>' % (link,obj.content))
+    view_content_link.short_description = 'Edit Content'
+    
+    
+    def save_model(self, request, obj, form, change): 
+        if not obj.author:
+            obj.author = request.user
+            obj.save()
     
 admin.site.register(Media, MediaAdmin)
 admin.site.register(Quiz, QuizAdmin)
