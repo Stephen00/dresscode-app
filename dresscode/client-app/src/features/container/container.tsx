@@ -1,8 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { Container } from "semantic-ui-react";
 import "./container.css";
-
+import { Container } from "react-bootstrap";
 import Article from "../../views/article-page/article-page";
 import Quiz from "../../views/quiz-page/quiz-page";
 import DiscoverArticle from "../../views/discover-article-page/discover-article-page";

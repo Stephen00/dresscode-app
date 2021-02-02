@@ -35,9 +35,11 @@ card.title {
   font-size: 30px;
 }
 
-.nav-link:focus, .nav-link:hover, .nav-link.active {
+.nav-link:focus,
+.nav-link:hover,
+.nav-link.active {
   color: #ed6b4b;
-} 
+}
 
 .overview-image {
   margin-left: auto;
@@ -54,8 +56,4 @@ span {
 
 .text-color {
   color: #74529e;
-}
-
-.far{
-  font-family: "Font Awesome 5 Free" !important;
 }
