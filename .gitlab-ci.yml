@@ -9,7 +9,10 @@ test-backend:
         - cd dresscode
         - python manage.py makemigrations
         - python manage.py migrate
-        - python manage.py test
+        - coverage run manage.py test
+        - coverage report
+        - coverage-badge
+
         
 test-frontend:
     stage: test
