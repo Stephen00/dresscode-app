@@ -1,6 +1,23 @@
-test-job:
-  stage: test
-  tags:
-    - docker
-  script:
-    - echo "Hello world"
+test-backend:
+    stage: test
+    image: python:latest
+    tags:
+        - docker
+    script:
+        - pip install --upgrade pip
+        - pip install -r requirements.txt
+        - cd dresscode
+        - python manage.py makemigrations
+        - python manage.py migrate
+        - python manage.py test
+        
+test-frontend:
+    stage: test
+    image: node:latest
+    tags:
+        - docker
+    script:
+        - cd dresscode/client-app
+        - npm install
+        - npm test
+
