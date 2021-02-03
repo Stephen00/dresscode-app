@@ -27,13 +27,12 @@ class QuizQuestionSerializer(serializers.ModelSerializer):
 
 class QuizSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
-    title = serializers.SerializerMethodField('get_question')
     
     class Meta:
         model = Quiz
         questions = QuizQuestionSerializer(many=True)
         depth=1
-        fields = ('pk', 'questions', 'tags', 'slug', 'title')
+        fields = ('pk', 'title', 'questions', 'tags', 'slug',)
     
     def get_question(self, obj):
         return obj.questions.all()[0]
@@ -47,7 +46,7 @@ class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
         depth=1
-        fields = ('pk', 'question', 'media', 'answer1', 'answer2', 'answer3', 'answer4', 'vote1', 'vote2', 'vote3', 'vote4', 'slug', 'tags','title')
+        fields = ('pk', 'title', 'question', 'media', 'answer1', 'answer2', 'answer3', 'answer4', 'vote1', 'vote2', 'vote3', 'vote4', 'slug', 'tags')
     
     def get_question(self, obj):
         return obj.question
