@@ -36,7 +36,7 @@ class QuizSerializer(serializers.ModelSerializer):
         fields = ('pk', 'questions', 'tags', 'slug', 'title')
     
     def get_question(self, obj):
-        return obj.question
+        return obj.questions.all()[0]
 
 
 class PollSerializer(serializers.ModelSerializer):
