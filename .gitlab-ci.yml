@@ -1,6 +1,10 @@
 test-job:
-  stage: test
-  tags:
-    - docker
-  script:
-    - echo "Hello world"
+    stage: test
+    image: python:latest
+    tags:
+        - docker
+    script:
+        - pip install --upgrade pip
+        - pip install -r requirements.txt
+        - cd dresscode
+        - python manage.py test
