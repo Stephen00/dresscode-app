@@ -1,20 +1,23 @@
 import { createContext } from "react";
-import { IArticle } from "../models/article";
+import { IPost } from "../models/post";
 import agent from "../api/agent";
 import { action, configure, observable, runInAction } from "mobx";
 
 configure({ enforceActions: "always" });
 
 class ArticleStore {
-  @observable articles: IArticle[] | undefined;
-  @observable selectedArticle: IArticle | undefined;
+  @observable articles: IPost[] | undefined;
+  @observable selectedArticle: IPost | undefined;
   @observable loadingInitial = false;
 
   @action loadArticles = async () => {
     this.loadingInitial = true;
     try {
-      let res = await agent.Articles.list();
+      let res = await agent.Articles.listAsPosts();
       runInAction(() => {
+        res.forEach((post) => {
+          post.created_at = new Date(post.created_at);
+        });
         this.articles = res;
         this.loadingInitial = false;
       });
@@ -25,10 +28,10 @@ class ArticleStore {
     }
   };
 
-  @action selectArticle = (pk: number) => {
+  @action selectArticle = (id: number) => {
     runInAction(() => {
       if (this.articles) {
-        this.selectedArticle = this.articles.find((a) => a.pk === pk);
+        this.selectedArticle = this.articles.find((a) => a.id === id);
       }
     });
   };

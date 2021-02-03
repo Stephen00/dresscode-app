@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect, withRouter } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import "./container.css";
 
@@ -35,4 +35,4 @@ const AppContainer: React.FC = () => {
   );
 };
 
-export default withRouter(observer(AppContainer));
+export default observer(AppContainer);
