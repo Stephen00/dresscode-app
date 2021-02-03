@@ -125,8 +125,8 @@ class testAttributes(TestCase):
 
     def testPostReact(self):
         test_post = Post.objects.all()[2]
-        test_post.react1()
-        test_post.react2()
-        test_post.react3()
+        test_post.heart()
+        test_post.star()
+        test_post.share()
         tot = test_post.reaction1_counter + test_post.reaction2_counter + test_post.reaction3_counter
         self.assertEquals(tot, 29)
