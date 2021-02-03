@@ -1,4 +1,4 @@
-test-job:
+test-backend:
     stage: test
     image: python:latest
     tags:
@@ -10,3 +10,13 @@ test-job:
         - python manage.py makemigrations
         - python manage.py migrate
         - python manage.py test
+        
+test-frontend:
+    stage: test
+    image: node:latest
+    tags:
+        - docker
+    script:
+        - cd dresscode/client-app
+        - npm install
+        - npm test
