@@ -81,12 +81,14 @@ def get_all_tags(request):
 @api_view(['GET', 'POST'])
 def discover_quizzes(request):
     if request.method == 'GET':
-        CT=get_content_type_for_model(Quiz.objects.first())
-        data = Post.objects.filter(content_type=CT)        
-        serializer = PostSerializer(data, context={'request': request}, many=True)
-
-        return Response(serializer.data)
-
+        try:
+            CT=get_content_type_for_model(Quiz.objects.first())
+            data = Post.objects.filter(content_type=CT)        
+            serializer = PostSerializer(data, context={'request': request}, many=True)
+            return Response(serializer.data)
+        except:
+            return Response("No quizzes found", status=status.HTTP_204_NO_CONTENT)
+        
     elif request.method == 'POST':
         serializer = QuizSerializer(data=request.data)
         if serializer.is_valid():
@@ -99,11 +101,13 @@ def discover_quizzes(request):
 @api_view(['GET', 'POST'])
 def discover_polls(request):
     if request.method == 'GET':
-        CT=get_content_type_for_model(Poll.objects.first())
-        data = Post.objects.filter(content_type=CT)        
-        serializer = PostSerializer(data, context={'request': request}, many=True)
-
-        return Response(serializer.data)
+        try:
+            CT=get_content_type_for_model(Poll.objects.first())
+            data = Post.objects.filter(content_type=CT)        
+            serializer = PostSerializer(data, context={'request': request}, many=True)
+            return Response(serializer.data)
+        except:
+            return Response("No polls found", status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'POST':
         serializer = PollSerializer(data=request.data)
@@ -117,11 +121,13 @@ def discover_polls(request):
 @api_view(['GET', 'POST'])
 def discover_articles(request):
     if request.method == 'GET':
-        CT=get_content_type_for_model(Article.objects.first())
-        data = Post.objects.filter(content_type=CT)        
-        serializer = PostSerializer(data, context={'request': request}, many=True)
-
-        return Response(serializer.data)
+        try:
+            CT=get_content_type_for_model(Article.objects.first())
+            data = Post.objects.filter(content_type=CT)        
+            serializer = PostSerializer(data, context={'request': request}, many=True)
+            return Response(serializer.data)
+        except:
+            return Response("no quiz found", status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'POST':
         serializer = ArticleSerializer(data=request.data)
