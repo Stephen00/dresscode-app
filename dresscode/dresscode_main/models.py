@@ -56,6 +56,7 @@ class QuizQuestion(models.Model):
             
 
 class Quiz(models.Model):
+    title = models.CharField(default="Quiz", blank=True, null=True, max_length=128)
     questions = models.ManyToManyField(QuizQuestion)
     tags = models.ManyToManyField(Tag, blank=True)
     slug=models.SlugField(unique=True)
@@ -71,6 +72,8 @@ class Quiz(models.Model):
         
     def save(self, *args, **kwargs):
         mk_post=True
+        if self.title=="Quiz":
+            self.title="Quiz "+str(Quiz.objects.count()+1)
         if self.id:
             mk_post=False
             self.slug=slugify(self.id)
