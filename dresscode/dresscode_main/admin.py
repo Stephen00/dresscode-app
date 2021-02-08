@@ -12,6 +12,17 @@ from django.utils.html import format_html
 
 admin.site.site_header = "Dresscode Admin"
 
+#Helper function(s) start
+def assign_author_to_post(obj, request):
+    obj.save()
+    try:
+        post=Post.objects.get(object_id=obj.pk, content_type=get_content_type_for_model(obj))
+        post.author=request.user
+        post.save()
+    except:
+        pass
+#Helper function(s) ends
+
 
 class TagAdmin(admin.ModelAdmin):
     list_display=('tag',)
@@ -79,6 +90,10 @@ class QuizAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         }),
     )
+    
+    #Override Model Save
+    def save_model(self, request, obj, form, change): 
+        assign_author_to_post(obj, request)
 
 class PollAdmin(admin.ModelAdmin):
     list_display=('question', 'answer1', 'answer2', 'answer3', 'answer4', 'media', 'tagged_as')
@@ -100,6 +115,10 @@ class PollAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         }),
     )
+    
+    #Override Model Save
+    def save_model(self, request, obj, form, change): 
+        assign_author_to_post(obj, request)
 
 class MediaAdmin(admin.ModelAdmin):
     list_display=('video', 'image')
@@ -138,15 +157,9 @@ class ArticleAdmin(admin.ModelAdmin):
         }),
     )
     
-    #Post connection to save
+    #Override Model Save
     def save_model(self, request, obj, form, change): 
-        obj.save()
-        try:
-            post=Post.objects.get(object_id=obj.pk, content_type=get_content_type_for_model(obj))
-            post.author=request.user
-            post.save()
-        except:
-            pass
+        assign_author_to_post(obj, request)
             
             
 class PostAdmin(admin.ModelAdmin):
