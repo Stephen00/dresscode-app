@@ -130,7 +130,7 @@ class Article(models.Model):
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     text = HTMLField()
     tags = models.ManyToManyField(Tag, blank=True)
-    slug=models.SlugField(unique=True)
+    slug = models.SlugField(unique=True)
     
     def save(self, *args, **kwargs):
         try:
