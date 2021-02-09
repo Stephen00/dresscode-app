@@ -22,4 +22,5 @@ test-frontend:
     script:
         - cd dresscode/client-app
         - npm install
-        - npm test
+        - npm test -- --coverage
+

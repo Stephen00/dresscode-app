@@ -89,3 +89,4 @@ class testViews(TestCase):
         p.save()
         response = self.client.get('/discover/polls/'+p.slug, follow=True)
         self.assertEquals(response.status_code, 200)
+

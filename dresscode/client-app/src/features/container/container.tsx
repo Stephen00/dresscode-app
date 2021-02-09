@@ -12,8 +12,9 @@ import Error404Page from "../../views/error-404-page/error-404-page"
 import Home from "../../views/home-page/home-page";
 import More from "../../views/more-page/more-page";
 import People from "../../views/people-page/people-page";
+import { observer } from "mobx-react-lite";
 
-const AppContainer = () => {
+const AppContainer: React.FC = () => {
   return (
     <Container className="body-container">
       <Switch>
@@ -34,4 +35,4 @@ const AppContainer = () => {
   );
 };
 
-export default AppContainer;
+export default observer(AppContainer);
