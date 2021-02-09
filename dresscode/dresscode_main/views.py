@@ -205,4 +205,3 @@ def answer_quiz(request, slug):
         return redirect("discover/quizzes/", slug=slug)
 
 # Create your views here.
-

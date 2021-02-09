@@ -26,42 +26,42 @@ const DiscoverArticle: React.FC = () => {
 
   return (
     <Fragment>
-        {articleStore.articles?.map((article) => (
-          <a
-            key={article.id}
-            style={{ cursor: "pointer" }}
-            onClick={() => selectArticle(article.id)}
-          >
-            <Card key={article.id} className="text-color">
-              <Card.Subtitle className="date-style">
-                {formatDistance(article.created_at, new Date())}
-              </Card.Subtitle>
-              <Card.Title>{article.content.title}</Card.Title>
-              <div className="image-section">
-                <img alt="" src={Picture} className="overview-image" />
-              </div>
-              <Card.Body>
-                <Row>
-                  <Col xs={4} className="icon-style">
-                    <i className="far fa-heart fa-2x">
-                      <span>{article.reaction1_counter}</span>
-                    </i>
-                  </Col>
-                  <Col xs={4} className="icon-style">
-                    <i className="far fa-star fa-2x">
-                      <span>{article.reaction2_counter}</span>
-                    </i>
-                  </Col>
-                  <Col xs={4} className="icon-style">
-                    <i className="far fa-share-square fa-2x">
-                      <span>{article.reaction3_counter}</span>
-                    </i>
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </a>
-        ))}
+      {articleStore.articles?.map((article) => (
+        <a
+          key={article.id}
+          style={{ cursor: "pointer" }}
+          onClick={() => selectArticle(article.id)}
+        >
+          <Card key={article.id} className="text-color">
+            <Card.Subtitle className="date-style">
+              {formatDistance(article.created_at, new Date())} ago
+            </Card.Subtitle>
+            <Card.Title>{article.content.title}</Card.Title>
+            <div className="image-section">
+              <img alt="" src={Picture} className="overview-image" />
+            </div>
+            <Card.Body>
+              <Row>
+                <Col xs={4} className="icon-style">
+                  <i className="far fa-heart fa-2x">
+                    <span>{article.reaction1_counter}</span>
+                  </i>
+                </Col>
+                <Col xs={4} className="icon-style">
+                  <i className="far fa-star fa-2x">
+                    <span>{article.reaction2_counter}</span>
+                  </i>
+                </Col>
+                <Col xs={4} className="icon-style">
+                  <i className="far fa-share-square fa-2x">
+                    <span>{article.reaction3_counter}</span>
+                  </i>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </a>
+      ))}
     </Fragment>
   );
 };
