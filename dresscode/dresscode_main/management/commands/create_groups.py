@@ -40,3 +40,13 @@ class Command(BaseCommand):
                         continue
                     new_group.permissions.add(perm)
         print("Permission groups created\n")
+
+
+# Assign Staff Permissions here (to-do later)
+
+# Add bob as admin
+bob = User.objects.get(username='bob')
+bob.is_staff = True
+admin = Group.objects.get(name='admin')
+bob.groups.add(admin)
+bob.save()
