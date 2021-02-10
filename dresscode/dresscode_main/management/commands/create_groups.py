@@ -2,8 +2,6 @@ import logging
 
 from django.contrib.auth.models import User, Group, Permission
 from django.core.management.base import BaseCommand
-from django.db.models.signals import m2m_changed
-from django.dispatch import receiver
 
 # Create the admin superuser group
 admin, created = Group.objects.get_or_create(name='admin')
