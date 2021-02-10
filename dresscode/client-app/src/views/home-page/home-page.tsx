@@ -1,13 +1,30 @@
-import React, { Component } from "react";
+import React, { useEffect, Fragment, useContext } from "react";
+import PostStore from "../../app/stores/postStore";
+import { observer } from "mobx-react-lite";
+import DiscoverCard from "../../features/discover-card/discover-card";
 
-import './home-page.css';
+import "./home-page.css";
 
 const HomePage = () => {
-    return (
-        <div>
-            <h1>Home Page</h1>
-        </div>
-    )
-}
+  const postStore = useContext(PostStore);
+  const { posts, loadAllPosts, removeAllPosts } = postStore;
 
-export default HomePage;
+  useEffect(() => {
+    if (!posts) {
+      loadAllPosts();
+    }
+    return () => {
+      removeAllPosts();
+    };
+  }, []);
+
+  return (
+    <Fragment>
+      {posts?.map((post) => (
+        <DiscoverCard post={post} key={post.id} />
+      ))}
+    </Fragment>
+  );
+};
+
+export default observer(HomePage);
