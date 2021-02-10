@@ -6,7 +6,7 @@ const DiscoverQuizPage = () => {
         <div>
             <h1>Discover Quiz Page</h1>
         </div>
-        <Card.Title className="text-color"><LinkContainer to="/article/${article.slug}">
+
     )
 }
 

@@ -7,7 +7,7 @@ import { Card, Col, Container, Nav, Row, Image } from "react-bootstrap";
 
 const QuizPage = () => {
 
-const [quizes, setQuizes] = useState<IArticle[]>([]);
+const [quizes, setQuizes] = useState<IQuiz[]>([]);
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/discover/quizzes/<slug:quiz_slug>/", {
