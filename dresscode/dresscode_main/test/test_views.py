@@ -79,7 +79,7 @@ class testViews(TestCase):
                                         "Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean "
                                         "quis leo in orci laoreet ullamcorper at nec lectus.")
         a.save()
-        response = self.client.get('/discover/articles/why-java-is-awesome/', follow=True)
+        response = self.client.get('/article/why-java-is-awesome/', follow=True)
         self.assertEquals(response.status_code, 200)
 
     def test_custom_discover_poll_view_status_200(self):
