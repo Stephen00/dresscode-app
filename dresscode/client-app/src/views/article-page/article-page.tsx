@@ -4,13 +4,15 @@ import { IArticle } from "../../app/models/article";
 import Picture from "../../assets/shutterstock_256173265_edit.jpg";
 import "./article-page.css";
 import { Card, Col, Container, Nav, Row, Image } from "react-bootstrap";
+import { useParams } from 'react-router'
 
 const ArticlePage = () => {
   const [articles, setArticles] = useState<IArticle[]>([]);
+  const param = useParams();
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/discover/articles/view_article/", {
-        params: { slug: "why-java-is-awesome" },
+        params: { slug: param },
       })
       .then((response) => {
         setArticles(response.data);
@@ -44,7 +46,7 @@ const ArticlePage = () => {
         </Col>
         <Col xs={6}>
           <div>
-            <h5 className="title"> Why Java Is Awesome </h5>
+            <h5 className="title"> Why Java Is Awesome</h5>
           </div>
         </Col>
         <Col xs={3}>

@@ -1,7 +1,7 @@
 import './quiz-page.css';
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
-import { IArticle } from "../../app/models/article";
+import { IQuiz } from "../../app/models/quiz";
 import Picture from "../../assets/shutterstock_256173265_edit.jpg";
 import { Card, Col, Container, Nav, Row, Image } from "react-bootstrap";
 

@@ -5,6 +5,7 @@ import { Card, Col, Row } from "react-bootstrap";
 import ArticleStore from "../../app/stores/articleStore";
 import { observer } from "mobx-react-lite";
 import { formatDistance } from "date-fns";
+import { Link } from 'react-router-dom';
 
 const DiscoverArticle: React.FC = () => {
   const articleStore = useContext(ArticleStore);
@@ -36,7 +37,7 @@ const DiscoverArticle: React.FC = () => {
             <Card.Subtitle className="date-style">
               {formatDistance(article.created_at, new Date())} ago
             </Card.Subtitle>
-            <Card.Title>{article.content.title}</Card.Title>
+            <Card.Title><Link to={'/article/'+article.content.slug }>{article.content.title}</Link></Card.Title>
             <div className="image-section">
               <img alt="" src={Picture} className="overview-image" />
             </div>
