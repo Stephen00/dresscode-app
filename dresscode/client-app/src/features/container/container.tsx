@@ -1,7 +1,8 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { Container } from "semantic-ui-react";
 import "./container.css";
-import { Container } from "react-bootstrap";
+
 import Article from "../../views/article-page/article-page";
 import Quiz from "../../views/quiz-page/quiz-page";
 import DiscoverArticle from "../../views/discover-article-page/discover-article-page";
@@ -21,13 +22,8 @@ const AppContainer: React.FC = () => {
           <Redirect to="/latest" />
         </Route>
         <Route path="/latest" component={Home} />
-<<<<<<< HEAD
-        <Route path="/discover/articles" component={DiscoverArticle} />
-        <Route path="/article/:article" component={Article} />
-=======
         <Route path="/article/:slug" component={Article} />
         <Route path="/discover/articles" component={DiscoverArticle} />
->>>>>>> origin/develop
         <Route path="/discover/quizzes" component={DiscoverQuiz} />
         <Route path="/discover/polls" component={DiscoverPoll} />
         <Route path="/quiz/:slug" component={Quiz} />
