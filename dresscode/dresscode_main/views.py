@@ -4,6 +4,8 @@ from rest_framework import status
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 
+from django.contrib.admin.options import get_content_type_for_model
+
 from .models import *
 from .serializers import *
 
@@ -24,7 +26,9 @@ def get_custom_article(request, article_slug):
     if request.method == 'GET':
         try:
             article = Article.objects.get(slug=article_slug)
-            serializer = ArticleSerializer(article, context={'request': request})
+            CT=get_content_type_for_model(article)
+            post=Post.objects.filter(object_id=article.pk, content_type=CT)[0]
+            serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
             return Response("no article found", status=status.HTTP_204_NO_CONTENT)
@@ -35,7 +39,9 @@ def get_custom_quiz(request, quiz_slug):
     if request.method == 'GET':
         try:
             quiz = Quiz.objects.get(slug=quiz_slug)
-            serializer = QuizSerializer(quiz, context={'request': request})
+            CT=get_content_type_for_model(quiz)
+            post=Post.objects.filter(object_id=quiz.pk, content_type=CT)[0]
+            serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
             return Response("no quiz found", status=status.HTTP_204_NO_CONTENT)
@@ -46,7 +52,9 @@ def get_custom_poll(request, poll_slug):
     if request.method == 'GET':
         try:
             poll = Poll.objects.get(slug=poll_slug)
-            serializer = PollSerializer(poll, context={'request': request})
+            CT=get_content_type_for_model(poll)
+            post=Post.objects.filter(object_id=poll.pk, content_type=CT)[0]
+            serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
             return Response("no poll found", status=status.HTTP_204_NO_CONTENT)
@@ -73,12 +81,14 @@ def get_all_tags(request):
 @api_view(['GET', 'POST'])
 def discover_quizzes(request):
     if request.method == 'GET':
-        data = Quiz.objects.all()
-
-        serializer = QuizSerializer(data, context={'request': request}, many=True)
-
-        return Response(serializer.data)
-
+        try:
+            CT=get_content_type_for_model(Quiz.objects.first())
+            data = Post.objects.filter(content_type=CT)        
+            serializer = PostSerializer(data, context={'request': request}, many=True)
+            return Response(serializer.data)
+        except:
+            return Response("No quizzes found", status=status.HTTP_204_NO_CONTENT)
+        
     elif request.method == 'POST':
         serializer = QuizSerializer(data=request.data)
         if serializer.is_valid():
@@ -91,11 +101,13 @@ def discover_quizzes(request):
 @api_view(['GET', 'POST'])
 def discover_polls(request):
     if request.method == 'GET':
-        data = Poll.objects.all()
-
-        serializer = PollSerializer(data, context={'request': request}, many=True)
-
-        return Response(serializer.data)
+        try:
+            CT=get_content_type_for_model(Poll.objects.first())
+            data = Post.objects.filter(content_type=CT)        
+            serializer = PostSerializer(data, context={'request': request}, many=True)
+            return Response(serializer.data)
+        except:
+            return Response("No polls found", status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'POST':
         serializer = PollSerializer(data=request.data)
@@ -109,11 +121,13 @@ def discover_polls(request):
 @api_view(['GET', 'POST'])
 def discover_articles(request):
     if request.method == 'GET':
-        data = Article.objects.all()
-
-        serializer = ArticleSerializer(data, context={'request': request}, many=True)
-
-        return Response(serializer.data)
+        try:
+            CT=get_content_type_for_model(Article.objects.first())
+            data = Post.objects.filter(content_type=CT)        
+            serializer = PostSerializer(data, context={'request': request}, many=True)
+            return Response(serializer.data)
+        except:
+            return Response("no quiz found", status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'POST':
         serializer = ArticleSerializer(data=request.data)
@@ -174,9 +188,9 @@ def add_poll_vote(request, slug):
         poll.vote_poll()
         poll.save()
         messages.info(request, "Successfully voted")
-        return redirect("discover/polls/", slug=slug) 
+        return redirect("discover/polls/", slug=slug)
 
-# needs more work: 
+# needs more work:
 def answer_quiz(request, slug):
     if request.method == 'POST':
         quiz = get_object_or_404(Quiz, slug=slug)
