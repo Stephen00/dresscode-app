@@ -1,11 +1,11 @@
 import { ITag } from "./tag";
+import { IQuestion } from "./question";
 
-export interface IArticle {
+export interface IQuiz {
   pk: number;
   title: string;
   // TODO add media
-  text: string;
+  questions: IQuestion[];
   tags: ITag[];
   slug: string;
 }
-

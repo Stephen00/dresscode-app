@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from tinymce.models import HTMLField
 
 from django.template.defaultfilters import slugify
 
@@ -18,6 +19,9 @@ class Tag(models.Model):
 class Media(models.Model):
     video = models.FileField()
     image = models.ImageField()
+    
+    class Meta:
+        verbose_name_plural = "Media"
 
 
 class QuizQuestion(models.Model):
@@ -28,7 +32,11 @@ class QuizQuestion(models.Model):
     mistake2 = models.CharField(max_length=128, blank=True, null=True)
     mistake3 = models.CharField(max_length=128, blank=True, null=True)
     tags = models.ManyToManyField(Tag, blank=True)
-
+    
+    class Meta:
+        verbose_name="Quiz Question"
+        verbose_name_plural = "Quiz Questions"
+    
     def get_randomised_answers(self):
         ans = [self.answer, self.mistake1, self.mistake2, self.mistake3]
         for i in range(10):
@@ -48,9 +56,13 @@ class QuizQuestion(models.Model):
             
 
 class Quiz(models.Model):
+    title = models.CharField(default="Quiz", blank=True, null=True, max_length=128)
     questions = models.ManyToManyField(QuizQuestion)
     tags = models.ManyToManyField(Tag, blank=True)
     slug=models.SlugField(unique=True)
+    
+    class Meta:
+        verbose_name_plural = "Quizzes"
 
     def get_tags(self):
         tags = self.tags
@@ -60,6 +72,8 @@ class Quiz(models.Model):
         
     def save(self, *args, **kwargs):
         mk_post=True
+        if self.title=="Quiz":
+            self.title="Quiz "+str(Quiz.objects.count()+1)
         if self.id:
             mk_post=False
             self.slug=slugify(self.id)
@@ -75,7 +89,14 @@ class Quiz(models.Model):
 class Poll(models.Model):
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
-    answers = models.JSONField()
+    answer1 = models.CharField(max_length=128)
+    answer2 = models.CharField(max_length=128, blank=True, null=True)
+    answer3 = models.CharField(max_length=128, blank=True, null=True)
+    answer4 = models.CharField(max_length=128, blank=True, null=True) 
+    vote1=models.IntegerField(default=0)
+    vote2=models.IntegerField(default=0)
+    vote3=models.IntegerField(default=0)
+    vote4=models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag, blank=True)
     slug = models.SlugField(unique=True)
 
@@ -83,12 +104,12 @@ class Poll(models.Model):
         return self.question
     
     def vote_poll(self, answer):
-        if self.answers["answer1"] == answer:
-            self.answers["vote1"] += 1
-        if self.answers["answer2"] == answer:
-            self.answers["vote2"] += 1
-        if self.answers["answer3"] == answer:
-            self.answers["vote3"] += 1
+        if self.answer1 == answer:
+            self.vote1 += 1
+        if self.answer2 == answer:
+            self.vote2 += 1
+        if self.answer3 == answer:
+            self.vote3 += 1
             
     def save(self, *args, **kwargs):
         try:
@@ -105,11 +126,11 @@ class Poll(models.Model):
 
 
 class Article(models.Model):
-    title = models.TextField(unique=True)
+    title = models.CharField(unique=True, max_length=256)
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
-    text = models.JSONField()
+    text = HTMLField()
     tags = models.ManyToManyField(Tag, blank=True)
-    slug=models.SlugField(unique=True)
+    slug = models.SlugField(unique=True)
     
     def save(self, *args, **kwargs):
         try:
@@ -152,11 +173,11 @@ class Post(models.Model):
     def full_title(self):
         return self.post_type() + " : " + self.title()
 
-    def react1(self):
+    def heart(self):
         self.reaction1_counter += 1
 
-    def react2(self):
+    def star(self):
         self.reaction2_counter += 1
 
-    def react3(self):
+    def share(self):
         self.reaction3_counter += 1
