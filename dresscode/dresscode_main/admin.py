@@ -1,4 +1,6 @@
 from django.contrib import admin, messages
+from django.contrib.auth.models import Group
+from django.dispatch import receiver
 from django.utils.translation import ngettext
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -187,11 +189,12 @@ class PostAdmin(admin.ModelAdmin):
 
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_superuser')
-    actions = ['make_staff', 'remove_staff', ]
+    list_display = ('username', 'email', 'first_name', 'last_name', 'staff_role', 'is_staff', 'is_superuser',)
+    actions = ['add_staff_status', 'remove_staff_status', 'add_admin_role', ]
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, default=1)
 
     # action to add user(s) as a staff member
-    def make_staff(self, request, queryset):
+    def add_staff_status(self, request, queryset):
         updated = queryset.update(is_staff=True)
         self.message_user(request, ngettext(
             '%d user successfully added as staff.',
@@ -199,9 +202,9 @@ class UserAdmin(BaseUserAdmin):
             updated
         ) % updated, messages.SUCCESS)
 
-    make_staff.short_description = "Add staff status to selected users"
+    add_staff_status.short_description = "Add staff status to selected users"
 
-    def remove_staff(self, request, queryset):
+    def remove_staff_status(self, request, queryset):
         if not request.user.is_superuser:
             messages.error(request, "Please contact a superuser to remove staff")
         if request.user in queryset:
@@ -213,9 +216,10 @@ class UserAdmin(BaseUserAdmin):
                 '%d users were successfully removed as staff.',
                 updated
             ) % updated, messages.SUCCESS)
+    remove_staff_status.short_description = "Remove staff status from selected users"
 
-    remove_staff.short_description = "Remove staff status from selected users"
-
+    def staff_role(self, request):
+        return ''.join([g.name for g in request.groups.all()]) if request.groups.count() else ''
 
 # Re-register UserAdmin
 admin.site.unregister(User)
