@@ -189,7 +189,7 @@ class PostAdmin(admin.ModelAdmin):
 
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'staff_role', 'is_staff', 'is_superuser',)
+    list_display = ('username', 'email', 'first_name', 'last_name', 'staff_group', 'is_staff', 'is_superuser',)
     actions = ['add_staff_status', 'remove_staff_status', 'add_admin_role', ]
     group = models.ForeignKey(Group, on_delete=models.CASCADE, default=1)
 
@@ -218,7 +218,7 @@ class UserAdmin(BaseUserAdmin):
             ) % updated, messages.SUCCESS)
     remove_staff_status.short_description = "Remove staff status from selected users"
 
-    def staff_role(self, request):
+    def staff_group(self, request):
         return ''.join([g.name for g in request.groups.all()]) if request.groups.count() else ''
 
 # Re-register UserAdmin
