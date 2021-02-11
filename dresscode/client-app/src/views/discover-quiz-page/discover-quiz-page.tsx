@@ -6,6 +6,7 @@ const DiscoverQuizPage = () => {
         <div>
             <h1>Discover Quiz Page</h1>
         </div>
+
     )
 }
 
