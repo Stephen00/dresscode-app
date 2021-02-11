@@ -189,8 +189,9 @@ class PostAdmin(admin.ModelAdmin):
 
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'staff_group', 'is_staff', 'is_superuser',)
+    list_display = ('username', 'email', 'first_name', 'last_name', 'staff_group', 'is_staff',)
     actions = ['add_staff_status', 'remove_staff_status', 'add_admin_role', ]
+    list_filter = ('groups', 'is_staff', 'is_superuser',)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, default=1)
 
     # action to add user(s) as a staff member
