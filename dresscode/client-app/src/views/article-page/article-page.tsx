@@ -8,12 +8,10 @@ import { useParams } from 'react-router'
 
 const ArticlePage = () => {
   const [articles, setArticles] = useState<IArticle[]>([]);
-  const param = useParams();
+  const param = useParams<{slug: string}>();
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/discover/articles/view_article/", {
-        params: { slug: param },
-      })
+      .get(`http://127.0.0.1:8000/discover/articles/view_article/`, { params: {article_slug: param.slug} })
       .then((response) => {
         setArticles(response.data);
       })
