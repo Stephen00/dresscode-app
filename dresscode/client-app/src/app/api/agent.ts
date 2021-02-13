@@ -1,7 +1,21 @@
 import axios, { AxiosResponse } from "axios";
+import { toast } from "react-toastify";
+import { history } from "../..";
 import { IPost } from "../models/post";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000";
+
+axios.interceptors.response.use(undefined, (error) => {
+  if (error.message === "Network Error" && !error.response) {
+    toast.error("Network error");
+  }
+  if (error.response.status === 404) {
+    history.push("/notfound");
+  }
+  if (error.response.status === 500) {
+    toast.error("Server error - check terminal for more info!");
+  }
+});
 
 // const sleep = (ms: number) => (response: AxiosResponse) =>
 //   new Promise<AxiosResponse>((resolve) =>

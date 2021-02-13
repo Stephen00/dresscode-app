@@ -1,3 +1,10 @@
+.notfound {
+  padding: 10% 0;
+  text-align: center;
+  color: #74529e;
+  font-weight: 700;
+}
+
 .title {
   color: #74529e;
   font-size: 2rem;

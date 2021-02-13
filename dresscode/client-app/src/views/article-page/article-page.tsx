@@ -16,9 +16,15 @@ interface DetailsProps {
 
 const ArticlePage: React.FC<RouteComponentProps<DetailsProps>> = ({
   match,
+  history,
 }) => {
   const postStore = useContext(PostStore);
-  const { selectedPost, loadPost, removeSelectedPost } = postStore;
+  const {
+    selectedPost,
+    loadPost,
+    removeSelectedPost,
+    loadingInitial,
+  } = postStore;
 
   useEffect(() => {
     if (!selectedPost) {
@@ -29,8 +35,12 @@ const ArticlePage: React.FC<RouteComponentProps<DetailsProps>> = ({
     };
   }, []);
 
-  if (!selectedPost) {
+  if (loadingInitial) {
     return <LoadingComponent />;
+  }
+
+  if (!selectedPost) {
+    return <h2 className="notfound">Article not found</h2>;
   }
 
   return (
