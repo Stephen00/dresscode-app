@@ -92,8 +92,8 @@ class PostContentTypeRelatedField(serializers.RelatedField):
         Serialize content objects to a simple textual representation.
         """
         
-        #There is a potential issue with this, as it depends of an instance to exist on db to match content_type
-        #However, for us to transmit an instance it needs to exist in db so...
+        # There is a potential issue with this, as it depends of an instance to exist on db to match content_type
+        # However, for us to transmit an instance it needs to exist in db so...
         # This is not scalable and could be changed for optimization though
         if get_content_type_for_model(Quiz.objects.first())==value:
             return "Quiz"
