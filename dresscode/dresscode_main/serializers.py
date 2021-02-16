@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Quiz, QuizQuestion, Post, Tag, Article, Media, Poll
-
+from django.contrib.admin.options import get_content_type_for_model
 
 class MediaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -82,9 +82,17 @@ class PostContentRelatedField(serializers.RelatedField):
         else:
             raise Exception('Unexpected type of content attached to Post.')
         return serializer.data
+        
+class PostContentTypeRelatedField(serializers.RelatedField):
+    """
+    A custom field to determine content_types.
+    """
+    def to_representation(self, value):
+        return value.model #Content_Type instance is passed in so we can return CT.model
 
 class PostSerializer(serializers.ModelSerializer):
     content = PostContentRelatedField(read_only='True')
+    content_type = PostContentTypeRelatedField(read_only='True')
     
     class Meta:
         model = Post
