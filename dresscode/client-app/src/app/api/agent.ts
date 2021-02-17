@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import { history } from "../..";
+import { history } from "../../history";
 import { IPost } from "../models/post";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000";

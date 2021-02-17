@@ -1,14 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Router } from "react-router-dom";
+import App from "./app/layout/App";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.min.css";
-import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
-import { Router } from "react-router-dom";
-import { createBrowserHistory } from "history";
-
-export const history = createBrowserHistory();
+import { history } from "./history";
 
 ReactDOM.render(
   <Router history={history}>
