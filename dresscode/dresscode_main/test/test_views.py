@@ -76,9 +76,6 @@ class TestViews(TestCase):
         response = self.client.get(reverse('discover_posts'))
         self.assertEquals(response.status_code, 200)
 
-    def test_discover_posts_view_status_200(self):
-        response = self.client.get(reverse('discover_posts'))
-        self.assertEquals(response.status_code, 200)
 
     def test_custom_discover_article_view_status_200(self):
         a = Article.objects.create(media=None, title="Why Java is awesome",
