@@ -5,6 +5,7 @@ import "./container.css";
 
 import Article from "../../views/article-page/article-page";
 import Quiz from "../../views/quiz-page/quiz-page";
+import Poll from "../../views/poll-page/poll-page";
 import DiscoverArticle from "../../views/discover-article-page/discover-article-page";
 import DiscoverQuiz from "../../views/discover-quiz-page/discover-quiz-page";
 import DiscoverPoll from "../../views/discover-poll-page/discover-poll-page";
@@ -24,10 +25,10 @@ const AppContainer: React.FC = () => {
         <Route exact path="/latest" component={Home} />
         <Route exact path="/articles/:slug" component={Article} />
         <Route exact path="/quizzes/:slug" component={Quiz} />
+        <Route exact path="/polls/:slug" component={Poll} />
         <Route exact path="/discover/articles" component={DiscoverArticle} />
         <Route exact path="/discover/quizzes" component={DiscoverQuiz} />
         <Route exact path="/discover/polls" component={DiscoverPoll} />
-
         <Route exact path="/more" component={More} />
         <Route exact path="/people" component={People} />
         <Route component={Error404Page} />

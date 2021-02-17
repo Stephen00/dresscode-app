@@ -17,6 +17,11 @@ axios.interceptors.response.use(undefined, (error) => {
   }
 });
 
+// axios.interceptors.request.use((request) => {
+//   console.log(request.url);
+//   return request;
+// });
+
 // const sleep = (ms: number) => (response: AxiosResponse) =>
 //   new Promise<AxiosResponse>((resolve) =>
 //     setTimeout(() => resolve(response), ms)

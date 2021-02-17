@@ -4,6 +4,8 @@ import { RouteComponentProps } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import DiscoverCard from "../../features/discover-card/discover-card";
 import { DiscoverProps } from "../commonProps";
+import NoPosts from "../../features/no-posts/no-posts";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 
 const DiscoverArticle: React.FC<RouteComponentProps<DiscoverProps>> = ({
   match,
@@ -11,6 +13,7 @@ const DiscoverArticle: React.FC<RouteComponentProps<DiscoverProps>> = ({
   const postStore = useContext(PostStore);
   const {
     articles,
+    loadingInitial,
     loadPostsOfType: loadPosts,
     removePostsOfType: removeAllPosts,
   } = postStore;
@@ -23,6 +26,14 @@ const DiscoverArticle: React.FC<RouteComponentProps<DiscoverProps>> = ({
       removeAllPosts(match.path);
     };
   }, []);
+
+  if (loadingInitial) {
+    return <LoadingComponent />;
+  }
+
+  if (!articles) {
+    return <NoPosts callerType="overview" />;
+  }
 
   return (
     <Fragment>
