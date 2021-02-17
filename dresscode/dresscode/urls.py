@@ -28,8 +28,8 @@ urlpatterns = [
     path('discover/polls/', views.discover_polls, name="discover_polls"),
     path('discover/quizzes/', views.discover_quizzes, name="discover_quizzes"),
     path('discover/posts/', views.discover_posts, name="discover_posts"),
-    path('discover/articles/<slug:article_slug>/', views.get_custom_article),
-    path('discover/quizzes/<slug:quiz_slug>/', views.get_custom_quiz),
-    path('discover/polls/<slug:poll_slug>/', views.get_custom_poll),
+    path('discover/articles/<slug:article_slug>/', views.get_custom_article, name="custom_article"),
+    path('discover/quizzes/<slug:quiz_slug>/', views.get_custom_quiz, name="custom_quiz"),
+    path('discover/polls/<slug:poll_slug>/', views.get_custom_poll, name="custom_poll"),
     path('api/tags/', views.get_all_tags, name="api_tags"),
 ]
