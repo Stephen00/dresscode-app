@@ -1,0 +1,39 @@
+.poll-component-section {
+    border: 2px solid #74529E;
+    background-color: #74529E;
+    color: white;
+    padding: 10px;
+    margin: 0px 10px;
+    border-radius: 25px;
+}
+
+.poll-button {
+    border: 1px outset white !important;
+    background-color: white !important;
+    height: 40px;
+    width:  40px;
+}
+
+.vote-row {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.vote-answer-column {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.vote-button-column {
+    display: flex;
+    justify-content:center;
+}
+
+.vote-count-column {
+    display: flex;
+    justify-content:center;
+}
+
+.total-vote-section {
+    text-align: right;
+}
