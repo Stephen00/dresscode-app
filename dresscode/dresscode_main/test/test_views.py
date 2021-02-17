@@ -5,8 +5,6 @@ from dresscode_main.models import *
 
 
 class TestViews(TestCase):
-    def setup(self):
-        self.client = Client()
 
     def test_home_view_status_200(self):
         response = self.client.get(reverse('home'))
