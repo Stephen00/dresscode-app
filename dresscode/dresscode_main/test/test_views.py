@@ -63,6 +63,8 @@ class testViews(TestCase):
         self.assertEquals(response.status_code, 204)
 
     def test_discover_posts_view_status_200(self):
+        p=Poll(question="C or Java?", answer1="C", answer2="Java")
+        p.save()
         response = self.client.get(reverse('discover_posts'))
         self.assertEquals(response.status_code, 200)
 

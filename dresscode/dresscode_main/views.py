@@ -18,7 +18,7 @@ def home(request):
             serializer = PostSerializer(post, context={'request': request}, many=True)
             return Response(serializer.data)
         except:
-            return Response("no posts found", status=status.HTTP_204_NO_CONTENT)
+            return Response("no posts found", status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -31,7 +31,7 @@ def get_custom_article(request, article_slug):
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
-            return Response("no article found", status=status.HTTP_204_NO_CONTENT)
+            return Response("Article "+article_slug+" doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -44,7 +44,7 @@ def get_custom_quiz(request, quiz_slug):
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
-            return Response("no quiz found", status=status.HTTP_204_NO_CONTENT)
+            return Response("Quiz "+quiz_slug+" doesn't exist", status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET'])
@@ -57,7 +57,7 @@ def get_custom_poll(request, poll_slug):
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
-            return Response("no poll found", status=status.HTTP_204_NO_CONTENT)
+            return Response("Poll "+poll_slug+" doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET', 'POST'])
@@ -142,6 +142,10 @@ def discover_articles(request):
 def discover_posts(request):
     if request.method == 'GET':
         data = Post.objects.all()
+        try:
+            Post.objects.first()
+        except:
+            return Response("no posts found", status=status.HTTP_204_NO_CONTENT)
 
         serializer = PostSerializer(data, context={'request': request}, many=True)
 
