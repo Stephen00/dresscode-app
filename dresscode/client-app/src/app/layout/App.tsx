@@ -5,7 +5,7 @@ import AppContainer from "../../features/container/container";
 import { observer } from "mobx-react-lite";
 import { ToastContainer } from "react-toastify";
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <Fragment>
       <ToastContainer position="bottom-right" />

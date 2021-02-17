@@ -5,7 +5,7 @@ import DiscoverCard from "../../features/discover-card/discover-card";
 
 import "./home-page.css";
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   const postStore = useContext(PostStore);
   const { posts, loadAllPosts, removeAllPosts } = postStore;
 
@@ -19,7 +19,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <Fragment>
+    <Fragment key="homepage">
       {posts?.map((post) => (
         <DiscoverCard post={post} key={post.id} />
       ))}
