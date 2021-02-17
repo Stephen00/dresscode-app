@@ -17,7 +17,7 @@ const DiscoverCard: React.FC<CardProps> = ({ post }) => {
       className="text-color"
       style={{ textDecoration: "none", color: "#74529e" }}
       as={Link}
-      to={`/articles/${post.content.slug}`}
+      to={`/${post.content_type}/${post.content.slug}`}
     >
       <Card.Subtitle className="date-style">
         {formatDistance(post.created_at, new Date())} ago

@@ -21,14 +21,15 @@ const AppContainer: React.FC = () => {
         <Route exact path="/">
           <Redirect to="/latest" />
         </Route>
-        <Route path="/latest" component={Home} />
+        <Route exact path="/latest" component={Home} />
         <Route exact path="/articles/:slug" component={Article} />
-        <Route path="/discover/articles" component={DiscoverArticle} />
-        <Route path="/discover/quizzes" component={DiscoverQuiz} />
-        <Route path="/discover/polls" component={DiscoverPoll} />
-        <Route path="/quizzes/:slug" component={Quiz} />
-        <Route path="/more" component={More} />
-        <Route path="/people" component={People} />
+        <Route exact path="/quizzes/:slug" component={Quiz} />
+        <Route exact path="/discover/articles" component={DiscoverArticle} />
+        <Route exact path="/discover/quizzes" component={DiscoverQuiz} />
+        <Route exact path="/discover/polls" component={DiscoverPoll} />
+
+        <Route exact path="/more" component={More} />
+        <Route exact path="/people" component={People} />
         <Route component={Error404Page} />
       </Switch>
     </Container>

@@ -16,7 +16,6 @@ interface DetailsProps {
 
 const ArticlePage: React.FC<RouteComponentProps<DetailsProps>> = ({
   match,
-  history,
 }) => {
   const postStore = useContext(PostStore);
   const {

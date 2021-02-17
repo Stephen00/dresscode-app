@@ -26,8 +26,8 @@ def get_custom_article(request, article_slug):
     if request.method == 'GET':
         try:
             article = Article.objects.get(slug=article_slug)
-            CT=get_content_type_for_model(article)
-            post=Post.objects.filter(object_id=article.pk, content_type=CT)[0]
+            CT = get_content_type_for_model(article)
+            post = Post.objects.filter(object_id=article.pk, content_type=CT)[0]
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
@@ -39,8 +39,8 @@ def get_custom_quiz(request, quiz_slug):
     if request.method == 'GET':
         try:
             quiz = Quiz.objects.get(slug=quiz_slug)
-            CT=get_content_type_for_model(quiz)
-            post=Post.objects.filter(object_id=quiz.pk, content_type=CT)[0]
+            CT = get_content_type_for_model(quiz)
+            post = Post.objects.filter(object_id=quiz.pk, content_type=CT)[0]
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
@@ -52,8 +52,8 @@ def get_custom_poll(request, poll_slug):
     if request.method == 'GET':
         try:
             poll = Poll.objects.get(slug=poll_slug)
-            CT=get_content_type_for_model(poll)
-            post=Post.objects.filter(object_id=poll.pk, content_type=CT)[0]
+            CT = get_content_type_for_model(poll)
+            post = Post.objects.filter(object_id=poll.pk, content_type=CT)[0]
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
@@ -82,13 +82,13 @@ def get_all_tags(request):
 def discover_quizzes(request):
     if request.method == 'GET':
         try:
-            CT=get_content_type_for_model(Quiz.objects.first())
-            data = Post.objects.filter(content_type=CT)        
+            CT = get_content_type_for_model(Quiz.objects.first())
+            data = Post.objects.filter(content_type=CT)
             serializer = PostSerializer(data, context={'request': request}, many=True)
             return Response(serializer.data)
         except:
             return Response("No quizzes found", status=status.HTTP_204_NO_CONTENT)
-        
+
     elif request.method == 'POST':
         serializer = QuizSerializer(data=request.data)
         if serializer.is_valid():
@@ -102,8 +102,8 @@ def discover_quizzes(request):
 def discover_polls(request):
     if request.method == 'GET':
         try:
-            CT=get_content_type_for_model(Poll.objects.first())
-            data = Post.objects.filter(content_type=CT)        
+            CT = get_content_type_for_model(Poll.objects.first())
+            data = Post.objects.filter(content_type=CT)
             serializer = PostSerializer(data, context={'request': request}, many=True)
             return Response(serializer.data)
         except:
@@ -122,8 +122,8 @@ def discover_polls(request):
 def discover_articles(request):
     if request.method == 'GET':
         try:
-            CT=get_content_type_for_model(Article.objects.first())
-            data = Post.objects.filter(content_type=CT)        
+            CT = get_content_type_for_model(Article.objects.first())
+            data = Post.objects.filter(content_type=CT)
             serializer = PostSerializer(data, context={'request': request}, many=True)
             return Response(serializer.data)
         except:
@@ -182,6 +182,7 @@ def add_share_reaction(request, slug):
         messages.info(request, "Share reaction added to this post")
         return redirect("discover/posts/", slug=slug)
 
+
 def add_poll_vote(request, slug):
     if request.method == 'POST':
         poll = get_object_or_404(Poll, slug=slug)
@@ -190,15 +191,16 @@ def add_poll_vote(request, slug):
         messages.info(request, "Successfully voted")
         return redirect("discover/polls/", slug=slug)
 
+
 # needs more work:
 def answer_quiz(request, slug):
     if request.method == 'POST':
         quiz = get_object_or_404(Quiz, slug=slug)
-        questions = quiz.questions.all()   #might need to pass pk of some sort here or in next line
+        questions = quiz.questions.all()  # might need to pass pk of some sort here or in next line
         for question in questions:
-            guess = "C#" # place holder; not sure how to get guess
+            guess = "C#"  # place holder; not sure how to get guess
             if question.check_answer(guess):
-                quiz.score() # need to update models to include way to evaluate quiz
+                quiz.score()  # need to update models to include way to evaluate quiz
         quiz.save()
         msg = "Quiz result: " + quiz.score.get()
         messages.info(request, msg)
