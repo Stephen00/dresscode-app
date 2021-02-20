@@ -1,4 +1,4 @@
-.text-colour{
+.text-colour {
   color: #74529e;
 }
 
@@ -51,7 +51,7 @@
   margin-top: 1em;
 }
 
-.article-content {
+.post-content {
   margin-top: 1em;
 }
 
@@ -68,4 +68,29 @@
 .fab {
   margin: 0 0.3em;
   color: #74529e;
+}
+
+.after-content-row {
+  margin: 7% 0;
+  align-items: center;
+}
+
+.list-group-item {
+  background-color: #74529e !important;
+  color: #f9b222 !important;
+  font-weight: 700;
+  padding: 0 5%;
+}
+
+.list-group-item:hover {
+  color: #ed6b4b !important;
+  cursor: pointer;
+}
+
+.fa-share-square {
+  align-items: flex-end;
+}
+
+.social-icons-row {
+  justify-content: center;
 }
