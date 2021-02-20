@@ -24,7 +24,7 @@ const DiscoverPoll = ({answers, votes, total_votes}: DiscoverPollProps) => {
             <Button className="poll-button  float-right" onClick={() => handlePollClick(index)}></Button>
           </Col>
           <Col xs={6} className="vote-answer-column">
-            <h5>{value}, {vote[index]}, {total_vote}, {String(visible)}</h5>
+            <h5>{value}</h5>
           </Col>
           <Col xs={3} className="vote-count-column">
             {visible && <h5>{((vote[index] / total_vote) * 100).toFixed(0)}%</h5>}
@@ -48,7 +48,7 @@ const DiscoverPoll = ({answers, votes, total_votes}: DiscoverPollProps) => {
 
   return (
     <div className="poll-component-section">
-      {visible && <h5>Thank you for answering the poll.</h5>}
+      {visible && <h5 className="message-section">Thank you for answering the poll.</h5>}
       {items}
       {visible && <h5 className="total-vote-section">Total vote: {total_vote}</h5>}
     </div>
