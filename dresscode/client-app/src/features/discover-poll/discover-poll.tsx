@@ -1,57 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import "./discover-poll.css";
 import { Card, Col, Row, Button } from "react-bootstrap";
 import { propTypes } from "react-bootstrap/esm/Image";
 
 type DiscoverPollProps = {
-  answers: (string | undefined)[],
-  votes: (number | undefined)[]
+  answers: (string)[],
+  votes: (number)[],
+  total_votes: (number)
 }
 
-const DiscoverPoll = ({answers, votes}: DiscoverPollProps) => {
-  var new_answers: String[] = []
-  var new_votes: number[] = []
-  var total_votes: number = 0
-
-  answers.forEach(function (value, index) {
-    if (answers[index] !== null) {
-      new_answers.push(String(answers[index]))
-      new_votes.push(Number(votes[index]))
-      total_votes += Number(votes[index])
-    }
-  });
+const DiscoverPoll = ({answers, votes, total_votes}: DiscoverPollProps) => {
+  const [visible, setVisible] = useState<Boolean>(false)
+  const [answer, setAnswer] = useState<string[]>(answers)
+  const [vote, setVote] = useState<number[]>(votes)
+  const [total_vote, setTotal_vote] = useState<number>(total_votes)
 
   const items: any = []
-  new_answers.forEach((value, index) => {
+  answer.forEach((value, index) => {
     items.push(
       <div key={index}>
         <Row className="vote-row">
-          <Col xs={4} className="vote-button-column">
-            <Button className="poll-button" onClick={handlePollClick}></Button>
+          <Col xs={3} className="vote-button-column">
+            <Button className="poll-button  float-right" onClick={() => handlePollClick(index)}></Button>
           </Col>
-          <Col xs={4} className="vote-answer-column">
-            <h5>{value}</h5>
+          <Col xs={6} className="vote-answer-column">
+            <h5>{value}, {vote[index]}, {total_vote}, {String(visible)}</h5>
           </Col>
-          <Col xs={4} className="vote-count-column">
-            {((new_votes[index] / total_votes) * 100).toFixed(0)}
+          <Col xs={3} className="vote-count-column">
+            {visible && <h5>{((vote[index] / total_vote) * 100).toFixed(0)}%</h5>}
           </Col>
         </Row>
       </div>
     )
   })
 
-  var state = { isClick: false, isExecute: false }
+  function handlePollClick (index: number) {
+    if (!visible) {
+      setTotal_vote(total_vote + 1)
 
-  function handlePollClick() {
-    console.log("handlePollClick()")
-    console.log("isClick:", state.isClick)
+      let items:number[] = [...vote];
+      items[index] += 1
+      setVote(items);
+  
+      setVisible(true)
+    }
   }
 
   return (
     <div className="poll-component-section">
-      <h5>Thank you for answering the poll.</h5>
+      {visible && <h5>Thank you for answering the poll.</h5>}
       {items}
-      <h5 className="total-vote-section">Total vote: {total_votes}</h5>
+      {visible && <h5 className="total-vote-section">Total vote: {total_vote}</h5>}
     </div>
   )
 

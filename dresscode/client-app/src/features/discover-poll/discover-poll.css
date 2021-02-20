@@ -25,13 +25,12 @@
 }
 
 .vote-button-column {
-    display: flex;
-    justify-content:center;
+    display: flex-end;
+    justify-content:right;
 }
 
 .vote-count-column {
-    display: flex;
-    justify-content:center;
+    text-align: center;
 }
 
 .total-vote-section {

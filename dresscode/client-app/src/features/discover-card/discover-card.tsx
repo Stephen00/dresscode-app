@@ -22,6 +22,18 @@ const DiscoverCard: React.FC<CardProps> = ({ post }) => {
                   (post?.content as IPoll).vote2, 
                   (post?.content as IPoll).vote3,
                   (post?.content as IPoll).vote4]
+    
+    var new_answers: string[] = []
+    var new_votes: number[] = []
+    var total_votes: number = 0
+  
+    answers.forEach(function (value, index) {
+      if (answers[index] !== null) {
+        new_answers.push(String(answers[index]))
+        new_votes.push(Number(votes[index]))
+        total_votes += Number(votes[index])
+      }
+    });
 
     return (
       <div>
@@ -35,7 +47,7 @@ const DiscoverCard: React.FC<CardProps> = ({ post }) => {
           </Card.Subtitle>
           <Card.Title>{post.content.title}</Card.Title>
           <div className="poll-section">
-            <DiscoverPoll answers={answers} votes={votes}/>
+            <DiscoverPoll answers={new_answers} votes={new_votes} total_votes={total_votes}/>
           </div>
           <Card.Body>
             <Row>
