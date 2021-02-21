@@ -1,42 +1,44 @@
 .poll-component-section {
-    border: 2px solid #74529E;
-    background-color: #74529E;
-    color: white;
-    padding: 10px;
-    margin: 0px 10px;
-    border-radius: 25px;
+  border: 2px solid #74529e;
+  background-color: #74529e;
+  color: white;
+  padding: 20px 50px;
+  margin: 0px 7%;
+  border-radius: 25px;
+  font-size: 1.1rem;
+}
+
+@media only screen and (max-width: 700px) {
+  .poll-component-section {
+    margin: 0;
+    padding: 20px;
+  }
 }
 
 .poll-button {
-    border: 1px outset white !important;
-    background-color: white !important;
-    height: 40px;
-    width:  40px;
+  border: 1px outset white !important;
+  background-color: white !important;
+  height: 40px;
+  width: 40px;
 }
 
 .vote-row {
-    margin-top: 20px;
-    margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .vote-answer-column {
-    margin-top: auto;
-    margin-bottom: auto;
+  margin: auto 0;
 }
 
-.vote-button-column {
-    display: flex-end;
-    justify-content:right;
-}
+/* .vote-button-column {
+  display: flex-end;
+} */
 
 .vote-count-column {
-    text-align: center;
+  text-align: right;
 }
 
-.total-vote-section {
-    text-align: right;
-}
-
-.message-section {
-    padding-left: 30px;
+.after-answer-section {
+  text-align: right;
 }

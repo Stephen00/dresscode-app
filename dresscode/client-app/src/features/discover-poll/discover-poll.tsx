@@ -2,58 +2,81 @@ import React, { useState } from "react";
 import "./discover-poll.css";
 import { Card, Col, Row, Button } from "react-bootstrap";
 import { propTypes } from "react-bootstrap/esm/Image";
+import { PollComponentProps } from "../../views/commonProps";
 
-type DiscoverPollProps = {
-  answers: (string)[],
-  votes: (number)[],
-  total_votes: (number)
-}
+const DiscoverPoll: React.FC<PollComponentProps> = ({ poll }) => {
+  const answers = [
+    poll.answer1,
+    poll.answer2,
+    poll.answer3,
+    poll.answer4,
+    poll.answer5,
+  ].filter(Boolean);
 
-const DiscoverPoll = ({answers, votes, total_votes}: DiscoverPollProps) => {
-  const [visible, setVisible] = useState<Boolean>(false)
-  const [answer, setAnswer] = useState<string[]>(answers)
-  const [vote, setVote] = useState<number[]>(votes)
-  const [total_vote, setTotal_vote] = useState<number>(total_votes)
+  var initialVotes = [
+    poll.vote1,
+    poll.vote2,
+    poll.vote3,
+    poll.vote4,
+    poll.vote5,
+  ].filter(Boolean);
 
-  const items: any = []
-  answer.forEach((value, index) => {
+  var initialTotalVotes = initialVotes.reduce((a, b) => a!! + b!!, 0);
+
+  const [visible, setVisible] = useState<Boolean>(false);
+  const [votes, setVotes] = useState<(number | undefined)[]>(initialVotes);
+  const [totalVotes, setTotalVotes] = useState<number | undefined>(
+    initialTotalVotes
+  );
+
+  const items: any = [];
+  answers.forEach((value, index) => {
     items.push(
       <div key={index}>
         <Row className="vote-row">
-          <Col xs={3} className="vote-button-column">
-            <Button className="poll-button  float-right" onClick={() => handlePollClick(index)}></Button>
+          <Col xs={2} className="vote-button-column">
+            <Button
+              className="poll-button"
+              onClick={() => handlePollClick(index)}
+            ></Button>
           </Col>
-          <Col xs={6} className="vote-answer-column">
-            <h5>{value}</h5>
+          <Col xs={7} className="vote-answer-column">
+            {value}
           </Col>
           <Col xs={3} className="vote-count-column">
-            {visible && <h5>{((vote[index] / total_vote) * 100).toFixed(0)}%</h5>}
+            {visible && (
+              <span>{((votes[index]!! / totalVotes!!) * 100).toFixed(0)}%</span>
+            )}
           </Col>
         </Row>
       </div>
-    )
-  })
+    );
+  });
 
-  function handlePollClick (index: number) {
+  function handlePollClick(index: number) {
     if (!visible) {
-      setTotal_vote(total_vote + 1)
+      let items: (number | undefined)[] = [...votes];
+      if (items[index] !== undefined) {
+        items[index] = items[index]!! + 1;
+      }
+      setVotes(items);
+      setTotalVotes(totalVotes!! + 1);
 
-      let items:number[] = [...vote];
-      items[index] += 1
-      setVote(items);
-  
-      setVisible(true)
+      setVisible(true);
     }
   }
 
   return (
     <div className="poll-component-section">
-      {visible && <h5 className="message-section">Thank you for answering the poll.</h5>}
       {items}
-      {visible && <h5 className="total-vote-section">Total vote: {total_vote}</h5>}
+      {visible && (
+        <div className="after-answer-section">
+          <div>Thank you for your answer!</div>
+          <div>Total votes: {totalVotes}</div>
+        </div>
+      )}
     </div>
-  )
-
+  );
 };
 
 export default DiscoverPoll;
