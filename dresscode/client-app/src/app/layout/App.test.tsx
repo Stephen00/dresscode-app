@@ -2,16 +2,11 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 import { Router } from "react-router-dom";
-import HomePage from "../../views/home-page/home-page";
 import App from "./App";
+import ErrorPage from "../../views/error-404-page/error-404-page";
+import userEvent from "@testing-library/user-event";
 
-test("renders homepage text", () => {
-  render(<HomePage />);
-  const linkElement = screen.getByText("Home Page");
-  expect(linkElement).toBeInTheDocument();
-});
-
-test("landing on a bad page", () => {
+test("test entering bad route", () => {
   const history = createMemoryHistory();
   history.push("/someroute/bad");
   render(
@@ -21,4 +16,11 @@ test("landing on a bad page", () => {
   );
 
   expect(screen.getByText("404 page not found")).toBeInTheDocument();
+});
+
+test("test homepage button in error page", () => {
+  render(<ErrorPage />);
+
+  userEvent.click(screen.getByText("Go to Home Page"));
+  expect(document.getElementById("homepage")).toBeInTheDocument;
 });

@@ -13,5 +13,5 @@ export interface IPost {
   created_at: Date;
   updated_at: Date;
   author: string;
-  content_type: number;
+  content_type: string;
 }
