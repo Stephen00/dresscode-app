@@ -3,7 +3,7 @@ import PostStore from "../../app/stores/postStore";
 import Picture from "../../assets/shutterstock_256173265_edit.jpg";
 import { observer } from "mobx-react-lite";
 import "./details-layout.css";
-import { Col, ListGroup, Row } from "react-bootstrap";
+import { Col, ListGroup, Row, Card, Form } from "react-bootstrap";
 import { format } from "date-fns";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { DetailsProps } from "../../views/commonProps";
@@ -96,11 +96,39 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
 
         {selectedPost.content_type === "quizzes" && (
           <Row className="post-content">
-            <ListGroup>
-              {(selectedPost.content as IQuiz).questions.map((q) => (
-                <ListGroup.Item key={q.id}>{q.question}</ListGroup.Item>
-              ))}
-            </ListGroup>
+            {(selectedPost.content as IQuiz).questions.map((q) => (
+            <Card className="quiz-card">
+                  <Card.Title id="question-text">
+                      {q.question}
+                  </Card.Title>
+                  <Card.Body className="card-body">
+                      <Form>
+                          <div className="mb-4 checkHolder">
+                            <Form.Check
+                              name="groupOptions"
+                              type="radio"
+                              label={q.answer}
+                              />
+                            <Form.Check
+                              name="groupOptions"
+                              type="radio"
+                              label={q.mistake1}
+                            />
+                            <Form.Check
+                              name="groupOptions"
+                              type="radio"
+                              label={q.mistake2}
+                            />
+                            <Form.Check
+                              name="groupOptions"
+                              type="radio"
+                              label={q.mistake3}
+                            />
+                          </div>
+                      </Form>
+                  </Card.Body>
+              </Card>
+            ))}
           </Row>
         )}
 
