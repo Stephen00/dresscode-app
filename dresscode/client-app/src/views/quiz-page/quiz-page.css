@@ -1,0 +1,41 @@
+
+body {
+    cursor: pointer !important;
+}
+
+
+#page-container {
+    text-align:center;
+}
+
+.card-title{
+    padding-left: 0% !important;
+}
+
+
+.quiz-card{
+    background: #74529e !important;
+    font-size: 12px !important;
+    color: #f9b222 !important;
+    border-style: solid !important;
+    border-width: 4px !important;
+    border-color: #f9b222 !important;
+}
+
+.checkHolder{
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+    transform: scale(2);
+    cursor: pointer;
+    margin: auto !important;
+}
+
+#question-text{
+    font-size: 26px !important;
+    margin-bottom: 1.5em !important;
+    margin-left: 1em !important;
+}
+
+.card-body{
+    margin: auto !important;
+}

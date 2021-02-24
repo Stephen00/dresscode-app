@@ -1,0 +1,27 @@
+test-backend:
+    stage: test
+    image: python:latest
+    tags:
+        - docker
+    script:
+        - pip install --upgrade pip
+        - pip install -r requirements.txt
+        - cd dresscode
+        - python manage.py makemigrations
+        - python manage.py migrate
+        - coverage run manage.py test
+        - coverage report
+        - coverage-badge -o coverage.svg
+    coverage: '/^TOTAL.+?(\d+\%)$/'
+
+        
+test-frontend:
+    stage: test
+    image: node:latest
+    tags:
+        - docker
+    script:
+        - cd dresscode/client-app
+        - npm install
+        - npm test -- --coverage
+
