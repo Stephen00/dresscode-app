@@ -51,6 +51,7 @@ class testAttributes(TestCase):
         quiz.tags.set([c_tag])
         quiz.questions.add(QuizQuestion.objects.all()[0])
         quiz.save()
+        quiz.get_tags()
 
     # Test Cases here
     def testPollQuestion(self):

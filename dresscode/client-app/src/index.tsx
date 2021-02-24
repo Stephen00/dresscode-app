@@ -1,16 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-//import "semantic-ui-css/semantic.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { Router } from "react-router-dom";
 import App from "./app/layout/App";
+import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.min.css";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
+import { history } from "./history";
 
 ReactDOM.render(
-  <BrowserRouter>
+  <Router history={history}>
     <App />
-  </BrowserRouter>,
+  </Router>,
   document.getElementById("root")
 );
 

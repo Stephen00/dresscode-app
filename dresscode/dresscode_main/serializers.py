@@ -88,7 +88,9 @@ class PostContentTypeRelatedField(serializers.RelatedField):
     A custom field to determine content_types.
     """
     def to_representation(self, value):
-        return value.model #Content_Type instance is passed in so we can return CT.model
+        if value.model == 'quiz':
+            return 'quizzes'
+        return value.model+'s' #Content_Type instance is passed in so we can return CT.model
 
 class PostSerializer(serializers.ModelSerializer):
     content = PostContentRelatedField(read_only='True')

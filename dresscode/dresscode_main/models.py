@@ -67,7 +67,7 @@ class Quiz(models.Model):
     def get_tags(self):
         tags = self.tags
         for q in self.questions.all():
-            tags = tags | q.tags
+            tags = tags or q.tags
         return tags
 
     def save(self, *args, **kwargs):

@@ -1,15 +1,17 @@
 import React from "react";
-import { Dimmer, Loader } from "semantic-ui-react";
+import { Spinner } from "react-bootstrap";
 
-const LoadingComponent: React.FC<{
-  inverted?: boolean;
-  content?: string;
-}> = ({ inverted = true, content }) => {
+const LoadingComponent: React.FC = () => {
   return (
-    <div>
-      <Dimmer active inverted={inverted}>
-        <Loader content={content} />
-      </Dimmer>
+    <div
+      style={{
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+      }}
+    >
+      <Spinner animation="border" />
     </div>
   );
 };
