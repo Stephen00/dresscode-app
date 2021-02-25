@@ -90,7 +90,7 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
 
         {selectedPost.content_type === "articles" && (
           <Row className="post-content">
-            {(selectedPost.content as IArticle).text}
+            <div dangerouslySetInnerHTML={{__html: (selectedPost.content as IArticle).text}}></div>
           </Row>
         )}
 
