@@ -5,7 +5,7 @@ from django.contrib.admin.options import get_content_type_for_model
 class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
-        fields = ('pk', 'video', 'image')
+        fields = ('pk', 'image', 'video')
 
 
 class TagSerializer(serializers.ModelSerializer):

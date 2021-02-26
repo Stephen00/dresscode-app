@@ -17,8 +17,8 @@ class Tag(models.Model):
 
 
 class Media(models.Model):
-    video = models.FileField()
-    image = models.ImageField()
+    image = models.ImageField(blank=True, null=True)
+    video = models.FileField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Media"

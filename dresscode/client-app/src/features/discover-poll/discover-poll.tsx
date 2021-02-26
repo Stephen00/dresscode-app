@@ -18,8 +18,10 @@ const DiscoverPoll: React.FC<PollComponentProps> = ({ poll }) => {
     poll.vote2,
     poll.vote3,
     poll.vote4,
-    poll.vote5,
-  ].filter(Boolean);
+	poll.vote5,
+  ].filter(function (vote) {
+		return vote != null;
+	});
 
   var initialTotalVotes = initialVotes.reduce((a, b) => a!! + b!!, 0);
 

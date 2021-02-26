@@ -125,7 +125,14 @@ class PollAdmin(admin.ModelAdmin):
 
 
 class MediaAdmin(admin.ModelAdmin):
-    list_display = ('video', 'image')
+    list_display = ('id', 'name', 'image', 'video')
+    
+    def name(self, obj):
+        if obj.image:
+            return " ".join(str(obj.image).split(".")[:-1])
+        elif obj.video:
+            return " ".join(str(obj.video).split(".")[:-1])
+        return str("NULL")
 
     # Individual Instance visuals
     fieldsets = (
