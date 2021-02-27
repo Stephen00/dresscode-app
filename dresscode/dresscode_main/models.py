@@ -90,13 +90,13 @@ class Poll(models.Model):
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
     answer1 = models.CharField(max_length=128)
-    answer2 = models.CharField(max_length=128, blank=True, null=True)
+    answer2 = models.CharField(max_length=128)
     answer3 = models.CharField(max_length=128, blank=True, null=True)
     answer4 = models.CharField(max_length=128, blank=True, null=True)
     vote1 = models.IntegerField(default=0)
     vote2 = models.IntegerField(default=0)
-    vote3 = models.IntegerField(default=0)
-    vote4 = models.IntegerField(default=0)
+    vote3 = models.IntegerField(default=None, blank=True, null=True)
+    vote4 = models.IntegerField(default=None, blank=True, null=True)
     tags = models.ManyToManyField(Tag, blank=True)
     slug = models.SlugField(unique=True)
 
@@ -104,12 +104,26 @@ class Poll(models.Model):
         return self.question
 
     def vote_poll(self, answer):
-        if self.answer1 == answer:
-            self.vote1 += 1
-        if self.answer2 == answer:
-            self.vote2 += 1
-        if self.answer3 == answer:
-            self.vote3 += 1
+        if self.answer1 == answer and answer!=None:
+            if self.vote1:
+                self.vote1 += 1
+            else:
+                self.vote1=1
+        elif self.answer2 == answer and answer!=None:
+            if self.vote2:
+                self.vote2 += 1
+            else:
+                self.vote2=1
+        elif self.answer3 == answer and answer!=None:
+            if self.vote3:
+                self.vote3 += 1
+            else:
+                self.vote3=1
+        elif self.answer4 == answer and answer!=None:
+            if self.vote4:
+                self.vote4 += 1
+            else:
+                self.vote4=1
 
     def save(self, *args, **kwargs):
         try:

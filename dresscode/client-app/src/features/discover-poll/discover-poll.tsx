@@ -13,6 +13,8 @@ const DiscoverPoll: React.FC<PollComponentProps> = ({ poll }) => {
     poll.answer5,
   ].filter(Boolean);
 
+//Filter initialVotes by checking if they are Null or not instead of filtering by Boolean. 
+//Filtering by boolean doesn't work because 0 is Falsy so Boolean(0) returns False in JS and TS
   var initialVotes = [
     poll.vote1,
     poll.vote2,
