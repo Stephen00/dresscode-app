@@ -16,8 +16,8 @@ class testAttributes(TestCase):
 
         # Create test poll
         p = Poll.objects.create(media=None, question="What is your favourite programming language?",
-                                answer1 = 'Python', answer2 = "Java", answer3 = "C++", vote1 = 7,
-                                         vote2 = 9, vote3 = 11)
+                                answer1 = 'Python', answer2 = "Java", answer3 = "C", answer4 = "C++", answer5 = "C#", vote1 = 7,
+                                         vote2 = 9, vote3 = 11, vote4=0)
         p.save()
 
         # Create test articles
@@ -63,10 +63,15 @@ class testAttributes(TestCase):
         test_poll = Poll.objects.all()[0]
         test_poll.vote_poll("Python")  # Increment each poll vote by one
         test_poll.vote_poll("Java")
+        test_poll.vote_poll("C")
         test_poll.vote_poll("C++")
+        test_poll.vote_poll("C#")
+        test_poll.vote_poll(None)
         self.assertEquals(test_poll.vote1, 8)
         self.assertEquals(test_poll.vote2, 10)
         self.assertEquals(test_poll.vote3, 12)
+        self.assertEquals(test_poll.vote4, 1)
+        self.assertEquals(test_poll.vote5, 1)
 
     def testPollAnswer(self):
         test_poll = Poll.objects.all()[0]
