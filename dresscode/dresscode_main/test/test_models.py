@@ -59,19 +59,29 @@ class testAttributes(TestCase):
         self.assertEquals(test_poll.question, "What is your favourite p"
                                               "rogramming language?")
 
-    def testPollReaction(self):
-        test_poll = Poll.objects.all()[0]
-        test_poll.vote_poll("Python")  # Increment each poll vote by one
-        test_poll.vote_poll("Java")
-        test_poll.vote_poll("C")
-        test_poll.vote_poll("C++")
-        test_poll.vote_poll("C#")
-        test_poll.vote_poll(None)
-        self.assertEquals(test_poll.vote1, 8)
-        self.assertEquals(test_poll.vote2, 10)
-        self.assertEquals(test_poll.vote3, 12)
-        self.assertEquals(test_poll.vote4, 1)
-        self.assertEquals(test_poll.vote5, 1)
+    def testFullPollReaction(self):
+        test_full_poll = Poll.objects.all()[0]
+        test_full_poll.vote_poll("Python")  # Increment each poll vote by one
+        test_full_poll.vote_poll("Java")
+        test_full_poll.vote_poll("C")
+        test_full_poll.vote_poll("C++")
+        test_full_poll.vote_poll("C#")
+        test_full_poll.vote_poll(None)
+        self.assertEquals(test_full_poll.vote1, 8)
+        self.assertEquals(test_full_poll.vote2, 10)
+        self.assertEquals(test_full_poll.vote3, 12)
+        self.assertEquals(test_full_poll.vote4, 1)
+        self.assertEquals(test_full_poll.vote5, 1)
+
+    def testEmptyPollReaction(self):
+        empty_p = Poll.objects.create(media=None, question="What is your least favourite programming language?",
+            answer1 = 'Python', answer2 = "Java", vote1 = 7, vote2 = 9, vote3 = 11, vote4=0)
+        empty_p.save()
+        self.assertEquals(empty_p.vote1, 7)
+        self.assertEquals(empty_p.vote2, 9)
+        self.assertEquals(empty_p.vote3, None)
+        self.assertEquals(empty_p.vote4, None)
+        self.assertEquals(empty_p.vote5, None)
 
     def testPollAnswer(self):
         test_poll = Poll.objects.all()[0]

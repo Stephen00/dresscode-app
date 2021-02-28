@@ -146,23 +146,25 @@ class Poll(models.Model):
         #Create slug
         if self.question: 
             self.slug = slugify(self.question)
-        
-        #Ensure that 0 is assigned to existing answers with 0 votes
-        if self.answer1:
-            if self.vote1 is None:
-                self.vote1 = 0
-        if self.answer2:
-            if self.vote2 is None:
-                self.vote2 = 0
+                
+        #Ensure that None is set to votes with no answers         
         if self.answer3:
             if self.vote3 is None:
                 self.vote3 = 0
+        else:
+            self.vote3=None
+ 
         if self.answer4:
             if self.vote4 is None:
                 self.vote4 = 0
+        else:
+            self.vote4=None
+ 
         if self.answer5:
             if self.vote5 is None:
                 self.vote5 = 0
+        else:
+            self.vote5=None
         
         #Check if Post needs to be made
         try:
