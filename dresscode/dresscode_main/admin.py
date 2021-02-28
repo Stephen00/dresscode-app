@@ -99,7 +99,7 @@ class QuizAdmin(admin.ModelAdmin):
 
 
 class PollAdmin(admin.ModelAdmin):
-    list_display = ('question', 'answer1', 'answer2', 'answer3', 'answer4', 'media', 'tagged_as')
+    list_display = ('question', 'answer1', 'answer2', 'answer3', 'answer4', 'answer5', 'media', 'tagged_as')
     search_fields = ('question',)
     list_filter = ('tags__tag',)
 
@@ -112,7 +112,7 @@ class PollAdmin(admin.ModelAdmin):
             'fields': ('question',),
         }),
         ('Answers', {
-            'fields': ('answer1', 'answer2', 'answer3', 'answer4'),
+            'fields': ('answer1', 'answer2', 'answer3', 'answer4', 'answer5'),
         }),
         ('Tags', {
             'fields': ('tags',),

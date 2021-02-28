@@ -22,6 +22,14 @@ class Media(models.Model):
 
     class Meta:
         verbose_name_plural = "Media"
+        
+    def __str__(self):
+        def name(self, obj):
+            if obj.image:
+                return "Media "+self.pk+": Image:"+" ".join(str(obj.image).split(".")[:-1])
+            elif obj.video:
+                return "Media "+self.pk+": Video:"+" ".join(str(obj.video).split(".")[:-1])
+            return str("Media "+self.pk+": NULL")
 
 
 class QuizQuestion(models.Model):
@@ -93,10 +101,12 @@ class Poll(models.Model):
     answer2 = models.CharField(max_length=128)
     answer3 = models.CharField(max_length=128, blank=True, null=True)
     answer4 = models.CharField(max_length=128, blank=True, null=True)
+    answer5 = models.CharField(max_length=128, blank=True, null=True)
     vote1 = models.IntegerField(default=0)
     vote2 = models.IntegerField(default=0)
     vote3 = models.IntegerField(default=None, blank=True, null=True)
     vote4 = models.IntegerField(default=None, blank=True, null=True)
+    vote5 = models.IntegerField(default=None, blank=True, null=True)
     tags = models.ManyToManyField(Tag, blank=True)
     slug = models.SlugField(unique=True)
 
@@ -104,37 +114,65 @@ class Poll(models.Model):
         return self.question
 
     def vote_poll(self, answer):
-        if self.answer1 == answer and answer!=None:
+        if answer is None: #If request is sent without an answer value
+            return None 
+        if self.answer1 == answer:
             if self.vote1:
                 self.vote1 += 1
             else:
                 self.vote1=1
-        elif self.answer2 == answer and answer!=None:
+        elif self.answer2 == answer:
             if self.vote2:
                 self.vote2 += 1
             else:
                 self.vote2=1
-        elif self.answer3 == answer and answer!=None:
+        elif self.answer3 == answer:
             if self.vote3:
                 self.vote3 += 1
             else:
                 self.vote3=1
-        elif self.answer4 == answer and answer!=None:
+        elif self.answer4 == answer:
             if self.vote4:
                 self.vote4 += 1
             else:
                 self.vote4=1
+        elif self.answer5 == answer:
+            if self.vote5:
+                self.vote5 += 1
+            else:
+                self.vote5=1
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):    
+        #Create slug
+        if self.question: 
+            self.slug = slugify(self.question)
+        
+        #Ensure that 0 is assigned to existing answers with 0 votes
+        if self.answer1:
+            if self.vote1 is None:
+                self.vote1 = 0
+        if self.answer2:
+            if self.vote2 is None:
+                self.vote2 = 0
+        if self.answer3:
+            if self.vote3 is None:
+                self.vote3 = 0
+        if self.answer4:
+            if self.vote4 is None:
+                self.vote4 = 0
+        if self.answer5:
+            if self.vote5 is None:
+                self.vote5 = 0
+        
+        #Check if Post needs to be made
         try:
             Poll.objects.get(pk=self.id)
             mk_post = False
         except:
             mk_post = True
-        if self.question:
-            self.slug = slugify(self.question)
+        #Save Poll object
         super(Poll, self).save(*args, **kwargs)
-        if mk_post == True:
+        if mk_post == True: #Create Post if necessary
             postpoll = Post(content=self)
             postpoll.save()
 
