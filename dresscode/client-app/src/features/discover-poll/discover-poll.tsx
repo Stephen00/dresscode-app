@@ -22,7 +22,7 @@ const DiscoverPoll: React.FC<PollComponentProps> = ({ poll }) => {
     poll.vote4,
 	poll.vote5,
   ].filter(function (vote) {
-		return vote != null;
+		return vote!==undefined && vote != null;
 	});
 
   var initialTotalVotes = initialVotes.reduce((a, b) => a!! + b!!, 0);
