@@ -15,30 +15,10 @@
   }
 }
 
-.poll-button {
-  border: 1px outset white !important;
-  background-color: white !important;
-  height: 40px;
-  width: 40px;
-}
-
-.vote-row {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.vote-answer-column {
-  margin: auto 0;
-}
-
-/* .vote-button-column {
-  display: flex-end;
-} */
-
-.vote-count-column {
-  text-align: right;
-}
-
 .after-answer-section {
   text-align: right;
+}
+
+.answered {
+  cursor:initial;
 }
