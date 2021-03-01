@@ -1,0 +1,45 @@
+.option-checkbox {
+  border: 0px outset white !important;
+  background-color: white !important;
+  height: 40px;
+  width: 40px;
+  justify-content: center;
+  display: flex !important;
+}
+
+.option-row {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.option-answer-column {
+  margin: auto 0;
+}
+
+.option-count-column {
+  text-align: right;
+}
+
+div[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.fa-check:hover,
+.hovering {
+  color: #f9b222;
+  cursor: pointer;
+}
+
+.hovering-text {
+  cursor: pointer !important;
+}
+
+.fa-check:active,
+.chosen {
+  color: #ed6b4b;
+}
+
+.correct-quiz-answer {
+  color: #ed6b4b;
+}
