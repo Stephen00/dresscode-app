@@ -126,7 +126,7 @@ class PollAdmin(admin.ModelAdmin):
 
 class MediaAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'image', 'video')
-    
+
     def name(self, obj):
         if obj.image:
             return " ".join(str(obj.image).split(".")[:-1])
@@ -180,6 +180,7 @@ class PostAdmin(admin.ModelAdmin):
         'content', 'view_content_link', 'author', 'description', 'created_at', 'updated_at', 'reaction1_counter',
         'reaction2_counter', 'reaction3_counter')
     exclude = ('content_type', 'object_id',)
+    list_filter = ('updated_at', 'author',)
 
     def view_content_link(self, obj):
         content_type = obj.content_type.name
@@ -191,17 +192,17 @@ class PostAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if not obj.author:
             obj.author = request.user
-            obj.save()
+        obj.save()
 
 
-# Define a new User admin
+# Define a new User admin for custom functionality
 class UserAdmin(BaseUserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'staff_group', 'is_staff',)
     actions = ['add_staff_status', 'remove_staff_status', 'add_admin_role', ]
     list_filter = ('groups', 'is_staff', 'is_superuser',)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, default=1)
 
-    # action to add user(s) as a staff member
+    # admin action to add user(s) staff status
     def add_staff_status(self, request, queryset):
         updated = queryset.update(is_staff=True)
         self.message_user(request, ngettext(
@@ -212,6 +213,7 @@ class UserAdmin(BaseUserAdmin):
 
     add_staff_status.short_description = "Add staff status to selected users"
 
+    # admin action to remove user(s) staff status
     def remove_staff_status(self, request, queryset):
         if not request.user.is_superuser:
             messages.error(request, "Please contact a superuser to remove staff")
@@ -224,12 +226,16 @@ class UserAdmin(BaseUserAdmin):
                 '%d users were successfully removed as staff.',
                 updated
             ) % updated, messages.SUCCESS)
+
     remove_staff_status.short_description = "Remove staff status from selected users"
 
     def staff_group(self, request):
         return ''.join([g.name for g in request.groups.all()]) if request.groups.count() else ''
 
+
 # Re-register UserAdmin
+# This is necessary to allow the custom user admin functionality to be implemented
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
