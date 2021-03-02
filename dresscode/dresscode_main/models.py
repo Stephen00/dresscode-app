@@ -93,7 +93,6 @@ class Quiz(models.Model):
     def __str__(self):
         return "Quiz " + str(self.id)
 
-
 class Poll(models.Model):
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     question = models.TextField()

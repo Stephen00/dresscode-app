@@ -6,6 +6,9 @@ from django.contrib import messages
 
 from .serializers import *
 
+# For each post get the get the object and its content type
+# Apply the appropriate serializer to convert into a neat JSON format
+# Return the serialized content, otherwise return a 204 or 404 error
 
 @api_view(['GET'])
 def home(request):
@@ -166,7 +169,7 @@ def add_heart_reaction(request, slug):
         messages.info(request, "Heart reaction added to this post")
         return redirect("discover/posts/", slug=slug)
 
-
+# Add reactions to the designated post by obtaining the object's slug
 @api_view(['GET', 'POST'])
 def add_star_reaction(request, slug):
     if request.method == 'POST':
