@@ -4,9 +4,6 @@ from rest_framework import status
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 
-from django.contrib.admin.options import get_content_type_for_model
-
-from .models import *
 from .serializers import *
 
 
@@ -31,7 +28,7 @@ def get_custom_article(request, article_slug):
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
-            return Response("Article "+article_slug+" doesn't exist", status=status.HTTP_404_NOT_FOUND)
+            return Response("Article " + article_slug + " doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -44,7 +41,7 @@ def get_custom_quiz(request, quiz_slug):
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
-            return Response("Quiz "+quiz_slug+" doesn't exist", status=status.HTTP_204_NO_CONTENT)
+            return Response("Quiz " + quiz_slug + " doesn't exist", status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET'])
@@ -57,7 +54,7 @@ def get_custom_poll(request, poll_slug):
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
-            return Response("Poll "+poll_slug+" doesn't exist", status=status.HTTP_404_NOT_FOUND)
+            return Response("Poll " + poll_slug + " doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET', 'POST'])
@@ -160,6 +157,7 @@ def discover_posts(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET', 'POST'])
 def add_heart_reaction(request, slug):
     if request.method == 'POST':
         post = get_object_or_404(Post, slug=slug)
@@ -169,6 +167,7 @@ def add_heart_reaction(request, slug):
         return redirect("discover/posts/", slug=slug)
 
 
+@api_view(['GET', 'POST'])
 def add_star_reaction(request, slug):
     if request.method == 'POST':
         post = get_object_or_404(Post, slug=slug)
@@ -178,6 +177,7 @@ def add_star_reaction(request, slug):
         return redirect("discover/posts/", slug=slug)
 
 
+@api_view(['GET', 'POST'])
 def add_share_reaction(request, slug):
     if request.method == 'POST':
         post = get_object_or_404(Post, slug=slug)
@@ -187,6 +187,7 @@ def add_share_reaction(request, slug):
         return redirect("discover/posts/", slug=slug)
 
 
+@api_view(['GET', 'POST'])
 def add_poll_vote(request, slug):
     if request.method == 'POST':
         poll = get_object_or_404(Poll, slug=slug)
@@ -197,6 +198,7 @@ def add_poll_vote(request, slug):
 
 
 # needs more work:
+@api_view(['GET', 'POST'])
 def answer_quiz(request, slug):
     if request.method == 'POST':
         quiz = get_object_or_404(Quiz, slug=slug)
@@ -209,5 +211,3 @@ def answer_quiz(request, slug):
         msg = "Quiz result: " + quiz.score.get()
         messages.info(request, msg)
         return redirect("discover/quizzes/", slug=slug)
-
-# Create your views here.
