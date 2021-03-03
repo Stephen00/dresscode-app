@@ -50,7 +50,7 @@ class QuizQuestion(models.Model):
             x = random.randrange(len(ans))
             y = random.randrange(len(ans))
             ans[x], ans[y] = ans[y], ans[x]
-            return ans[x], ans[y]
+        return ans
 
     def check_answer(self, guess):
         if guess == self.answer:
