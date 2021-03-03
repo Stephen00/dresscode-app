@@ -24,12 +24,11 @@ class Media(models.Model):
         verbose_name_plural = "Media"
         
     def __str__(self):
-        def name(self, obj):
-            if obj.image:
-                return "Media "+self.pk+": Image:"+" ".join(str(obj.image).split(".")[:-1])
-            elif obj.video:
-                return "Media "+self.pk+": Video:"+" ".join(str(obj.video).split(".")[:-1])
-            return str("Media "+self.pk+": NULL")
+        if self.image:
+            return "Media "+str(self.pk)+": Image:"+" ".join(str(self.image).split(".")[:-1])
+        elif self.video:
+            return "Media "+str(self.pk)+": Video:"+" ".join(str(self.video).split(".")[:-1])
+        return str("Media "+str(self.pk)+": NULL")
 
 
 class QuizQuestion(models.Model):
@@ -51,7 +50,7 @@ class QuizQuestion(models.Model):
             x = random.randrange(len(ans))
             y = random.randrange(len(ans))
             ans[x], ans[y] = ans[y], ans[x]
-            return ans[x], ans[y]
+        return ans
 
     def check_answer(self, guess):
         if guess == self.answer:

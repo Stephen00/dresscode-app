@@ -113,16 +113,12 @@ class testAttributes(TestCase):
     def testRandomizedAnswers(self):
         test_question = QuizQuestion.objects.all()[0]
         question_matched = False
-
+        
         while not question_matched:
-            rnd1, rnd2 = test_question.get_randomised_answers()
-            if rnd1 == test_question.answer:
-                rnd1 = True
-                self.assertEquals(rnd1, True)
-                question_matched = True
-            elif rnd2 == test_question.answer:
-                rnd2 = True
-                self.assertEquals(rnd2, True)
+            rnd = test_question.get_randomised_answers()
+            if rnd[0] != test_question.answer and test_question.answer in rnd:
+                works = True
+                self.assertEquals(works, True)
                 question_matched = True
 
     def testPostType(self):

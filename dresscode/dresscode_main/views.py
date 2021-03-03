@@ -10,6 +10,7 @@ from .serializers import *
 # Apply the appropriate serializer to convert into a neat JSON format
 # Return the serialized content, otherwise return a 204 or 404 error
 
+
 @api_view(['GET'])
 def home(request):
     if request.method == 'GET':
