@@ -1,13 +1,12 @@
 import React from "react";
 import "./discover-card.css";
-import Picture from "../../assets/shutterstock_256173265_edit.jpg";
 import { Card, Col, Row } from "react-bootstrap";
 import { formatDistance } from "date-fns";
-import { IPost } from "../../app/models/post";
 import { IPoll } from "../../app/models/poll";
 import DiscoverPoll from "../../features/discover-poll/discover-poll";
 import { Link } from "react-router-dom";
 import { DiscoverCardProps } from "../../views/commonProps";
+import { IArticle } from "../../app/models/article";
 
 type ConditionalLinkProps = {
   children: any;
@@ -40,15 +39,25 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
             {formatDistance(post.created_at, new Date())} ago
           </Card.Subtitle>
           <Card.Title>{post.content.title}</Card.Title>
-          {post.content_type === "polls" ? (
+          {post.content_type === "polls" && (
             <div className="poll-section">
               <DiscoverPoll poll={post?.content as IPoll} />
             </div>
-          ) : (
-            <div className="image-section">
-              <img alt="" src={Picture} className="overview-image" />
-            </div>
           )}
+
+          {post.content_type === "articles" &&
+            (post.content as IArticle).media &&
+            (post.content as IArticle).media?.image && (
+              <div className="image-section">
+                <img
+                  alt=""
+                  src={`http://localhost:8000${
+                    (post.content as IArticle).media!!.image
+                  }`}
+                  className="overview-image"
+                />
+              </div>
+            )}
 
           <Card.Body>
             <Row>

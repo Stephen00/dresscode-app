@@ -54,8 +54,7 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
                 </div>
               </Col>
               <Col xs={7} md={8} className="author-date">
-                {/* <Row>{selectedPost?.author}</Row> */}
-                <Row>John Doe</Row>
+                <Row>{selectedPost?.author}</Row>
                 <Row>{format(selectedPost!!.created_at, "do MMM y")}</Row>
               </Col>
             </Row>
@@ -82,12 +81,21 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
             </div>
           </Row>
         )} */}
-
-        <Row>
-          <div className="image-div">
-            <img src={Picture} alt="post" className="article-image" />
-          </div>
-        </Row>
+        {selectedPost.content_type === "articles" &&
+          (selectedPost.content as IArticle).media &&
+          (selectedPost.content as IArticle).media?.image && (
+            <Row>
+              <div className="image-div">
+                <img
+                  src={`http://localhost:8000${
+                    (selectedPost.content as IArticle).media!!.image
+                  }`}
+                  alt="post"
+                  className="article-image"
+                />
+              </div>
+            </Row>
+          )}
 
         {selectedPost.content_type === "articles" && (
           <Row className="post-content">

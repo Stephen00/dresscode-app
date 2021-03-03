@@ -44,56 +44,20 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
   const options: any = [];
   quiz.questions.forEach((q, questionIndex) => {
     options[q.id] = [];
-    options[q.id].push(
-      <AnswerOption
-        postType="quiz"
-        postIndex={questionIndex}
-        isAnswered={answeredQuestions[questionIndex]}
-        key={0}
-        optionIndex={0}
-        option={q.answer}
-        onOptionSelected={onQuestionAnswered}
-        isCorrectAnswer={submitted}
-      />
-    );
-    options[q.id].push(
-      <AnswerOption
-        postType="quiz"
-        postIndex={questionIndex}
-        isAnswered={answeredQuestions[questionIndex]}
-        key={1}
-        optionIndex={1}
-        option={q.mistake1}
-        onOptionSelected={onQuestionAnswered}
-        isCorrectAnswer={submitted}
-      />
-    );
-    q.mistake2 &&
+    q.answers.forEach((option, optionIndex) => {
       options[q.id].push(
         <AnswerOption
           postType="quiz"
           postIndex={questionIndex}
           isAnswered={answeredQuestions[questionIndex]}
-          key={2}
-          optionIndex={2}
-          option={q.mistake2!!}
+          key={optionIndex}
+          optionIndex={optionIndex}
+          option={option}
           onOptionSelected={onQuestionAnswered}
           isCorrectAnswer={submitted}
         />
       );
-    q.mistake3 &&
-      options[q.id].push(
-        <AnswerOption
-          postType="quiz"
-          postIndex={questionIndex}
-          isAnswered={answeredQuestions[questionIndex]}
-          key={3}
-          optionIndex={3}
-          option={q.mistake3!!}
-          onOptionSelected={onQuestionAnswered}
-          isCorrectAnswer={submitted}
-        />
-      );
+    });
   });
 
   return (

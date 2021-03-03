@@ -1,11 +1,11 @@
+import { IMedia } from "./media";
 import { ITag } from "./tag";
 
 export interface IArticle {
   pk: number;
   title: string;
-  // TODO add media
+  media: IMedia | undefined;
   text: string;
   tags: ITag[];
   slug: string;
 }
-

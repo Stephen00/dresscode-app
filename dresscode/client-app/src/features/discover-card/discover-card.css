@@ -32,10 +32,12 @@
   text-align: center;
 }
 
-.overview-image {
-  margin-left: auto;
-  margin-right: auto;
+.image-section {
+  display: flex;
+  justify-content: center;
+}
 
+.overview-image {
   max-width: 100%;
   height: auto;
 }
