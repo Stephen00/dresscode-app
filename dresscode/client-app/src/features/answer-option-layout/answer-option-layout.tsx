@@ -3,8 +3,9 @@ import "./answer-option-layout.css";
 import { Col, Row, Button } from "react-bootstrap";
 
 interface AnswerOptionProps {
-  index: number;
+  optionIndex: number;
   postType: string;
+  postIndex: number;
   isAnswered: boolean;
   option: string;
   onOptionSelected: Function;
@@ -14,7 +15,8 @@ interface AnswerOptionProps {
 }
 
 const AnswerOption: React.FC<AnswerOptionProps> = ({
-  index,
+  optionIndex,
+  postIndex,
   postType,
   isAnswered,
   option,
@@ -28,13 +30,13 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
 
   function handleOptionChosen() {
     if (!isAnswered) {
-      onOptionSelected(index);
+      onOptionSelected(optionIndex, postIndex);
       setChosenOption(true);
     }
   }
 
   return (
-    <div key={index} aria-disabled={isAnswered}>
+    <div key={postIndex * 10 + optionIndex} aria-disabled={isAnswered}>
       <Row className="option-row">
         <Col xs={2} className="option-button-column">
           <Button
@@ -53,7 +55,7 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
                   : ""
               }`}
             ></i>
-            <i
+            {/* <i
               className="fas fa-times fa-2x"
               hidden={
                 !(
@@ -63,7 +65,7 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
                   !isCorrectAnswer
                 )
               }
-            ></i>
+            ></i> */}
           </Button>
         </Col>
         <Col
