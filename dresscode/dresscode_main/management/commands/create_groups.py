@@ -7,7 +7,6 @@ from django.core.management.base import BaseCommand
 admin, created = Group.objects.get_or_create(name='admin')
 print("Creating permissions for admin...")
 for permission in Permission.objects.all():
-
     admin.permissions.add(permission)
 
 # Define models and permissions for staff
@@ -18,7 +17,9 @@ GROUP_PERMISSIONS = {
     }
 }
 
+
 # a simple command to create the models with their associated permissions
+# Usage: python manage.py create_groups
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
@@ -33,7 +34,7 @@ class Command(BaseCommand):
                     # Try creating the permission, otherwise return an error
                     try:
                         perm = Permission.objects.get(name=name)
-                    except perm.DoesNotExist:
+                    except Permission.DoesNotExist:
                         logging.warning(" Permission not found: " + name)
                         continue
                     new_group.permissions.add(perm)

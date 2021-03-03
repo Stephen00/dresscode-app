@@ -20,6 +20,7 @@ from dresscode_main import views
 from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve
 
 urlpatterns = [
     path('', views.home, name="home"),
@@ -32,4 +33,5 @@ urlpatterns = [
     path('discover/quizzes/<slug:quiz_slug>/', views.get_custom_quiz, name="custom_quiz"),
     path('discover/polls/<slug:poll_slug>/', views.get_custom_poll, name="custom_poll"),
     path('api/tags/', views.get_all_tags, name="api_tags"),
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT,})
 ]
