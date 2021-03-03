@@ -3,7 +3,6 @@ from .models import Quiz, QuizQuestion, Post, Tag, Article, Media, Poll
 from django.contrib.admin.options import get_content_type_for_model
 import random
 
-
 class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
@@ -18,7 +17,7 @@ class PollSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     media = MediaSerializer()
     title = serializers.SerializerMethodField('get_question')
-
+    
     class Meta:
         model = Poll
         depth=1
@@ -30,10 +29,10 @@ class PollSerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     media = MediaSerializer()
-
+        
     class Meta:
         model = Article
-        depth = 1
+        depth=1
         fields = ('pk', 'title', 'media', 'text', 'tags', 'slug')
   
 
@@ -69,23 +68,21 @@ class PostContentRelatedField(serializers.RelatedField):
         Serialize content objects to a simple textual representation.
         """
         if isinstance(value, Quiz):
-            serializer = QuizSerializer(value)
+            serializer  = QuizSerializer(value)
         elif isinstance(value, QuizQuestion):
-            serializer = QuizQuestionSerializer(value)
+            serializer  = QuizQuestionSerializer(value)
         elif isinstance(value, Article):
-            serializer = ArticleSerializer(value)
+            serializer  = ArticleSerializer(value)
         elif isinstance(value, Poll):
-            serializer = PollSerializer(value)
+            serializer  = PollSerializer(value)
         else:
             raise Exception('Unexpected type of content attached to Post.')
         return serializer.data
-
-
+        
 class PostContentTypeRelatedField(serializers.RelatedField):
     """
     A custom field to determine content_types.
     """
-
     def to_representation(self, value):
         if value.model == 'quiz':
             return 'quizzes'
