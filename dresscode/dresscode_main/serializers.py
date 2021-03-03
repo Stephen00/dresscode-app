@@ -91,10 +91,21 @@ class PostContentTypeRelatedField(serializers.RelatedField):
         if value.model == 'quiz':
             return 'quizzes'
         return value.model+'s' #Content_Type instance is passed in so we can return CT.model
+        
+class PostAuthorRelatedField(serializers.RelatedField):
+    """
+    A custom field to determine authors.
+    """
+    def to_representation(self, value):
+        try:
+            return value.first_name+" "+value.last_name
+        except:
+            return None
 
 class PostSerializer(serializers.ModelSerializer):
     content = PostContentRelatedField(read_only='True')
     content_type = PostContentTypeRelatedField(read_only='True')
+    author = PostAuthorRelatedField(read_only='True')
     
     class Meta:
         model = Post

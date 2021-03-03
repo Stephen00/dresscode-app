@@ -13,7 +13,7 @@ from dresscode_main.models import Tag, Media, Quiz, QuizQuestion, Poll, Article,
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-temp = os.path.join(BASE_DIR, 'temp.jpg')
+temp = 'stick-man.png'
 
 
 def main():
@@ -46,6 +46,11 @@ def main():
     user4.save()
     user5.save()
     print("Users made")
+    
+    #Create Media
+    media1=Media(image=temp)
+    media1.save()
+    print("Media Created")
     
     post_enabled_models=['Quiz', 'Poll', 'Article']
     for m in post_enabled_models:
@@ -85,6 +90,7 @@ def main():
 
     for article in articles:
         a = Article(title=article['title'], text=article['text'])
+        a.media=media1
         a.save()
         for tag in article['tags']:
             a.tags.add(tag)
@@ -116,7 +122,26 @@ def main():
             p.tags.add(tag)
         p.save()
     print("Polls made")
-
+    
+    #Add users to Posts
+    p=Post.objects.all()[0]
+    print(p)
+    p.author=user1
+    p.save()
+    p=Post.objects.all()[1]
+    p.author=user2
+    p.save()
+    p=Post.objects.all()[2]
+    p.author=user3
+    p.save()
+    p=Post.objects.all()[3]
+    p.author=user4
+    p.save()
+    p=Post.objects.all()[4]
+    p.author=user5
+    p.save()
+    print("Authors Set")
+    
     quiz_questions = [
         {'media': None, 'question': "What is the correct way to declare an integer variable equal to 1 in C#?",
         'answer': 'int var = 1;',
@@ -137,6 +162,7 @@ def main():
          'mistake3': "str <>",
          'tags':[]},
     ]
+    
 
     for qq in quiz_questions:
         q = QuizQuestion(media=qq['media'], question=qq['question'], answer=qq['answer'], mistake1=qq['mistake1'],
