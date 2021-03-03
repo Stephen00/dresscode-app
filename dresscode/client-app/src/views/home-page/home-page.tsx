@@ -2,65 +2,35 @@ import React, { useEffect, Fragment, useContext, useState } from "react";
 import PostStore from "../../app/stores/postStore";
 import { observer } from "mobx-react-lite";
 import DiscoverCard from "../../features/discover-card/discover-card";
-import { Button, InputGroup, FormControl } from "react-bootstrap";
-import { DiscoverCardProps } from "../../views/commonProps";
-import { IPost } from "../../app/models/post";
+import { InputGroup, FormControl } from "react-bootstrap";
 
 import "./home-page.css";
 
 const HomePage: React.FC = () => {
   const postStore = useContext(PostStore);
-  const { posts, loadAllPosts, removeAllPosts } = postStore;
-  const [inputValue, setInputValue] = useState<string>("");
-  const [allPosts, setAllPosts] = useState<IPost[]>();
+  const { posts, loadAllPosts, removeAllPosts, showFilteredResults } = postStore;
 
   useEffect(() => {
     if (!posts) {
-      loadAllPosts();
+      showFilteredResults();
     }
     return () => {
       removeAllPosts();
     };
   }, []);
 
-  function onSearch() {
-    var filterPost: IPost[];
-
-    filterPost = posts!!.filter((item, index) => {
-                                                    var title: string = item.content.title.toLowerCase();
-                                                    var searchIndex: number = title.search(inputValue)
-                                                    
-                                                    if (searchIndex >= 0) {
-                                                      return item
-                                                    }
-                                                  })
-    setAllPosts(filterPost)
+  const getSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    postStore.getSearchValue(event.target.value)
   }
 
   return (
     <div>
-      {/* <input
-        type="text"
-        value={inputValue}
-        onChange={(
-            ev: React.ChangeEvent<HTMLInputElement>,
-        ) => {
-          setInputValue(ev.target.value)
-          onSearch()
-        }
-      }/> */}
       <div className="search-input-row">
         <InputGroup className="mb-3">
           <FormControl
               className="search-input"
               placeholder="search ..."
-              onChange={(
-                ev: React.ChangeEvent<HTMLInputElement>,
-              ) => {
-                setInputValue(ev.target.value)
-                onSearch()
-              }
-            }
+              onChange={getSearch}
           />
         </InputGroup>
       </div>

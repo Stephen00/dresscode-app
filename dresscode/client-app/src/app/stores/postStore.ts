@@ -1,11 +1,12 @@
 import { createContext } from "react";
 import { IPost } from "../models/post";
 import agent from "../api/agent";
-import { action, configure, observable, runInAction } from "mobx";
+import { action, configure, observable, runInAction, computed } from "mobx";
 
 configure({ enforceActions: "always" });
 
 class PostStore {
+  @observable searchValue: string = ""; 
   @observable posts: IPost[] | undefined;
   @observable articles: IPost[] | undefined;
   @observable polls: IPost[] | undefined;
@@ -113,6 +114,21 @@ class PostStore {
     }
     return pathList[2];
   }
+
+  @action getSearchValue = (value: string) => {
+    this.searchValue = value
+    this.showFilteredResults()
+  }
+
+  @action showFilteredResults = async () => {
+    if (this.searchValue === "") {
+      this.loadAllPosts()
+    } else {
+      this.posts =  this.posts?.filter(post => {
+                      return post.content.title.toLowerCase().indexOf(this.searchValue) > -1
+                    }) 
+    }
+  };
 }
 
 export default createContext(new PostStore());
