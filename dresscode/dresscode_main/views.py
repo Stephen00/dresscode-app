@@ -16,11 +16,7 @@ def home(request):
     if request.method == 'GET':
         try:
             post = Post.objects.all().order_by('-created_at')
-            print(post)
             serializer = PostSerializer(post, context={'request': request}, many=True)
-            print("Serialised")
-            print(serializer.data)
-            print("Checked")
             return Response(serializer.data)
         except:
             return Response("no posts found", status=status.HTTP_404_NOT_FOUND)
