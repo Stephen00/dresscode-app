@@ -1,9 +1,0 @@
-.search-input-row {
-    display: flex; 
-    justify-content: flex-end;
-}
-
-.input-group {
-    width: 20% !important;
-    padding-top: 15px;
-}

@@ -8,6 +8,7 @@ configure({ enforceActions: "always" });
 class PostStore {
   @observable searchValue: string = ""; 
   @observable posts: IPost[] | undefined;
+  @observable filteredPosts: IPost[] | undefined;
   @observable articles: IPost[] | undefined;
   @observable polls: IPost[] | undefined;
   @observable quizzes: IPost[] | undefined;
@@ -26,6 +27,7 @@ class PostStore {
             post.created_at = new Date(post.created_at);
           });
           this.posts = res;
+          this.filteredPosts = [...this.posts]
           this.loadingInitial = false;
         }
       });
@@ -123,10 +125,11 @@ class PostStore {
   @action showFilteredResults = async () => {
     if (this.searchValue === "") {
       this.loadAllPosts()
-    } else {
-      this.posts =  this.posts?.filter(post => {
-                      return post.content.title.toLowerCase().indexOf(this.searchValue) > -1
-                    }) 
+      this.filteredPosts =  this.posts
+    } else { 
+      this.filteredPosts =  this.posts?.filter(post => {
+                              return post.content.title.toLowerCase().indexOf(this.searchValue) > -1
+                            }) 
     }
   };
 }
