@@ -33,7 +33,7 @@ class TagAdmin(admin.ModelAdmin):
     # Individual Instance Visuals
     fieldsets = (
         ('Tags', {
-            'fields': ('tags',),
+            'fields': ('tag',),
         }),
     )
 
