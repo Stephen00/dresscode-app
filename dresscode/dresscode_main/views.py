@@ -172,14 +172,14 @@ def add_star_reaction(request, slug):
         return redirect("discover/posts/", slug=slug)
 
 
-@api_view(['GET', 'POST'])
-def add_share_reaction(request, slug):
+@api_view(['POST'])
+def add_share_reaction(request):
     if request.method == 'POST':
-        post = get_object_or_404(Post, slug=slug)
+        data=request.data
+        post = get_object_or_404(Post, id=data['postId'])
         post.share()
         post.save()
-        messages.info(request, "Share reaction added to this post")
-        return redirect("discover/posts/", slug=slug)
+        return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
