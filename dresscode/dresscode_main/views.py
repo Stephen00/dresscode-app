@@ -152,24 +152,24 @@ def discover_posts(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-@api_view(['GET', 'POST'])
-def add_heart_reaction(request, slug):
+@api_view(['POST'])
+def add_heart_reaction(request):
     if request.method == 'POST':
-        post = get_object_or_404(Post, slug=slug)
+        data=request.data
+        post = get_object_or_404(Post, id=data['postId'])
         post.heart()
         post.save()
-        messages.info(request, "Heart reaction added to this post")
-        return redirect("discover/posts/", slug=slug)
+        return Response(status=status.HTTP_200_OK)
 
 # Add reactions to the designated post by obtaining the object's slug
-@api_view(['GET', 'POST'])
-def add_star_reaction(request, slug):
+@api_view(['POST'])
+def add_star_reaction(request):
     if request.method == 'POST':
-        post = get_object_or_404(Post, slug=slug)
+        data=request.data
+        post = get_object_or_404(Post, id=data['postId'])
         post.star()
         post.save()
-        messages.info(request, "Star reaction added to this post")
-        return redirect("discover/posts/", slug=slug)
+        return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
