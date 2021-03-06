@@ -68,6 +68,8 @@ class QuizQuestionAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         })
     )
+    
+    filter_horizontal = ('tags',)
 
 
 class QuizAdmin(admin.ModelAdmin):
@@ -92,6 +94,8 @@ class QuizAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         }),
     )
+    
+    filter_horizontal = ('tags',)
 
     # Override Model Save
     def save_model(self, request, obj, form, change):
@@ -118,6 +122,8 @@ class PollAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         }),
     )
+    
+    filter_horizontal = ('tags',)
 
     # Override Model Save
     def save_model(self, request, obj, form, change):
@@ -169,6 +175,8 @@ class ArticleAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         }),
     )
+    
+    filter_horizontal = ('tags',)
 
     # Override Model Save
     def save_model(self, request, obj, form, change):
