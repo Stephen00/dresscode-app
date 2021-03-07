@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../../history";
+import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
 import { IPost } from "../models/post";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000";
@@ -45,6 +46,11 @@ const Posts = {
     requests.put(`/discover/${contentType}/${article.content.slug}/`, article),
 };
 
+const Polls = {
+  vote: (vote: PollVoteDTO) => requests.put(`/discover/polls/vote/`, vote),
+};
+
 export default {
   Posts,
+  Polls,
 };
