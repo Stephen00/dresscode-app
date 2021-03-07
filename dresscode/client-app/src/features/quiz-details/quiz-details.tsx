@@ -4,10 +4,7 @@ import { QuizComponentProps } from "../../views/commonProps";
 import AnswerOption from "../answer-option-layout/answer-option-layout";
 import { Prompt } from "react-router";
 
-// TODO rework when backend starts sending list of answer options
-
 const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
-  const [readyForSubmission, setReadyForSubmission] = useState<boolean>(false);
   const [quizNotFinished, setQuizNotFinished] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([
@@ -16,7 +13,7 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
     false,
   ]);
 
-  // Similar to componentDidMount and componentDidUpdate
+  // Covers the effect of componentDidMount and componentDidUpdate
   useEffect(() => {
     if (quizNotFinished) {
       window.onbeforeunload = () => true;
@@ -33,30 +30,32 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
     let updatedQuizNotFinished = updatedAnswered.some((q) => q === true);
     setQuizNotFinished(updatedQuizNotFinished);
 
-    let updatedReadForSubmission = updatedAnswered.every((q) => q === true);
-    setReadyForSubmission(updatedReadForSubmission);
+    let readyForSubmission = updatedAnswered.every((q) => q === true);
 
-    if (updatedReadForSubmission) {
+    if (readyForSubmission) {
       setQuizNotFinished(false);
     }
   }
 
-  const options: any = [];
+  // Mapping from question pk to components containing the answers to the question
+  const options: Map<Number, JSX.Element[]> = new Map(); 
   quiz.questions.forEach((q, questionIndex) => {
-    options[q.id] = [];
+    options.set(q.pk, []);
     q.answers.forEach((option, optionIndex) => {
-      options[q.id].push(
-        <AnswerOption
-          postType="quiz"
-          postIndex={questionIndex}
-          isAnswered={answeredQuestions[questionIndex]}
-          key={optionIndex}
-          optionIndex={optionIndex}
-          option={option}
-          onOptionSelected={onQuestionAnswered}
-          isCorrectAnswer={submitted}
-        />
-      );
+      options
+        .get(q.pk)
+        ?.push(
+          <AnswerOption
+            postType="quiz"
+            postIndex={questionIndex}
+            isAnswered={answeredQuestions[questionIndex]}
+            key={optionIndex}
+            optionIndex={optionIndex}
+            option={option}
+            onOptionSelected={onQuestionAnswered}
+            isCorrectAnswer={submitted}
+          />
+        );
     });
   });
 
@@ -68,14 +67,14 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
       />
       {quiz.questions.map((q, i) => (
         <div
-          key={q.id}
-          className={`question-component-section ${
+          key={i}
+          className={`question-component-section ${q.pk} ${
             answeredQuestions[i] ? "answered" : ""
           }`}
         >
           <div className="quiz-question">{q.question}</div>
           <div className={` ${submitted ? "answered" : ""}`}>
-            {options[q.id]}
+            {options.get(q.pk)}
           </div>
         </div>
       ))}

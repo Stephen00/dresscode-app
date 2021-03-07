@@ -2,7 +2,7 @@ import { IMedia } from "./media";
 import { ITag } from "./tag";
 
 export interface IQuestion {
-  id: number;
+  pk: number;
   question: string;
   answers: string[];
   media: IMedia | undefined;

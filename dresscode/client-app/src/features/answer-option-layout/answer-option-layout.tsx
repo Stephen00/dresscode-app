@@ -8,7 +8,7 @@ interface AnswerOptionProps {
   postIndex: number;
   isAnswered: boolean;
   option: string;
-  onOptionSelected: Function;
+  onOptionSelected: (optionIndex: number, postIndex: number) => void;
   optionCounts?: number | undefined;
   totalVotes?: number | undefined;
   isCorrectAnswer?: boolean;
@@ -25,7 +25,7 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
   totalVotes,
   isCorrectAnswer,
 }) => {
-  const [chosenOption, setChosenOption] = useState<boolean>(false);
+  const [isChosenOption, setChosenOption] = useState<boolean>(false);
   const [hoveringOver, setHoveringOver] = useState<boolean>(false);
 
   function handleOptionChosen() {
@@ -46,7 +46,7 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
             <i
               className={`fas fa-check fa-2x ${
                 hoveringOver ? "hovering" : ""
-              }  ${chosenOption ? "chosen" : ""} ${
+              }  ${isChosenOption ? "chosen" : ""} ${
                 postType === "quiz" &&
                 isAnswered &&
                 isCorrectAnswer &&
