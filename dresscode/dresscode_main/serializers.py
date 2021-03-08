@@ -93,9 +93,11 @@ class PostAuthorRelatedField(serializers.RelatedField):
     A custom field to determine authors.
     """
     def to_representation(self, value):
-        try:
+        if value.first_name and value.last_name:
             return value.first_name+" "+value.last_name
-        except:
+        elif value.first_name:
+            return value.first_name
+        else:
             return None
 
 class PostSerializer(serializers.ModelSerializer):

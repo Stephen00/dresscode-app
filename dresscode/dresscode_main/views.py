@@ -14,9 +14,25 @@ from .serializers import *
 @api_view(['GET'])
 def home(request):
     if request.method == 'GET':
+        all_posts=Post.objects.all().order_by('-created_at')
+        #Select all posts and order them by date
+        
+        #Check if something has been already sent, if so use it as an offset and send the next 10 posts
+        if request.GET.get('lastPostId', None)!=None:
+            cutoff=Post.objects.get(id=request.GET['lastPostId'])        
+            send_posts=[]
+            for post in all_posts:
+                if post.created_at<cutoff.created_at:
+                    send_posts.append(post)
+                    if len(send_posts)>10:
+                        break
+            posts=send_posts
+        else: #If not send the 10 most recent posts
+            posts = all_posts[0:11]
+
+        #Serialize the data before sending it
         try:
-            post = Post.objects.all().order_by('-created_at')
-            serializer = PostSerializer(post, context={'request': request}, many=True)
+            serializer = PostSerializer(posts, context={'request': request}, many=True)
             return Response(serializer.data)
         except:
             return Response("no posts found", status=status.HTTP_404_NOT_FOUND)
