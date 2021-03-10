@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { IPost } from "../models/post";
+import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
 import agent from "../api/agent";
 import { action, configure, observable, runInAction } from "mobx";
 
@@ -32,6 +33,18 @@ class PostStore {
       runInAction(() => {
         this.loadingInitial = false;
       });
+    }
+  };
+
+  @action voteInPoll = async (pollId: number, selectedAnswer: string) => {
+    try {
+      const requestBody = {
+        pollId: pollId,
+        selectedAnswer: selectedAnswer,
+      };
+      await agent.Polls.vote(requestBody as PollVoteDTO);
+    } catch (error) {
+      console.log(error);
     }
   };
 

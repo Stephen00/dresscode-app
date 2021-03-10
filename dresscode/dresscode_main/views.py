@@ -99,7 +99,7 @@ def discover_quizzes(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET',])
 def discover_polls(request):
     if request.method == 'GET':
         try:
@@ -109,15 +109,6 @@ def discover_polls(request):
             return Response(serializer.data)
         except:
             return Response("No polls found", status=status.HTTP_204_NO_CONTENT)
-
-    elif request.method == 'POST':
-        serializer = PollSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET', 'POST'])
 def discover_articles(request):
@@ -159,46 +150,47 @@ def discover_posts(request):
             return Response(status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
-
-@api_view(['GET', 'POST'])
-def add_heart_reaction(request, slug):
+@api_view(['POST'])
+def add_heart_reaction(request):
     if request.method == 'POST':
-        post = get_object_or_404(Post, slug=slug)
+        data=request.data
+        post = get_object_or_404(Post, id=data['postId'])
         post.heart()
         post.save()
-        messages.info(request, "Heart reaction added to this post")
-        return redirect("discover/posts/", slug=slug)
+        return Response(status=status.HTTP_200_OK)
 
 # Add reactions to the designated post by obtaining the object's slug
-@api_view(['GET', 'POST'])
-def add_star_reaction(request, slug):
+@api_view(['POST'])
+def add_star_reaction(request):
     if request.method == 'POST':
-        post = get_object_or_404(Post, slug=slug)
+        data=request.data
+        post = get_object_or_404(Post, id=data['postId'])
         post.star()
         post.save()
-        messages.info(request, "Star reaction added to this post")
-        return redirect("discover/posts/", slug=slug)
+        return Response(status=status.HTTP_200_OK)
 
 
-@api_view(['GET', 'POST'])
-def add_share_reaction(request, slug):
+@api_view(['POST'])
+def add_share_reaction(request):
     if request.method == 'POST':
-        post = get_object_or_404(Post, slug=slug)
+        data=request.data
+        post = get_object_or_404(Post, id=data['postId'])
         post.share()
         post.save()
-        messages.info(request, "Share reaction added to this post")
-        return redirect("discover/posts/", slug=slug)
+        return Response(status=status.HTTP_200_OK)
 
 
-@api_view(['GET', 'POST'])
-def add_poll_vote(request, slug):
+@api_view(['POST'])
+def add_poll_vote(request):
     if request.method == 'POST':
-        poll = get_object_or_404(Poll, slug=slug)
-        poll.vote_poll()
+        data=request.data
+        poll = get_object_or_404(Poll, id=data['pollId'])
+        poll.vote_poll(data['selectedAnswer'])
         poll.save()
-        messages.info(request, "Successfully voted")
-        return redirect("discover/polls/", slug=slug)
+        return Response(status=status.HTTP_200_OK)
+    
 
 
 # needs more work:

@@ -28,7 +28,7 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
   const [isChosenOption, setChosenOption] = useState<boolean>(false);
   const [hoveringOver, setHoveringOver] = useState<boolean>(false);
 
-  function handleOptionChosen() {
+  function handleOptionSelected() {
     if (!isAnswered) {
       onOptionSelected(optionIndex, postIndex);
       setChosenOption(true);
@@ -41,7 +41,7 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
         <Col xs={2} className="option-button-column">
           <Button
             className="option-checkbox"
-            onClick={() => handleOptionChosen()}
+            onClick={() => handleOptionSelected()}
           >
             <i
               className={`fas fa-check fa-2x ${
@@ -72,7 +72,7 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
           xs={7}
           onMouseEnter={() => setHoveringOver(true)}
           onMouseLeave={() => setHoveringOver(false)}
-          onClick={() => handleOptionChosen()}
+          onClick={() => handleOptionSelected()}
           className={`option-answer-column ${
             hoveringOver ? "hovering-text" : ""
           }`}
