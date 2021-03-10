@@ -71,7 +71,7 @@ def main():
     for m in post_enabled_models:
         c=ContentType.objects.get_or_create(app_label='dresscode_main', model=m)[0]
         c.save()
-    print("ContentType mades")
+    print("ContentTypes made")
     
     ##Creating tags
     tags=['Java','Databases','C','Python','Algorithms','Sigma16','Deep Neural Networks','WebApp','Game Dev','Back-End','Front-End','Threading','Django','AJAX','React','SQL','Functional Programming', 'Object Oriented Programming', 'Declarative Programming', 'Machine Learning','C++']
@@ -226,9 +226,6 @@ def main():
     q.questions.add(QuizQuestion.objects.all()[1])
     q.questions.add(QuizQuestion.objects.all()[2])
     q.save()
-    p=Post.objects.get(object_id=q.id)
-    p.author=user1
-    p.save()
     print("Quiz Made")
 
 if __name__ == '__main__':
