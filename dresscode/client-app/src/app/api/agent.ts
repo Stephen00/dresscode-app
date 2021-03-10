@@ -36,8 +36,9 @@ const requests = {
   put: (url: string, body: {}) => axios.post(url, body).then(responseBody),
 };
 
-const Posts = {
-  list: (): Promise<IPost[]> => requests.get("/"),
+export const Posts = {
+  list: (lastPostId?: number): Promise<IPost[]> =>
+    requests.get(lastPostId ? `/?lastPostId=${lastPostId}` : "/"),
   listOfType: (contentType: string): Promise<IPost[]> =>
     requests.get(`/discover/${contentType}/`),
   details: (slug: string, contentType: string): Promise<IPost> =>
@@ -46,11 +47,6 @@ const Posts = {
     requests.put(`/discover/${contentType}/${article.content.slug}/`, article),
 };
 
-const Polls = {
+export const Polls = {
   vote: (vote: PollVoteDTO) => requests.put(`/discover/polls/vote/`, vote),
-};
-
-export default {
-  Posts,
-  Polls,
 };

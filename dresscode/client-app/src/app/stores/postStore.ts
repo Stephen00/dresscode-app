@@ -1,8 +1,8 @@
 import { createContext } from "react";
 import { IPost } from "../models/post";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
-import agent from "../api/agent";
-import { action, configure, observable, runInAction } from "mobx";
+import { Posts, Polls } from "../api/agent";
+import { action, computed, configure, observable, runInAction } from "mobx";
 
 configure({ enforceActions: "always" });
 
@@ -14,20 +14,42 @@ class PostStore {
   @observable selectedPost: IPost | undefined;
   @observable loadingInitial = false;
 
+  @observable lastPostId: number | undefined = 1;
+  @observable lastLoadedPostId: number | undefined;
+
+  @computed get hasMorePosts() {
+    return (
+      !this.posts ||
+      !this.lastPostId ||
+      this.lastPostId !== this.posts[this.posts?.length - 1].id
+    );
+  }
+
   @action loadAllPosts = async () => {
     this.loadingInitial = true;
     try {
       let res: IPost[] | undefined = undefined;
-      res = await agent.Posts.list();
-
+      console.log(this.lastLoadedPostId);
+      if (this.lastLoadedPostId) {
+        res = await Posts.list(this.lastLoadedPostId);
+      } else {
+        res = await Posts.list();
+      }
+      // const {posts, lastPostId} = res
       runInAction(() => {
         if (res) {
           res.forEach((post) => {
             post.created_at = new Date(post.created_at);
           });
-          this.posts = res;
-          this.loadingInitial = false;
+          //this.lastPostId = lastPostId
+          this.lastLoadedPostId = res[res.length - 1].id;
+          if (!this.posts) {
+            this.posts = res;
+          } else {
+            this.posts = this.posts.concat(res);
+          }
         }
+        this.loadingInitial = false;
       });
     } catch (error) {
       runInAction(() => {
@@ -42,7 +64,7 @@ class PostStore {
         pollId: pollId,
         selectedAnswer: selectedAnswer,
       };
-      await agent.Polls.vote(requestBody as PollVoteDTO);
+      await Polls.vote(requestBody as PollVoteDTO);
     } catch (error) {
       console.log(error);
     }
@@ -53,7 +75,7 @@ class PostStore {
     try {
       let res: IPost[] | undefined = undefined;
       let contentType = this.pathToContentType(path);
-      res = await agent.Posts.listOfType(contentType);
+      res = await Posts.listOfType(contentType);
 
       runInAction(() => {
         if (res) {
@@ -84,7 +106,7 @@ class PostStore {
     try {
       let res: IPost | undefined = undefined;
       let contentType = this.pathToContentType(path);
-      res = await agent.Posts.details(slug, contentType);
+      res = await Posts.details(slug, contentType);
 
       runInAction(() => {
         if (res) {
@@ -113,6 +135,7 @@ class PostStore {
 
   @action removeAllPosts = () => {
     this.posts = undefined;
+    this.lastLoadedPostId = undefined;
   };
 
   @action removeSelectedPost = () => {
