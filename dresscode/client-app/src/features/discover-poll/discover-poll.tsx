@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./discover-poll.css";
+import PostStore from "../../app/stores/postStore";
 import { PollComponentProps } from "../../views/commonProps";
 import AnswerOption from "../answer-option-layout/answer-option-layout";
 
 const DiscoverPoll: React.FC<PollComponentProps> = ({ poll }) => {
+  const postStore = useContext(PostStore);
+  const { voteInPoll } = postStore;
+
   const answers = [
     poll.answer1,
     poll.answer2,
@@ -27,19 +31,22 @@ const DiscoverPoll: React.FC<PollComponentProps> = ({ poll }) => {
   var initialTotalVotes = initialVotes.reduce((a, b) => a!! + b!!, 0);
 
   const [visible, setVisible] = useState<boolean>(false);
-  const [votes, setVotes] = useState<(number | undefined)[]>(initialVotes);
-  const [totalVotes, setTotalVotes] = useState<number | undefined>(
+  const [votes, setVotesLocally] = useState<(number | undefined)[]>(
+    initialVotes
+  );
+  const [totalVotes, setTotalVotesLocally] = useState<number | undefined>(
     initialTotalVotes
   );
 
-  function onVotesChange(index: number) {
+  function onVotesChange(optionIndex: number, pollIndex: number) {
     let items: (number | undefined)[] = [...votes];
-    if (items[index] !== undefined) {
-      items[index] = items[index]!! + 1;
+    if (items[optionIndex] !== undefined && answers[optionIndex] !== undefined) {
+      items[optionIndex] = items[optionIndex]!! + 1;
+      voteInPoll(poll.pk, answers[optionIndex]!!);
+      setVotesLocally(items);
+      setTotalVotesLocally(totalVotes!! + 1);
+      setVisible(true);
     }
-    setVotes(items);
-    setTotalVotes(totalVotes!! + 1);
-    setVisible(true);
   }
 
   const items: any = [];
@@ -47,9 +54,10 @@ const DiscoverPoll: React.FC<PollComponentProps> = ({ poll }) => {
     items.push(
       <AnswerOption
         postType="poll"
+        postIndex={poll.pk}
         isAnswered={visible}
         key={index}
-        index={index}
+        optionIndex={index}
         option={option!!}
         optionCounts={votes[index]!!}
         onOptionSelected={onVotesChange}
