@@ -1,13 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
+import ComingSoon from "../../features/coming-soon/coming-soon";
 
-import './more-page.css';
+import "./more-page.css";
 
 const MorePage = () => {
-    return (
-        <div>
-            <h1>More Page</h1>
-        </div>
-    )
-}
+  return <ComingSoon />;
+};
 
 export default MorePage;

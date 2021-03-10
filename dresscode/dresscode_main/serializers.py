@@ -1,42 +1,17 @@
 from rest_framework import serializers
 from .models import Quiz, QuizQuestion, Post, Tag, Article, Media, Poll
 from django.contrib.admin.options import get_content_type_for_model
+import random
 
 class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
-        fields = ('pk', 'video', 'image')
-
+        fields = ('pk', 'image', 'video')
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('pk', 'tag')
-
-
-class QuizQuestionSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True)
-    media = MediaSerializer()
-    
-    class Meta:
-        model = QuizQuestion
-        media = MediaSerializer()
-        depth=1
-        fields = ('pk', 'media', 'question', 'answer', 'mistake1', 'mistake2', 'mistake3', 'tags')
-
-
-class QuizSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True)
-    
-    class Meta:
-        model = Quiz
-        questions = QuizQuestionSerializer(many=True)
-        depth=1
-        fields = ('pk', 'title', 'questions', 'tags', 'slug',)
-    
-    def get_question(self, obj):
-        return obj.questions.all()[0]
-
+        fields = ('tag',) 
 
 class PollSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
@@ -46,11 +21,10 @@ class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
         depth=1
-        fields = ('pk', 'title', 'question', 'media', 'answer1', 'answer2', 'answer3', 'answer4', 'vote1', 'vote2', 'vote3', 'vote4', 'slug', 'tags')
+        fields = ('pk', 'title', 'question', 'media', 'answer1', 'answer2', 'answer3', 'answer4', 'answer5', 'vote1', 'vote2', 'vote3', 'vote4', 'vote5', 'slug', 'tags')
     
     def get_question(self, obj):
         return obj.question
-
 
 class ArticleSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
@@ -60,13 +34,35 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         depth=1
         fields = ('pk', 'title', 'media', 'text', 'tags', 'slug')
+  
+
+
+class QuizQuestionSerializer(serializers.ModelSerializer):
+    tags=TagSerializer(many=True)
+    answers = serializers.SerializerMethodField('get_answers')
+    
+    class Meta:
+        model = QuizQuestion 
+        fields= ('pk', 'question', 'answers', 'tags',)
+        
+    def get_answers(self, obj):
+        return obj.get_randomised_answers()
+
+class QuizSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True)
+    questions = QuizQuestionSerializer(many=True)
+    
+    class Meta:
+        model = Quiz
+        depth=1
+        fields = ('pk', 'title', 'questions', 'tags', 'slug',)
+
 
 
 class PostContentRelatedField(serializers.RelatedField):
     """
     A custom field to use for the `content_object` generic relationship in post.
     """
-
     def to_representation(self, value):
         """
         Serialize content objects to a simple textual representation.
@@ -91,10 +87,21 @@ class PostContentTypeRelatedField(serializers.RelatedField):
         if value.model == 'quiz':
             return 'quizzes'
         return value.model+'s' #Content_Type instance is passed in so we can return CT.model
+        
+class PostAuthorRelatedField(serializers.RelatedField):
+    """
+    A custom field to determine authors.
+    """
+    def to_representation(self, value):
+        try:
+            return value.first_name+" "+value.last_name
+        except:
+            return None
 
 class PostSerializer(serializers.ModelSerializer):
     content = PostContentRelatedField(read_only='True')
     content_type = PostContentTypeRelatedField(read_only='True')
+    author = PostAuthorRelatedField(read_only='True')
     
     class Meta:
         model = Post

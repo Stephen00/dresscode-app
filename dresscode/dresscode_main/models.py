@@ -17,11 +17,18 @@ class Tag(models.Model):
 
 
 class Media(models.Model):
-    video = models.FileField()
-    image = models.ImageField()
+    image = models.ImageField(blank=True, null=True)
+    video = models.FileField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Media"
+        
+    def __str__(self):
+        if self.image:
+            return "Media "+str(self.pk)+": Image:"+" ".join(str(self.image).split(".")[:-1])
+        elif self.video:
+            return "Media "+str(self.pk)+": Video:"+" ".join(str(self.video).split(".")[:-1])
+        return str("Media "+str(self.pk)+": NULL")
 
 
 class QuizQuestion(models.Model):
@@ -43,7 +50,7 @@ class QuizQuestion(models.Model):
             x = random.randrange(len(ans))
             y = random.randrange(len(ans))
             ans[x], ans[y] = ans[y], ans[x]
-            return ans[x], ans[y]
+        return ans
 
     def check_answer(self, guess):
         if guess == self.answer:
@@ -85,18 +92,19 @@ class Quiz(models.Model):
     def __str__(self):
         return "Quiz " + str(self.id)
 
-
 class Poll(models.Model):
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
-    answer1 = models.CharField(max_length=128)
-    answer2 = models.CharField(max_length=128, blank=True, null=True)
-    answer3 = models.CharField(max_length=128, blank=True, null=True)
-    answer4 = models.CharField(max_length=128, blank=True, null=True)
+    answer1 = models.CharField(max_length=128, default="")
+    answer2 = models.CharField(max_length=128, default="")
+    answer3 = models.CharField(max_length=128, default="", blank=True, null=True)
+    answer4 = models.CharField(max_length=128, default="", blank=True, null=True)
+    answer5 = models.CharField(max_length=128, default="", blank=True, null=True)
     vote1 = models.IntegerField(default=0)
     vote2 = models.IntegerField(default=0)
-    vote3 = models.IntegerField(default=0)
-    vote4 = models.IntegerField(default=0)
+    vote3 = models.IntegerField(default=None, blank=True, null=True)
+    vote4 = models.IntegerField(default=None, blank=True, null=True)
+    vote5 = models.IntegerField(default=None, blank=True, null=True)
     tags = models.ManyToManyField(Tag, blank=True)
     slug = models.SlugField(unique=True)
 
@@ -104,23 +112,67 @@ class Poll(models.Model):
         return self.question
 
     def vote_poll(self, answer):
+        if answer is None: #If request is sent without an answer value
+            return None 
         if self.answer1 == answer:
-            self.vote1 += 1
-        if self.answer2 == answer:
-            self.vote2 += 1
-        if self.answer3 == answer:
-            self.vote3 += 1
+            if self.vote1:
+                self.vote1 += 1
+            else:
+                self.vote1=1
+        elif self.answer2 == answer:
+            if self.vote2:
+                self.vote2 += 1
+            else:
+                self.vote2=1
+        elif self.answer3 == answer:
+            if self.vote3:
+                self.vote3 += 1
+            else:
+                self.vote3=1
+        elif self.answer4 == answer:
+            if self.vote4:
+                self.vote4 += 1
+            else:
+                self.vote4=1
+        elif self.answer5 == answer:
+            if self.vote5:
+                self.vote5 += 1
+            else:
+                self.vote5=1
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):    
+        #Create slug
+        if self.question: 
+            self.slug = slugify(self.question)
+                
+        #Ensure that None is set to votes with no answers         
+        if self.answer3:
+            if self.vote3 is None:
+                self.vote3 = 0
+        else:
+            self.vote3=None
+ 
+        if self.answer4:
+            if self.vote4 is None:
+                self.vote4 = 0
+        else:
+            self.vote4=None
+ 
+        if self.answer5:
+            if self.vote5 is None:
+                self.vote5 = 0
+        else:
+            self.vote5=None
+        
+        #Check if Post needs to be made
         try:
             Poll.objects.get(pk=self.id)
             mk_post = False
         except:
             mk_post = True
-        if self.question:
-            self.slug = slugify(self.question)
+        #Save Poll object
         super(Poll, self).save(*args, **kwargs)
-        if mk_post == True:
+        if mk_post == True: #Create Post if necessary
             postpoll = Post(content=self)
             postpoll.save()
 

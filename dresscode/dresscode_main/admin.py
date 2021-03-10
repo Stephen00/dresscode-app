@@ -33,7 +33,7 @@ class TagAdmin(admin.ModelAdmin):
     # Individual Instance Visuals
     fieldsets = (
         ('Tags', {
-            'fields': ('tags',),
+            'fields': ('tag',),
         }),
     )
 
@@ -68,6 +68,8 @@ class QuizQuestionAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         })
     )
+    
+    filter_horizontal = ('tags',)
 
 
 class QuizAdmin(admin.ModelAdmin):
@@ -92,6 +94,8 @@ class QuizAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         }),
     )
+    
+    filter_horizontal = ('tags',)
 
     # Override Model Save
     def save_model(self, request, obj, form, change):
@@ -99,7 +103,7 @@ class QuizAdmin(admin.ModelAdmin):
 
 
 class PollAdmin(admin.ModelAdmin):
-    list_display = ('question', 'answer1', 'answer2', 'answer3', 'answer4', 'media', 'tagged_as')
+    list_display = ('question', 'answer1', 'answer2', 'answer3', 'answer4', 'answer5', 'media', 'tagged_as')
     search_fields = ('question',)
     list_filter = ('tags__tag',)
 
@@ -112,12 +116,14 @@ class PollAdmin(admin.ModelAdmin):
             'fields': ('question',),
         }),
         ('Answers', {
-            'fields': ('answer1', 'answer2', 'answer3', 'answer4'),
+            'fields': ('answer1', 'answer2', 'answer3', 'answer4', 'answer5'),
         }),
         ('Tags', {
             'fields': ('tags',),
         }),
     )
+    
+    filter_horizontal = ('tags',)
 
     # Override Model Save
     def save_model(self, request, obj, form, change):
@@ -125,7 +131,14 @@ class PollAdmin(admin.ModelAdmin):
 
 
 class MediaAdmin(admin.ModelAdmin):
-    list_display = ('video', 'image')
+    list_display = ('id', 'name', 'image', 'video')
+    
+    def name(self, obj):
+        if obj.image:
+            return " ".join(str(obj.image).split(".")[:-1])
+        elif obj.video:
+            return " ".join(str(obj.video).split(".")[:-1])
+        return str("NULL")
 
     # Individual Instance visuals
     fieldsets = (
@@ -162,6 +175,8 @@ class ArticleAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         }),
     )
+    
+    filter_horizontal = ('tags',)
 
     # Override Model Save
     def save_model(self, request, obj, form, change):
@@ -184,7 +199,7 @@ class PostAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if not obj.author:
             obj.author = request.user
-            obj.save()
+        obj.save()
 
 
 # Define a new User admin

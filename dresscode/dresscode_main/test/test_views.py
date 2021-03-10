@@ -104,7 +104,7 @@ class TestViews(TestCase):
 
     def test_discover_polls_view_status_400(self):
         response = self.client.post(reverse('discover_polls'), data={'unknown_field': 'test_tag'})
-        self.assertEquals(response.status_code, 400)
+        self.assertEquals(response.status_code, 405)
 
     def test_custom_quiz_view_status_200(self):
         qq = QuizQuestion.objects.create(media=None,

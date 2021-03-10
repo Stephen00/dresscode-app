@@ -4,10 +4,11 @@ from rest_framework import status
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 
-from django.contrib.admin.options import get_content_type_for_model
-
-from .models import *
 from .serializers import *
+
+# For each post get the get the object and its content type
+# Apply the appropriate serializer to convert into a neat JSON format
+# Return the serialized content, otherwise return a 204 or 404 error
 
 
 @api_view(['GET'])
@@ -31,7 +32,7 @@ def get_custom_article(request, article_slug):
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
-            return Response("Article "+article_slug+" doesn't exist", status=status.HTTP_404_NOT_FOUND)
+            return Response("Article " + article_slug + " doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -44,7 +45,7 @@ def get_custom_quiz(request, quiz_slug):
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
-            return Response("Quiz "+quiz_slug+" doesn't exist", status=status.HTTP_204_NO_CONTENT)
+            return Response("Quiz " + quiz_slug + " doesn't exist", status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET'])
@@ -57,7 +58,7 @@ def get_custom_poll(request, poll_slug):
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
-            return Response("Poll "+poll_slug+" doesn't exist", status=status.HTTP_404_NOT_FOUND)
+            return Response("Poll " + poll_slug + " doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET', 'POST'])
@@ -98,7 +99,7 @@ def discover_quizzes(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET',])
 def discover_polls(request):
     if request.method == 'GET':
         try:
@@ -108,15 +109,6 @@ def discover_polls(request):
             return Response(serializer.data)
         except:
             return Response("No polls found", status=status.HTTP_204_NO_CONTENT)
-
-    elif request.method == 'POST':
-        serializer = PollSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET', 'POST'])
 def discover_articles(request):
@@ -158,45 +150,51 @@ def discover_posts(request):
             return Response(status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
-
-def add_heart_reaction(request, slug):
+@api_view(['POST'])
+def add_heart_reaction(request):
     if request.method == 'POST':
-        post = get_object_or_404(Post, slug=slug)
+        data=request.data
+        post = get_object_or_404(Post, id=data['postId'])
         post.heart()
         post.save()
-        messages.info(request, "Heart reaction added to this post")
-        return redirect("discover/posts/", slug=slug)
+        return Response(status=status.HTTP_200_OK)
 
-
-def add_star_reaction(request, slug):
+# Add reactions to the designated post by obtaining the object's slug
+@api_view(['POST'])
+def add_star_reaction(request):
     if request.method == 'POST':
-        post = get_object_or_404(Post, slug=slug)
+        data=request.data
+        post = get_object_or_404(Post, id=data['postId'])
         post.star()
         post.save()
-        messages.info(request, "Star reaction added to this post")
-        return redirect("discover/posts/", slug=slug)
+        return Response(status=status.HTTP_200_OK)
 
 
-def add_share_reaction(request, slug):
+@api_view(['POST'])
+def add_share_reaction(request):
     if request.method == 'POST':
-        post = get_object_or_404(Post, slug=slug)
+        data=request.data
+        post = get_object_or_404(Post, id=data['postId'])
         post.share()
         post.save()
-        messages.info(request, "Share reaction added to this post")
-        return redirect("discover/posts/", slug=slug)
+        return Response(status=status.HTTP_200_OK)
 
 
-def add_poll_vote(request, slug):
+@api_view(['POST'])
+def add_poll_vote(request):
     if request.method == 'POST':
-        poll = get_object_or_404(Poll, slug=slug)
-        poll.vote_poll()
+        data=request.data
+        poll = get_object_or_404(Poll, id=data['pollId'])
+        poll.vote_poll(data['selectedAnswer'])
         poll.save()
-        messages.info(request, "Successfully voted")
-        return redirect("discover/polls/", slug=slug)
+        return Response(status=status.HTTP_200_OK)
+    
 
 
 # needs more work:
+@api_view(['GET', 'POST'])
 def answer_quiz(request, slug):
     if request.method == 'POST':
         quiz = get_object_or_404(Quiz, slug=slug)
@@ -209,5 +207,3 @@ def answer_quiz(request, slug):
         msg = "Quiz result: " + quiz.score.get()
         messages.info(request, msg)
         return redirect("discover/quizzes/", slug=slug)
-
-# Create your views here.
