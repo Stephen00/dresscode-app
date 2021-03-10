@@ -10,6 +10,7 @@ import { DetailsProps } from "../../views/commonProps";
 import NoPosts from "../no-posts/no-posts";
 import { IArticle } from "../../app/models/article";
 import { IQuiz } from "../../app/models/quiz";
+import QuizDetails from "../quiz-details/quiz-details";
 
 const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
   const postStore = useContext(PostStore);
@@ -53,8 +54,7 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
                 </div>
               </Col>
               <Col xs={7} md={8} className="author-date">
-                {/* <Row>{selectedPost?.author}</Row> */}
-                <Row>John Doe</Row>
+                <Row>{selectedPost?.author}</Row>
                 <Row>{format(selectedPost!!.created_at, "do MMM y")}</Row>
               </Col>
             </Row>
@@ -81,54 +81,35 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
             </div>
           </Row>
         )} */}
-
-        <Row>
-          <div className="image-div">
-            <img src={Picture} alt="post" className="article-image" />
-          </div>
-        </Row>
+        {selectedPost.content_type === "articles" &&
+          (selectedPost.content as IArticle).media &&
+          (selectedPost.content as IArticle).media?.image && (
+            <Row>
+              <div className="image-div">
+                <img
+                  src={`http://localhost:8000${
+                    (selectedPost.content as IArticle).media!!.image
+                  }`}
+                  alt="post"
+                  className="article-image"
+                />
+              </div>
+            </Row>
+          )}
 
         {selectedPost.content_type === "articles" && (
           <Row className="post-content">
-            {(selectedPost.content as IArticle).text}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: (selectedPost.content as IArticle).text,
+              }}
+            ></div>
           </Row>
         )}
 
         {selectedPost.content_type === "quizzes" && (
           <Row className="post-content">
-            {(selectedPost.content as IQuiz).questions.map((q) => (
-            <Card className="quiz-card">
-                  <Card.Title id="question-text">
-                      {q.question}
-                  </Card.Title>
-                  <Card.Body className="card-body">
-                      <Form>
-                          <div className="mb-4 checkHolder">
-                            <Form.Check
-                              name="groupOptions"
-                              type="radio"
-                              label={q.answer}
-                              />
-                            <Form.Check
-                              name="groupOptions"
-                              type="radio"
-                              label={q.mistake1}
-                            />
-                            <Form.Check
-                              name="groupOptions"
-                              type="radio"
-                              label={q.mistake2}
-                            />
-                            <Form.Check
-                              name="groupOptions"
-                              type="radio"
-                              label={q.mistake3}
-                            />
-                          </div>
-                      </Form>
-                  </Card.Body>
-              </Card>
-            ))}
+            <QuizDetails quiz={selectedPost.content as IQuiz} />
           </Row>
         )}
 

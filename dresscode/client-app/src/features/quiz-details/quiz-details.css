@@ -1,0 +1,32 @@
+.question-component-section {
+  border: 2px solid #74529e;
+  background-color: #74529e;
+  color: white;
+  padding: 20px 50px;
+  margin: 7%;
+  border-radius: 25px;
+}
+
+@media only screen and (max-width: 700px) {
+  .question-component-section {
+    margin: 7% 0;
+    padding: 20px;
+  }
+}
+
+.quiz-container {
+  width: 100%;
+  font-size: 1.1rem;
+}
+
+.quiz-question {
+  margin-bottom: 20px;
+}
+
+.after-submission-section {
+  text-align: right;
+}
+
+.answered {
+  cursor: initial;
+}

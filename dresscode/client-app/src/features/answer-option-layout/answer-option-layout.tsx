@@ -3,18 +3,20 @@ import "./answer-option-layout.css";
 import { Col, Row, Button } from "react-bootstrap";
 
 interface AnswerOptionProps {
-  index: number;
+  optionIndex: number;
   postType: string;
+  postIndex: number;
   isAnswered: boolean;
   option: string;
-  onOptionSelected: Function;
+  onOptionSelected: (optionIndex: number, postIndex: number) => void;
   optionCounts?: number | undefined;
   totalVotes?: number | undefined;
   isCorrectAnswer?: boolean;
 }
 
 const AnswerOption: React.FC<AnswerOptionProps> = ({
-  index,
+  optionIndex,
+  postIndex,
   postType,
   isAnswered,
   option,
@@ -23,18 +25,18 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
   totalVotes,
   isCorrectAnswer,
 }) => {
-  const [chosenOption, setChosenOption] = useState<boolean>(false);
+  const [isChosenOption, setChosenOption] = useState<boolean>(false);
   const [hoveringOver, setHoveringOver] = useState<boolean>(false);
 
   function handleOptionSelected() {
     if (!isAnswered) {
-      onOptionSelected(index);
+      onOptionSelected(optionIndex, postIndex);
       setChosenOption(true);
     }
   }
 
   return (
-    <div key={index} aria-disabled={isAnswered}>
+    <div key={postIndex * 10 + optionIndex} aria-disabled={isAnswered}>
       <Row className="option-row">
         <Col xs={2} className="option-button-column">
           <Button
@@ -44,7 +46,7 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
             <i
               className={`fas fa-check fa-2x ${
                 hoveringOver ? "hovering" : ""
-              }  ${chosenOption ? "chosen" : ""} ${
+              }  ${isChosenOption ? "chosen" : ""} ${
                 postType === "quiz" &&
                 isAnswered &&
                 isCorrectAnswer &&
@@ -53,7 +55,7 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
                   : ""
               }`}
             ></i>
-            <i
+            {/* <i
               className="fas fa-times fa-2x"
               hidden={
                 !(
@@ -63,7 +65,7 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
                   !isCorrectAnswer
                 )
               }
-            ></i>
+            ></i> */}
           </Button>
         </Col>
         <Col
