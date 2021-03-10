@@ -15,7 +15,6 @@ class TagSerializer(serializers.ModelSerializer):
 
 class PollSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
-    media = MediaSerializer()
     title = serializers.SerializerMethodField('get_question')
     
     class Meta:
@@ -51,11 +50,12 @@ class QuizQuestionSerializer(serializers.ModelSerializer):
 class QuizSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     questions = QuizQuestionSerializer(many=True)
+    media = MediaSerializer()
     
     class Meta:
         model = Quiz
         depth=1
-        fields = ('pk', 'title', 'questions', 'tags', 'slug',)
+        fields = ('pk', 'media', 'title', 'questions', 'tags', 'slug',)
 
 
 
