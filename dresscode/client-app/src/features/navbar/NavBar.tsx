@@ -16,6 +16,7 @@ const NavBar = () => {
     }
     postStore.getSearchValue(event.target.value)
   }
+  // check bootstrap navbar logic ?
 
   return (
     <Navbar collapseOnSelect fixed="top" expand="lg">
@@ -62,6 +63,7 @@ const NavBar = () => {
                 <i className="fas fa-search"></i></InputGroup.Text>
               </InputGroup.Prepend>
               <FormControl
+                id="nav-search-input"
                 className="search-input-section"
                 placeholder="search ..."
                 onChange={getSearch}
