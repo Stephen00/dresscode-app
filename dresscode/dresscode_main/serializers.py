@@ -15,7 +15,6 @@ class TagSerializer(serializers.ModelSerializer):
 
 class PollSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
-    media = MediaSerializer()
     title = serializers.SerializerMethodField('get_question')
     
     class Meta:
@@ -49,13 +48,23 @@ class QuizQuestionSerializer(serializers.ModelSerializer):
         return obj.get_randomised_answers()
 
 class QuizSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True)
     questions = QuizQuestionSerializer(many=True)
+    media = MediaSerializer()
+    all_tags = serializers.SerializerMethodField('get_tags')
     
     class Meta:
         model = Quiz
         depth=1
-        fields = ('pk', 'title', 'questions', 'tags', 'slug',)
+        fields = ('pk', 'media', 'title', 'questions', 'all_tags', 'slug',)
+    
+    def get_tags(self, obj):
+        tags=obj.get_tags()
+        result=[]
+        if tags is None:
+            return None
+        for t in tags:
+            result.append(str(t.tag))
+        return result
 
 
 
