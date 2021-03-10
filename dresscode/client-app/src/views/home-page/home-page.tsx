@@ -7,12 +7,10 @@ import "./home-page.css";
 
 const HomePage: React.FC = () => {
   const postStore = useContext(PostStore);
-  const { posts, loadAllPosts, removeAllPosts } = postStore;
+  const { posts, loadPosts, removeAllPosts } = postStore;
 
   useEffect(() => {
-    if (!posts) {
-      loadAllPosts();
-    }
+    loadPosts();
     return () => {
       removeAllPosts();
     };

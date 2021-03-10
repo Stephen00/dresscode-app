@@ -85,11 +85,3 @@
 .list-group-item:hover {
   color: #ed6b4b !important;
 }
-
-.fa-share-square {
-  align-items: flex-end;
-}
-
-.social-icons-row {
-  justify-content: center;
-}
