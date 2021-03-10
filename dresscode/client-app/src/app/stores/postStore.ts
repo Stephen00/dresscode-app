@@ -3,6 +3,9 @@ import { IPost } from "../models/post";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
 import agent from "../api/agent";
 import { action, configure, observable, runInAction, computed } from "mobx";
+import { IArticle } from "../../app/models/article";
+import { IQuiz } from "../../app/models/quiz";
+import { IPoll } from "../../app/models/poll";
 
 configure({ enforceActions: "always" });
 
@@ -128,23 +131,77 @@ class PostStore {
       return pathList[1];
     }
     return pathList[2];
-  }
+  };
 
   @action getSearchValue = (value: string) => {
-    this.searchValue = value
-    this.showFilteredResults()
-  }
+    this.searchValue = value;
+    this.showFilteredResults();
+  };
 
   @action showFilteredResults = async () => {
     if (this.searchValue === "") {
-      this.loadAllPosts()
+      this.loadAllPosts();
       this.filteredPosts =  this.posts
-    } else { 
-      this.filteredPosts =  this.posts?.filter(post => {
-                              return post.content.title.toLowerCase().indexOf(this.searchValue) > -1
-                            }) 
+    } else {
+      this.toFilterPost();
     }
   };
+
+  @action toFilterPost = async () => {
+    this.filteredPosts =  this.posts?.filter(post => {
+      this.searchValue = this.searchValue.toLowerCase()
+      let tempPost = post.content;
+      let tags = tempPost.tags.map(obj => obj.tag);
+
+      if (tempPost.title.toLowerCase().indexOf(this.searchValue) > -1) {
+        return post;
+      } else if (post.content_type === "articles") {
+        if ((tempPost as IArticle).text.toLowerCase().indexOf(this.searchValue) > -1) {
+          return post;
+        }
+      } else if (post.content_type === "polls") {
+        const answers = [
+          (tempPost as IPoll).answer1,
+          (tempPost as IPoll).answer2,
+          (tempPost as IPoll).answer3,
+          (tempPost as IPoll).answer4,
+        ].filter(Boolean);
+        let isFound: Boolean = false;
+        answers.some(answer => {
+          if (answer!!.toLowerCase().indexOf(this.searchValue) > -1) {
+            isFound = true;
+            return true;
+          }
+        })
+        if (isFound === true) {
+          return post
+        }
+      } else if (post.content_type === "quizzes") {
+        let questions = (post.content as IQuiz).questions.map(obj => obj.question);
+        let isFound: Boolean = false;
+        questions.some(question => {
+          if (question.toLowerCase().indexOf(this.searchValue) > -1) {
+            isFound = true;
+            return true;
+          }
+        })
+        if (isFound === true) {
+          return post
+        }
+      } else {
+        let isFound: Boolean = false;
+        tags.some(tag => {
+          if (tag.toLowerCase().indexOf(this.searchValue) > -1) {
+            isFound = true;
+            return true;
+          }
+        })
+        if (isFound === true) {
+          return post
+        }
+      }
+    })
+  }
 }
 
 export default createContext(new PostStore());
