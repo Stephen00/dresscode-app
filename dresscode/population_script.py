@@ -68,10 +68,12 @@ def main():
     print("Media Created")
     
     post_enabled_models=['Quiz', 'Poll', 'Article']
+    cts=[]
     for m in post_enabled_models:
         c=ContentType.objects.get_or_create(app_label='dresscode_main', model=m)[0]
         c.save()
-    print("ContentType mades")
+        cts.append(c)
+    print("ContentTypes made")
     
     ##Creating tags
     tags=['Java','Databases','C','Python','Algorithms','Sigma16','Deep Neural Networks','WebApp','Game Dev','Back-End','Front-End','Threading','Django','AJAX','React','SQL','Functional Programming', 'Object Oriented Programming', 'Declarative Programming', 'Machine Learning','C++']
@@ -151,7 +153,6 @@ def main():
     
     #Add users to Posts
     p=Post.objects.all()[0]
-    print(p)
     p.author=user1
     p.save()
     p=Post.objects.all()[1]
@@ -226,7 +227,7 @@ def main():
     q.questions.add(QuizQuestion.objects.all()[1])
     q.questions.add(QuizQuestion.objects.all()[2])
     q.save()
-    p=Post.objects.get(object_id=q.id)
+    p=Post.objects.get(content_type__model='quiz', object_id=q.pk)
     p.author=user1
     p.save()
     print("Quiz Made")
