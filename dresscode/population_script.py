@@ -186,22 +186,24 @@ def main():
          'answer': "Java",
          'mistake1': "MySQL",
          'tags':[java_tag, sql_tag]},
-        {'media': None, 'question': "Out of the different programming language paradigms, which one is non-imperative?",
-         'answer': "Declarative Programming",
-         'mistake1': "Functional Programming",
-         'mistake2': "Procedural Programming",
-         'mistake3': "Object Oriented Programming",
-         'tags':[dec_tag, func_tag, oop_tag]},
-        {'media': None, 'question': "In a WebApp application which part of the system is in charge of communicating with the database",
-         'answer': "back-end",
-         'mistake1': "front-end",
-         'tags':[webapp_tag]},
+         
+        {'media': None, 'question': "Is Python dynamically or statically typed?",
+         'answer': "Dynamically",
+         'mistake1': "Statically",
+         'tags':[python_tag]},
         {'media': None, 'question': "How do you add something to the end of a list in python? Imagine the list has been declared as a=[]",
          'answer': "a.append(value)",
          'mistake1': "a.put_value(value)",
          'mistake2': "a.insert(value, 0)",
          'mistake3': "a.put(value)",
          'tags':[python_tag]},
+        {'media': None, 'question': "For which of the following areas of Computer Science is Python best suited?",
+         'answer': "Data Analysis",
+         'mistake1': "Videogame Creation",
+         'mistake2': "Object Oriented Programming",
+         'mistake3': "Embedded Microcontrollers",
+         'tags':[python_tag]},
+        
         {'media': None, 'question': "Imagine a list has n values. Which sort is based on iterating through the list n times, and swapping each value with the value to its right, if it is bigger than that value? ",
          'answer': "Bubble Sort, increasing order",
          'mistake1': "Bubble Sort, decreasing order",
@@ -209,6 +211,31 @@ def main():
          'mistake3': "Merge Sort, decreasing order",
          'mistake4': "Insertion Sort",
          'tags':[alg_tag]},
+        {'media': None, 'question': "What is the fetch execute cycle?",
+        'answer': 'The process through which the computer executes a program',
+        'mistake1': 'An app like Uber Eats',
+        'mistake2': 'An exercise routine',
+        'mistake3': 'A process used to load a pendrive and its drivers',
+        'tags':[c_tag]},
+        {'media': None, 'question': "Which printer is capable of building full structures",
+        'answer': '3D Printer',
+        'mistake1': 'Laser printer',
+        'mistake2': 'Inkjet Printer',
+        'tags':[c_tag]},
+        {'media': None, 'question': "Out of the different programming language paradigms, which one is non-imperative?",
+         'answer': "Declarative Programming",
+         'mistake1': "Functional Programming",
+         'mistake2': "Procedural Programming",
+         'mistake3': "Object Oriented Programming",
+         'tags':[dec_tag, func_tag, oop_tag]},
+        {'media': None, 'question': "In a WebApp application which part of the system is in charge of communicating with the database",
+         'answer': "Back-end",
+         'mistake1': "Front-end",
+         'tags':[webapp_tag]},
+        {'media': None, 'question': "Is programming a skill accessible to everyone?",
+        'answer': 'Yes!',
+        'mistake1': 'No',
+        'tags':[]},
     ]
     
 
@@ -223,14 +250,41 @@ def main():
     
     q=Quiz(title="Programming Languages", media=dcode_media)
     q.save()
-    q.questions.add(QuizQuestion.objects.all()[0])
-    q.questions.add(QuizQuestion.objects.all()[1])
-    q.questions.add(QuizQuestion.objects.all()[2])
+    all_questions=QuizQuestion.objects.all()
+    q.questions.add(all_questions[0])
+    q.questions.add(all_questions[1])
+    q.questions.add(all_questions[2])
+    q.questions.add(all_questions[3])
+    q.questions.add(all_questions[4])
+    q.questions.add(all_questions[5])
     q.save()
     p=Post.objects.get(content_type__model='quiz', object_id=q.pk)
     p.author=user1
     p.save()
-    print("Quiz Made")
-
+    print("Programming Languages Quiz Created")
+    
+    q=Quiz(title="Python is fun!", media=dcode_media)
+    q.save()
+    all_questions=QuizQuestion.objects.all()
+    q.questions.add(all_questions[3])
+    q.questions.add(all_questions[4])
+    q.questions.add(all_questions[5])
+    q.save()
+    p=Post.objects.get(content_type__model='quiz', object_id=q.pk)
+    p.author=user1
+    p.save()
+    print("Python is fun! Quiz Made")
+    
+    q=Quiz(title="Mixer Questions", media=dcode_media)
+    q.save()
+    all_questions=QuizQuestion.objects.all()
+    for qq in all_questions:
+        q.questions.add(qq)
+    q.save()
+    p=Post.objects.get(content_type__model='quiz', object_id=q.pk)
+    p.author=user1
+    p.save()
+    print("Mixer Questions Quiz Made")
+    
 if __name__ == '__main__':
     main()
