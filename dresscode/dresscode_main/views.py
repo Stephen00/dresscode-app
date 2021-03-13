@@ -200,19 +200,21 @@ def answer_quiz(request, quiz_slug):
         data=request.data
         """ Data takes this format:
         {
-            "questions" : [[questionId, "answer"], [questionId, "answer"], ..., [questionId, "answer"],]
+            "questions" : [[questionId, "answer"], [questionId, "answer"], ..., [questionId, "answer"]]
         }
         """
         quiz = get_object_or_404(Quiz, slug=quiz_slug)
         print("Quiz found")
         quiz_questions = quiz.questions.all()  # might need to pass pk of some sort here or in next line
         score=0
+        questions=[]
         for question_answer_tuple in data['questions']:
             question=get_object_or_404(QuizQuestion, id=question_answer_tuple[0])
             print("Quiz Question found")
             if question not in quiz_questions: #Check to ensure user is not inserting answers to other quizzes to steal marks
                 print("Question not valid for this quiz")
                 return Response(status=status.HTTP_404_NOT_FOUND)
+            questions.append([question.pk, question.answer])
             if question.check_answer(question_answer_tuple[1]):
                 score+=1  # need to update models to include way to evaluate quiz
-        return Response(status=status.HTTP_200_OK, data={'score':score})
+        return Response(status=status.HTTP_200_OK, data={'score':score, 'questions':questions})
