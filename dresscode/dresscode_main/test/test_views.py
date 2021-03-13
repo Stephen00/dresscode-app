@@ -91,7 +91,7 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_custom_discover_poll_view_status_200(self):
-        p = Poll.objects.create(media=None, question="What is your favourite programming language?",
+        p = Poll.objects.create(question="What is your favourite programming language?",
                                 answer1='Python', answer2="Java", answer3="C++", vote1=7,
                                 vote2=9, vote3=11)
         p.save()
@@ -107,8 +107,7 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 405)
 
     def test_custom_quiz_view_status_200(self):
-        qq = QuizQuestion.objects.create(media=None,
-                                         question="What is the correct way to declare an integer variable equal to 1 in C#",
+        qq = QuizQuestion.objects.create(question="What is the correct way to declare an integer variable equal to 1 in C#",
                                          answer="int var = 1;", mistake1="var = 1", mistake2="int var =1",
                                          mistake3="int var ==1;")
         qq.save()
