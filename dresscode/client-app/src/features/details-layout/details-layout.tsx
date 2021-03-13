@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import PostStore from "../../app/stores/postStore";
 import { observer } from "mobx-react-lite";
 import "./details-layout.css";
@@ -10,6 +10,12 @@ import NoPosts from "../no-posts/no-posts";
 import { IArticle } from "../../app/models/article";
 import { IQuiz } from "../../app/models/quiz";
 import QuizDetails from "../quiz-details/quiz-details";
+import {
+  FacebookShareButton,
+  FacebookShareCount,
+  LinkedinShareButton,
+  TwitterShareButton,
+} from "react-share";
 
 const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
   const postStore = useContext(PostStore);
@@ -20,8 +26,12 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
     loadingInitial,
     reactToPost,
   } = postStore;
+  const [isReactedTo, setReactedTo] = useState<boolean>(false);
+
+  const onShareCountChange = (shareCount: number) => {};
 
   const onReactionChange = (reaction: string) => {
+    setReactedTo(true);
     reactToPost(selectedPost!!.id, reaction, "details");
   };
 
@@ -48,19 +58,30 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
           <h5 className="title">{selectedPost?.content.title}</h5>
         </Row>
         <Row className="align-items-end">
-          <Col xs={12} md={8}>
-            <Row>
-              <Col xs={7} md={8} className="author-date">
-                <Row>{selectedPost?.author}</Row>
-                <Row>{format(selectedPost!!.created_at, "do MMM y")}</Row>
-              </Col>
-            </Row>
+          <Col xs={6} className="author-date">
+            <Row>{selectedPost?.author}</Row>
+            <Row>{format(selectedPost!!.created_at, "do MMM y")}</Row>
           </Col>
-          <Col md={4} className="d-none d-md-block">
+          <Col xs={6}>
             <div className="social-icons">
-              <i className="fab fa-facebook fa-2x" />
-              <i className="fab fa-twitter fa-2x" />
-              <i className="fab fa-linkedin fa-2x" />
+              <FacebookShareButton
+                url={window.location.href}
+                title={selectedPost.content.title}
+              >
+                <i className="fab fa-facebook fa-2x" />
+              </FacebookShareButton>
+              <TwitterShareButton
+                url={window.location.href}
+                title={selectedPost.content.title}
+              >
+                <i className="fab fa-twitter fa-2x" />
+              </TwitterShareButton>
+              <LinkedinShareButton
+                url={window.location.href}
+                title={selectedPost.content.title}
+              >
+                <i className="fab fa-linkedin fa-2x" />
+              </LinkedinShareButton>
             </div>
           </Col>
         </Row>
@@ -75,7 +96,7 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
                     (selectedPost.content as IQuiz).media!!.image
                   }`}
                   alt="post"
-                  className="article-image"
+                  className="post-image"
                 />
               </div>
             </Row>
@@ -91,7 +112,7 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
                     (selectedPost.content as IArticle).media!!.image
                   }`}
                   alt="post"
-                  className="article-image"
+                  className="post-image"
                 />
               </div>
             </Row>
@@ -113,21 +134,10 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
           </Row>
         )}
 
-        <Row className="d-md-none">
-          <Col xs={6} />
-          <Col xs={6}>
-            <div className="social-icons">
-              <i className="fab fa-facebook fa-2x" />
-              <i className="fab fa-twitter fa-2x" />
-              <i className="fab fa-linkedin fa-2x" />
-            </div>
-          </Col>
-        </Row>
-
         <Row className="after-content-row">
           <Col md={2} xs={3} className="icon-style">
             <i
-              className="far fa-heart fa-2x"
+              className={`far fa-heart fa-2x ${isReactedTo ? "disabled" : ""}`}
               onClick={() => onReactionChange("heart")}
             >
               <span>{selectedPost?.reaction1_counter}</span>
@@ -135,7 +145,7 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
           </Col>
           <Col md={2} xs={3} className="icon-style">
             <i
-              className="far fa-star fa-2x"
+              className={`far fa-star fa-2x ${isReactedTo ? "disabled" : ""}`}
               onClick={() => onReactionChange("star")}
             >
               <span>{selectedPost?.reaction2_counter}</span>
@@ -143,7 +153,7 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
           </Col>
           <Col md={6} xs={3} />
           <Col md={2} xs={3} className="icon-style">
-            <i className="far fa-share-square fa-2x">
+            <i className="far fa-share-square fa-2x disabled">
               <span>{selectedPost?.reaction3_counter}</span>
             </i>
           </Col>

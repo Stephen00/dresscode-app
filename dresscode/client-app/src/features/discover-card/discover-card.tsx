@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./discover-card.css";
 import { Card, Col, Row } from "react-bootstrap";
 import { formatDistance } from "date-fns";
@@ -33,8 +33,10 @@ const ConditionalLink = ({ children, to, condition }: ConditionalLinkProps) =>
 const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
   const postStore = useContext(PostStore);
   const { reactToPost } = postStore;
+  const [isReactedTo, setReactedTo] = useState<boolean>(false);
 
   const onReactionChange = (reaction: string) => {
+    setReactedTo(true);
     reactToPost(post.id, reaction, "discover");
   };
 
@@ -88,7 +90,9 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
           <Row>
             <Col xs={4} className="icon-style">
               <i
-                className="far fa-heart fa-2x"
+                className={`far fa-heart fa-2x ${
+                  isReactedTo ? "disabled" : ""
+                }`}
                 onClick={() => onReactionChange("heart")}
               >
                 <span>{post.reaction1_counter}</span>
@@ -96,14 +100,14 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
             </Col>
             <Col xs={4} className="icon-style">
               <i
-                className="far fa-star fa-2x"
+                className={`far fa-star fa-2x ${isReactedTo ? "disabled" : ""}`}
                 onClick={() => onReactionChange("star")}
               >
                 <span>{post.reaction2_counter}</span>
               </i>
             </Col>
             <Col xs={4} className="icon-style">
-              <i className="far fa-share-square fa-2x">
+              <i className="far fa-share-square fa-2x disabled">
                 <span>{post.reaction3_counter}</span>
               </i>
             </Col>
