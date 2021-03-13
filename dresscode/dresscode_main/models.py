@@ -45,7 +45,11 @@ class QuizQuestion(models.Model):
         verbose_name_plural = "Quiz Questions"
 
     def get_randomised_answers(self):
-        ans = [self.answer, self.mistake1, self.mistake2, self.mistake3]
+        ans = [self.answer, self.mistake1]
+        if self.mistake2:
+            ans.append(self.mistake2)
+        if self.mistake3:
+            ans.append(self.mistake3)
         for i in range(10):
             x = random.randrange(len(ans))
             y = random.randrange(len(ans))
@@ -63,6 +67,7 @@ class QuizQuestion(models.Model):
 
 
 class Quiz(models.Model):
+    media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     title = models.CharField(default="Quiz", blank=True, null=True, max_length=128)
     questions = models.ManyToManyField(QuizQuestion)
     tags = models.ManyToManyField(Tag, blank=True)
@@ -93,7 +98,6 @@ class Quiz(models.Model):
         return "Quiz " + str(self.id)
 
 class Poll(models.Model):
-    media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
     answer1 = models.CharField(max_length=128, default="")
     answer2 = models.CharField(max_length=128, default="")
