@@ -9,6 +9,7 @@ import { DiscoverCardProps } from "../../views/commonProps";
 import { IArticle } from "../../app/models/article";
 import PostStore from "../../app/stores/postStore";
 import { observer } from "mobx-react-lite";
+import { IQuiz } from "../../app/models/quiz";
 
 type ConditionalLinkProps = {
   children: any;
@@ -62,6 +63,20 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
                   alt=""
                   src={`http://localhost:8000${
                     (post.content as IArticle).media!!.image
+                  }`}
+                  className="overview-image"
+                />
+              </div>
+            )}
+
+          {post.content_type === "quizzes" &&
+            (post.content as IQuiz).media &&
+            (post.content as IQuiz).media?.image && (
+              <div className="image-section">
+                <img
+                  alt=""
+                  src={`http://localhost:8000${
+                    (post.content as IQuiz).media!!.image
                   }`}
                   className="overview-image"
                 />

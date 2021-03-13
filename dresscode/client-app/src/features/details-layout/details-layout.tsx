@@ -64,6 +64,23 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
             </div>
           </Col>
         </Row>
+
+        {selectedPost.content_type === "quizzes" &&
+          (selectedPost.content as IQuiz).media &&
+          (selectedPost.content as IQuiz).media?.image && (
+            <Row>
+              <div className="image-div">
+                <img
+                  src={`http://localhost:8000${
+                    (selectedPost.content as IQuiz).media!!.image
+                  }`}
+                  alt="post"
+                  className="article-image"
+                />
+              </div>
+            </Row>
+          )}
+
         {selectedPost.content_type === "articles" &&
           (selectedPost.content as IArticle).media &&
           (selectedPost.content as IArticle).media?.image && (
