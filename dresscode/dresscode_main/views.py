@@ -161,7 +161,7 @@ def add_heart_reaction(request):
         post.save()
         return Response(status=status.HTTP_200_OK)
 
-# Add reactions to the designated post by obtaining the object's slug
+# Add reactions to the designated post by obtaining the object's id
 @api_view(['POST'])
 def add_star_reaction(request):
     if request.method == 'POST':
@@ -194,16 +194,25 @@ def add_poll_vote(request):
 
 
 # needs more work:
-@api_view(['GET', 'POST'])
-def answer_quiz(request, slug):
+@api_view(['POST'])
+def answer_quiz(request, quiz_slug):
     if request.method == 'POST':
-        quiz = get_object_or_404(Quiz, slug=slug)
-        questions = quiz.questions.all()  # might need to pass pk of some sort here or in next line
-        for question in questions:
-            guess = "C#"  # place holder; not sure how to get guess
-            if question.check_answer(guess):
-                quiz.score()  # need to update models to include way to evaluate quiz
-        quiz.save()
-        msg = "Quiz result: " + quiz.score.get()
-        messages.info(request, msg)
-        return redirect("discover/quizzes/", slug=slug)
+        data=request.data
+        """ Data takes this format:
+        {
+            "questions" : [[questionId, "answer"], [questionId, "answer"], ..., [questionId, "answer"],]
+        }
+        """
+        quiz = get_object_or_404(Quiz, slug=quiz_slug)
+        print("Quiz found")
+        quiz_questions = quiz.questions.all()  # might need to pass pk of some sort here or in next line
+        score=0
+        for question_answer_tuple in data['questions']:
+            question=get_object_or_404(QuizQuestion, id=question_answer_tuple[0])
+            print("Quiz Question found")
+            if question not in quiz_questions: #Check to ensure user is not inserting answers to other quizzes to steal marks
+                print("Question not valid for this quiz")
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            if question.check_answer(question_answer_tuple[1]):
+                score+=1  # need to update models to include way to evaluate quiz
+        return Response(status=status.HTTP_200_OK, data={'score':score})

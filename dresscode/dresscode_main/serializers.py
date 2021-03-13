@@ -15,13 +15,12 @@ class TagSerializer(serializers.ModelSerializer):
 
 class PollSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
-    media = MediaSerializer()
     title = serializers.SerializerMethodField('get_question')
     
     class Meta:
         model = Poll
         depth=1
-        fields = ('pk', 'title', 'question', 'media', 'answer1', 'answer2', 'answer3', 'answer4', 'answer5', 'vote1', 'vote2', 'vote3', 'vote4', 'vote5', 'slug', 'tags')
+        fields = ('pk', 'title', 'question', 'answer1', 'answer2', 'answer3', 'answer4', 'answer5', 'vote1', 'vote2', 'vote3', 'vote4', 'vote5', 'slug', 'tags')
     
     def get_question(self, obj):
         return obj.question
