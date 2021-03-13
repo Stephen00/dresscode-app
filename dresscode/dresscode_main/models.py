@@ -69,6 +69,7 @@ class QuizQuestion(models.Model):
 class Quiz(models.Model):
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     title = models.CharField(default="Quiz", blank=True, null=True, max_length=128)
+    media=models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     questions = models.ManyToManyField(QuizQuestion)
     tags = models.ManyToManyField(Tag, blank=True)
     slug = models.SlugField(unique=True)
