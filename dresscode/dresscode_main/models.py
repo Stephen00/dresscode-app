@@ -50,7 +50,6 @@ class QuizQuestion(models.Model):
             ans.append(self.mistake2)
         if self.mistake3:
             ans.append(self.mistake3)
-
         for i in range(10):
             x = random.randrange(len(ans))
             y = random.randrange(len(ans))
@@ -68,8 +67,8 @@ class QuizQuestion(models.Model):
 
 
 class Quiz(models.Model):
+    media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     title = models.CharField(default="Quiz", blank=True, null=True, max_length=128)
-    media=models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     questions = models.ManyToManyField(QuizQuestion)
     tags = models.ManyToManyField(Tag, blank=True)
     slug = models.SlugField(unique=True)
@@ -99,7 +98,6 @@ class Quiz(models.Model):
         return "Quiz " + str(self.id)
 
 class Poll(models.Model):
-    media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     question = models.TextField()
     answer1 = models.CharField(max_length=128, default="")
     answer2 = models.CharField(max_length=128, default="")
