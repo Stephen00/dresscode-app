@@ -20,7 +20,7 @@ class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
         depth=1
-        fields = ('pk', 'title', 'question', 'media', 'answer1', 'answer2', 'answer3', 'answer4', 'answer5', 'vote1', 'vote2', 'vote3', 'vote4', 'vote5', 'slug', 'tags')
+        fields = ('pk', 'title', 'question', 'answer1', 'answer2', 'answer3', 'answer4', 'answer5', 'vote1', 'vote2', 'vote3', 'vote4', 'vote5', 'slug', 'tags')
     
     def get_question(self, obj):
         return obj.question
@@ -50,24 +50,12 @@ class QuizQuestionSerializer(serializers.ModelSerializer):
 class QuizSerializer(serializers.ModelSerializer):
     questions = QuizQuestionSerializer(many=True)
     media = MediaSerializer()
-    all_tags = serializers.SerializerMethodField('get_tags')
     
     class Meta:
         model = Quiz
         depth=1
-        fields = ('pk', 'media', 'title', 'questions', 'all_tags', 'slug',)
+        fields = ('pk', 'media', 'title', 'questions', 'tags', 'slug',)
     
-    def get_tags(self, obj):
-        tags=obj.get_tags()
-        result=[]
-        if tags is None:
-            return None
-        for t in tags:
-            result.append(str(t.tag))
-        return result
-
-
-
 class PostContentRelatedField(serializers.RelatedField):
     """
     A custom field to use for the `content_object` generic relationship in post.
