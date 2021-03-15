@@ -153,7 +153,9 @@ class PostStore {
       let tempPost = post.content;
       let tags = tempPost.tags.map(obj => obj.tag);
 
-      if (tempPost.title.toLowerCase().indexOf(this.searchValue) > -1) {
+      if (this.helperFunction (tags)) {
+        return post;
+      } else if (tempPost.title.toLowerCase().indexOf(this.searchValue) > -1) {
         return post;
       } else if (post.content_type === "articles") {
         if ((tempPost as IArticle).text.toLowerCase().indexOf(this.searchValue) > -1) {
@@ -166,41 +168,29 @@ class PostStore {
           (tempPost as IPoll).answer3,
           (tempPost as IPoll).answer4,
         ].filter(Boolean);
-        let isFound: Boolean = false;
-        answers.some(answer => {
-          if (answer!!.toLowerCase().indexOf(this.searchValue) > -1) {
-            isFound = true;
-            return true;
-          }
-        })
-        if (isFound === true) {
-          return post
+
+        if (this.helperFunction (answers)) {
+          return post;
         }
       } else if (post.content_type === "quizzes") {
         let questions = (post.content as IQuiz).questions.map(obj => obj.question);
-        let isFound: Boolean = false;
-        questions.some(question => {
-          if (question.toLowerCase().indexOf(this.searchValue) > -1) {
-            isFound = true;
-            return true;
-          }
-        })
-        if (isFound === true) {
-          return post
-        }
-      } else {
-        let isFound: Boolean = false;
-        tags.some(tag => {
-          if (tag.toLowerCase().indexOf(this.searchValue) > -1) {
-            isFound = true;
-            return true;
-          }
-        })
-        if (isFound === true) {
-          return post
+
+        if (this.helperFunction (questions)) {
+          return post;
         }
       }
     })
+  }
+
+  helperFunction (array: (string | undefined)[]) : Boolean {
+    let isFound: Boolean = false;
+    array!!.some(object => {
+      if (object!!.toLowerCase().indexOf(this.searchValue) > -1) {
+        isFound = true;
+        return true;
+      }
+    })
+    return isFound
   }
 }
 
