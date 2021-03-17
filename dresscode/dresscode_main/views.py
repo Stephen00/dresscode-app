@@ -207,14 +207,14 @@ def answer_quiz(request, quiz_slug):
         print("Quiz found")
         quiz_questions = quiz.questions.all()  # might need to pass pk of some sort here or in next line
         score=0
-        questions={}
+        questions=[]
         for q in quiz_questions:
-            questions[q.id]=q.answer
+            questions.append([q.id, q.answer])
         
-        for question_key in data['questions']:
-            question=get_object_or_404(QuizQuestion, id=question_key)
+        for question_answer_tuple in data['questions']:
+            question=get_object_or_404(QuizQuestion, id=question_answer_tuple[0])
             if question not in quiz_questions: #Check to ensure user is not inserting answers to other quizzes to steal marks
                 return Response(status=status.HTTP_404_NOT_FOUND)
-            if question.check_answer(data['questions'][question_key]):
+            if question.check_answer(question_answer_tuple[1]):
                 score+=1  # need to update models to include way to evaluate quiz
         return Response(status=status.HTTP_200_OK, data={'score':score, 'questions':questions})
