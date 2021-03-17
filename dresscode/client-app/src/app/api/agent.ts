@@ -37,8 +37,8 @@ const requests = {
 };
 
 export const Posts = {
-  list: (lastPostId?: number): Promise<IPost[]> =>
-    requests.get(lastPostId ? `/?lastPostId=${lastPostId}` : "/"),
+  list: (lastPostId?: number, count?:number): Promise<IPost[]> =>
+    requests.get(lastPostId ? `/?lastPostId=${lastPostId}?count=${count}` : "/"),
   listOfType: (contentType: string): Promise<IPost[]> =>
     requests.get(`/discover/${contentType}/`),
   details: (slug: string, contentType: string): Promise<IPost> =>

@@ -6,6 +6,8 @@ import { action, computed, configure, observable, runInAction } from "mobx";
 
 configure({ enforceActions: "always" });
 
+const BATCH_SIZE = 5;
+
 class PostStore {
   @observable posts: IPost[] | undefined;
   @observable articles: IPost[] | undefined;
@@ -31,7 +33,7 @@ class PostStore {
       let res: IPost[] | undefined = undefined;
       console.log(this.lastLoadedPostId);
       if (this.lastLoadedPostId) {
-        res = await Posts.list(this.lastLoadedPostId);
+        res = await Posts.list(this.lastLoadedPostId, BATCH_SIZE);
       } else {
         res = await Posts.list();
       }
