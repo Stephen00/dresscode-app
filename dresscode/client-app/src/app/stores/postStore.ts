@@ -1,8 +1,10 @@
 import { createContext } from "react";
 import { IPost } from "../models/post";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
-import { Posts, Polls } from "../api/agent";
+import { Posts, Polls, Quizzes } from "../api/agent";
 import { action, computed, configure, observable, runInAction } from "mobx";
+import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
+import { IQuiz } from "../models/quiz";
 import { ReactionDTO } from "../models/DTOs/reactionDTO";
 import { IPostsWrapper } from "../models/DTOs/postsWrapper";
 
@@ -80,6 +82,35 @@ class PostStore {
         selectedAnswer: selectedAnswer,
       };
       await Polls.vote(requestBody as PollVoteDTO);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  @action submitQuiz = async (answers: Map<number, string>) => {
+    try {
+      const requestBody: QuizSubmissionDTO = {
+        score: null,
+        questions: [],
+      };
+      answers.forEach((a, q) => {
+        requestBody.questions.push([q, a]);
+      });
+      console.log(requestBody);
+      let res = await Quizzes.submit(
+        this.selectedPost?.content.slug!!,
+        requestBody
+      );
+      runInAction(() => {
+        console.log(res);
+        let quiz = this.selectedPost?.content as IQuiz;
+        quiz.score = (res as QuizSubmissionDTO).score;
+        quiz.answers = new Map();
+        (res as QuizSubmissionDTO).questions.forEach((pair) => {
+          quiz.answers!!.set(pair[0] as number, pair[1] as string);
+        });
+        console.log(quiz.answers);
+      });
     } catch (error) {
       console.log(error);
     }

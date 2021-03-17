@@ -114,8 +114,7 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_custom_quiz_view_status_200(self):
-        qq = QuizQuestion.objects.create(media=None,
-                                         question="What is the correct way to declare an integer variable equal to 1 in C#",
+        qq = QuizQuestion.objects.create(question="What is the correct way to declare an integer variable equal to 1 in C#",
                                          answer="int var = 1;", mistake1="var = 1", mistake2="int var =1",
                                          mistake3="int var ==1;")
         qq.save()

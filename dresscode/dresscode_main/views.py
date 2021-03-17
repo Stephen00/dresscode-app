@@ -163,7 +163,7 @@ def add_heart_reaction(request):
         post.save()
         return Response(status=status.HTTP_200_OK)
 
-# Add reactions to the designated post by obtaining the object's slug
+# Add reactions to the designated post by obtaining the object's id
 @api_view(['POST'])
 def add_star_reaction(request):
     if request.method == 'POST':
@@ -194,6 +194,8 @@ def add_poll_vote(request):
         return Response(status=status.HTTP_200_OK)
     
 
+
+# needs more work:
 @api_view(['POST'])
 def answer_quiz(request, quiz_slug):
     if request.method == 'POST':
@@ -218,4 +220,3 @@ def answer_quiz(request, quiz_slug):
             if question.check_answer(question_answer_tuple[1]):
                 score+=1  # need to update models to include way to evaluate quiz
         return Response(status=status.HTTP_200_OK, data={'score':score, 'questions':questions})
-

@@ -40,7 +40,10 @@ const DiscoverPoll: React.FC<PollComponentProps> = ({ poll }) => {
 
   function onVotesChange(optionIndex: number, pollIndex: number) {
     let items: (number | undefined)[] = [...votes];
-    if (items[optionIndex] !== undefined && answers[optionIndex] !== undefined) {
+    if (
+      items[optionIndex] !== undefined &&
+      answers[optionIndex] !== undefined
+    ) {
       items[optionIndex] = items[optionIndex]!! + 1;
       voteInPoll(poll.pk, answers[optionIndex]!!);
       setVotesLocally(items);
@@ -55,13 +58,15 @@ const DiscoverPoll: React.FC<PollComponentProps> = ({ poll }) => {
       <AnswerOption
         postType="poll"
         postIndex={poll.pk}
-        isAnswered={visible}
+        isParentQuestionAnswered={visible}
         key={index}
         optionIndex={index}
         option={option!!}
         optionCounts={votes[index]!!}
         onOptionSelected={onVotesChange}
         totalVotes={totalVotes!!}
+        isQuizSubmitted={false}
+        isCorrectAnswer={true}
       />
     );
   });

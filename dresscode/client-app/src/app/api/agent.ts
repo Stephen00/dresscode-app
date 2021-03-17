@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { history } from "../../history";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
 import { IPostsWrapper } from "../models/DTOs/postsWrapper";
+import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
 import { ReactionDTO } from "../models/DTOs/reactionDTO";
 import { IPost } from "../models/post";
 
@@ -70,3 +71,9 @@ export const Posts = {
 export const Polls = {
   vote: (vote: PollVoteDTO) => requests.put("/discover/polls/vote/", vote),
 };
+
+export const Quizzes = {
+  submit: (slug: string, answers: QuizSubmissionDTO) =>
+    requests.put(`/discover/quizzes/${slug}/answer/`, answers),
+};
+
