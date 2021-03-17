@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../../history";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
+import { IPostsWrapper } from "../models/DTOs/PostsWrapper";
 import { IPost } from "../models/post";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000";
@@ -37,7 +38,7 @@ const requests = {
 };
 
 export const Posts = {
-  list: ( count?:number, lastPostId?: number): Promise<IPost[]> =>
+  list: ( count?:number, lastPostId?: number): Promise<IPostsWrapper> =>
     requests.get(lastPostId ? `/?lastPostId=${lastPostId}&count=${count}` : "/"),
   listOfType: (contentType: string): Promise<IPost[]> =>
     requests.get(`/discover/${contentType}/`),

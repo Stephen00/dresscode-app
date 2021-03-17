@@ -3,6 +3,7 @@ import { IPost } from "../models/post";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
 import { Posts, Polls } from "../api/agent";
 import { action, computed, configure, observable, runInAction } from "mobx";
+import { IPostsWrapper } from "../models/DTOs/PostsWrapper";
 
 configure({ enforceActions: "always" });
 
@@ -16,7 +17,7 @@ class PostStore {
   @observable selectedPost: IPost | undefined;
   @observable loadingInitial = false;
 
-  @observable lastPostId: number | undefined = 1;
+  @observable lastPostId: number | undefined;
   @observable lastLoadedPostId: number | undefined;
 
   @computed get hasMorePosts() {
@@ -30,25 +31,25 @@ class PostStore {
   @action loadAllPosts = async () => {
     this.loadingInitial = true;
     try {
-      let res: IPost[] | undefined = undefined;
+      let res: IPostsWrapper | undefined = undefined;
       console.log(this.lastLoadedPostId);
       if (this.lastLoadedPostId) {
         res = await Posts.list(BATCH_SIZE, this.lastLoadedPostId);
       } else {
         res = await Posts.list(BATCH_SIZE);
       }
-      // const {posts, lastPostId} = res
+      const { posts, lastPostId } = res;
       runInAction(() => {
         if (res) {
-          res.forEach((post) => {
+          posts.forEach((post) => {
             post.created_at = new Date(post.created_at);
           });
-          //this.lastPostId = lastPostId
-          this.lastLoadedPostId = res[res.length - 1].id;
+          this.lastPostId = lastPostId;
+          this.lastLoadedPostId = posts[posts.length - 1].id;
           if (!this.posts) {
-            this.posts = res;
+            this.posts = posts;
           } else {
-            this.posts = this.posts.concat(res);
+            this.posts = this.posts.concat(posts);
           }
         }
         this.loadingInitial = false;
