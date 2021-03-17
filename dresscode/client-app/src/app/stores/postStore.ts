@@ -3,15 +3,14 @@ import { IPost } from "../models/post";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
 import agent from "../api/agent";
 import { action, configure, observable, runInAction } from "mobx";
+import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
+import { IQuiz } from "../models/quiz";
 import { ReactionDTO } from "../models/DTOs/reactionDTO";
 
 configure({ enforceActions: "always" });
 
 class PostStore {
   @observable posts: IPost[] | undefined;
-  // @observable articles: IPost[] | undefined;
-  // @observable polls: IPost[] | undefined;
-  // @observable quizzes: IPost[] | undefined;
   @observable selectedPost: IPost | undefined;
   @observable loadingInitial = false;
 
@@ -49,6 +48,35 @@ class PostStore {
         selectedAnswer: selectedAnswer,
       };
       await agent.Polls.vote(requestBody as PollVoteDTO);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  @action submitQuiz = async (answers: Map<number, string>) => {
+    try {
+      const requestBody: QuizSubmissionDTO = {
+        score: null,
+        questions: [],
+      };
+      answers.forEach((a, q) => {
+        requestBody.questions.push([q, a]);
+      });
+      console.log(requestBody);
+      let res = await agent.Quizzes.submit(
+        this.selectedPost?.content.slug!!,
+        requestBody
+      );
+      runInAction(() => {
+        console.log(res);
+        let quiz = this.selectedPost?.content as IQuiz;
+        quiz.score = (res as QuizSubmissionDTO).score;
+        quiz.answers = new Map();
+        (res as QuizSubmissionDTO).questions.forEach((pair) => {
+          quiz.answers!!.set(pair[0] as number, pair[1] as string);
+        });
+        console.log(quiz.answers);
+      });
     } catch (error) {
       console.log(error);
     }
