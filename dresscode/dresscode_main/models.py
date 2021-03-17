@@ -69,7 +69,6 @@ class QuizQuestion(models.Model):
 class Quiz(models.Model):
     media = models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     title = models.CharField(default="Quiz", blank=True, null=True, max_length=128)
-    media=models.ForeignKey(Media, blank=True, null=True, on_delete=models.SET_NULL)
     questions = models.ManyToManyField(QuizQuestion)
     tags = models.ManyToManyField(Tag, blank=True)
     slug = models.SlugField(unique=True)
@@ -94,6 +93,10 @@ class Quiz(models.Model):
         if mk_post == True:
             post = Post(content=self)
             post.save()
+        for q in self.questions.all():
+            for tag in q.tags.all():
+                if tag not in self.tags.all():
+                    self.tags.add(tag)
 
     def __str__(self):
         return "Quiz " + str(self.id)

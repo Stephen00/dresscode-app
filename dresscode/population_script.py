@@ -138,7 +138,7 @@ def main():
         {'question': "OOP, declarative programming or functional programming?",
          'answer1': 'OOP', 'answer2': "Declarative Programming", 'answer3': "Functional Programming", 'vote1': 1, 'vote2': 1, 'vote3': 1,
          'tags':[]},
-        {'media': None, 'question': "What is your favourite Operating System?",
+        {'question': "What is your favourite Operating System?",
          'answer1': 'Linux', 'answer2': "Mac IOS", 'answer3': "Windows", 'vote1': 0, 'vote2': 0, 'vote3': 0,
          'tags':[]}
     ]

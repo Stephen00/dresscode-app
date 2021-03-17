@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "./discover-card.css";
 import { Card, Col, Row } from "react-bootstrap";
 import { formatDistance } from "date-fns";
@@ -7,6 +7,8 @@ import DiscoverPoll from "../../features/discover-poll/discover-poll";
 import { Link } from "react-router-dom";
 import { DiscoverCardProps } from "../../views/commonProps";
 import { IArticle } from "../../app/models/article";
+import PostStore from "../../app/stores/postStore";
+import { observer } from "mobx-react-lite";
 import { IQuiz } from "../../app/models/quiz";
 
 type ConditionalLinkProps = {
@@ -29,16 +31,25 @@ const ConditionalLink = ({ children, to, condition }: ConditionalLinkProps) =>
   );
 
 const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
+  const postStore = useContext(PostStore);
+  const { reactToPost } = postStore;
+  const [isReactedTo, setReactedTo] = useState<boolean>(false);
+
+  const onReactionChange = (reaction: string) => {
+    setReactedTo(true);
+    reactToPost(post.id, reaction, "discover");
+  };
+
   return (
-    <ConditionalLink
-      to={`/${post.content_type}/${post.content.slug}`}
-      condition={post.content_type !== "polls"}
-    >
-      <div>
-        <Card key={post.id} className="text-color">
-          <Card.Subtitle className="date-style">
-            {formatDistance(post.created_at, new Date())} ago
-          </Card.Subtitle>
+    <div>
+      <Card key={post.id} className="text-color">
+        <Card.Subtitle className="date-style">
+          {formatDistance(post.created_at, new Date())} ago
+        </Card.Subtitle>
+        <ConditionalLink
+          to={`/${post.content_type}/${post.content.slug}`}
+          condition={post.content_type !== "polls"}
+        >
           <Card.Title>{post.content.title}</Card.Title>
           {post.content_type === "polls" && (
             <div className="poll-section">
@@ -73,30 +84,41 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
                 />
               </div>
             )}
+        </ConditionalLink>
 
-          <Card.Body>
-            <Row>
-              <Col xs={4} className="icon-style">
-                <i className="far fa-heart fa-2x">
-                  <span>{post.reaction1_counter}</span>
-                </i>
-              </Col>
-              <Col xs={4} className="icon-style">
-                <i className="far fa-star fa-2x">
-                  <span>{post.reaction2_counter}</span>
-                </i>
-              </Col>
-              <Col xs={4} className="icon-style">
-                <i className="far fa-share-square fa-2x">
-                  <span>{post.reaction3_counter}</span>
-                </i>
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
-      </div>
-    </ConditionalLink>
+        <Card.Body>
+          <Row>
+            <Col xs={4} className="icon-style">
+              <i
+                className={`far fa-heart fa-2x ${
+                  isReactedTo ? "disabled" : ""
+                }`}
+                onClick={() => onReactionChange("heart")}
+              >
+                <span>{post.reaction1_counter}</span>
+              </i>
+            </Col>
+            <Col xs={4} className="icon-style">
+              <i
+                className={`far fa-star fa-2x ${isReactedTo ? "disabled" : ""}`}
+                onClick={() => onReactionChange("star")}
+              >
+                <span>{post.reaction2_counter}</span>
+              </i>
+            </Col>
+            <Col xs={4} className="icon-style">
+              <i
+                className={`far fa-star fa-2x ${isReactedTo ? "disabled" : ""}`}
+                onClick={() => onReactionChange("share")}
+              >
+                <span>{post.reaction3_counter}</span>
+              </i>
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
+    </div>
   );
 };
 
-export default DiscoverCard;
+export default observer(DiscoverCard);

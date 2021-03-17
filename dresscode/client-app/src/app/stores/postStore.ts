@@ -5,23 +5,26 @@ import agent from "../api/agent";
 import { action, configure, observable, runInAction } from "mobx";
 import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
 import { IQuiz } from "../models/quiz";
+import { ReactionDTO } from "../models/DTOs/reactionDTO";
 
 configure({ enforceActions: "always" });
 
 class PostStore {
   @observable posts: IPost[] | undefined;
-  @observable articles: IPost[] | undefined;
-  @observable polls: IPost[] | undefined;
-  @observable quizzes: IPost[] | undefined;
   @observable selectedPost: IPost | undefined;
   @observable loadingInitial = false;
 
-  @action loadAllPosts = async () => {
+  @action loadPosts = async (path?: string) => {
     this.loadingInitial = true;
+    console.log("loading new posts");
+    let res: IPost[] | undefined = undefined;
     try {
-      let res: IPost[] | undefined = undefined;
-      res = await agent.Posts.list();
-
+      if (path) {
+        let contentType = this.pathToContentType(path);
+        res = await agent.Posts.listOfType(contentType);
+      } else {
+        res = await agent.Posts.list();
+      }
       runInAction(() => {
         if (res) {
           res.forEach((post) => {
@@ -79,34 +82,48 @@ class PostStore {
     }
   };
 
-  @action loadPostsOfType = async (path: string) => {
-    this.loadingInitial = true;
+  @action reactToPost = async (
+    postId: number,
+    reaction: string,
+    caller: string
+  ) => {
     try {
-      let res: IPost[] | undefined = undefined;
-      let contentType = this.pathToContentType(path);
-      res = await agent.Posts.listOfType(contentType);
+      let post: IPost | undefined;
+      if (caller !== "details") {
+        post = this.posts!!.filter((post) => {
+          return post.id === postId;
+        })[0];
+      } else {
+        post = this.selectedPost;
+      }
 
-      runInAction(() => {
-        if (res) {
-          res.forEach((post) => {
-            post.created_at = new Date(post.created_at);
+      const requestBody = {
+        postId: postId,
+      };
+
+      switch (reaction) {
+        case "heart":
+          await agent.Posts.heart(requestBody as ReactionDTO);
+          runInAction(() => {
+            post!!.reaction1_counter += 1;
           });
-
-          if (contentType === "articles") {
-            this.articles = res;
-          } else if (contentType === "quizzes") {
-            this.quizzes = res;
-          } else if (contentType === "polls") {
-            this.polls = res;
-          }
-
-          this.loadingInitial = false;
-        }
-      });
+          break;
+        case "star":
+          await agent.Posts.star(requestBody as ReactionDTO);
+          runInAction(() => {
+            post!!.reaction2_counter += 1;
+          });
+          break;
+        case "share":
+          await agent.Posts.share(requestBody as ReactionDTO);
+          runInAction(() => {
+            post!!.reaction3_counter += 1;
+          });
+          break;
+      }
+      console.log(post);
     } catch (error) {
-      runInAction(() => {
-        this.loadingInitial = false;
-      });
+      console.log(error);
     }
   };
 
@@ -128,17 +145,6 @@ class PostStore {
       runInAction(() => {
         this.loadingInitial = false;
       });
-    }
-  };
-
-  @action removePostsOfType = (path: string) => {
-    let contentType = this.pathToContentType(path);
-    if (contentType === "articles") {
-      this.articles = undefined;
-    } else if (contentType === "quizzes") {
-      this.quizzes = undefined;
-    } else if (contentType === "polls") {
-      this.polls = undefined;
     }
   };
 
