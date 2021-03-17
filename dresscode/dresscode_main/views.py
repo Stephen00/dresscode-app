@@ -17,25 +17,30 @@ def home(request):
         all_posts=Post.objects.all().order_by('-created_at')
         #Select all posts and order them by date
         
-        count=int(request.GET.get('count', 10))
+        batchSize=int(request.GET.get('batchSize', 10))
         
         #Check if something has been already sent, if so use it as an offset and send the next 10 posts
-        if request.GET.get('lastPostId', None)!=None:
-            cutoff=Post.objects.get(id=request.GET['lastPostId'])        
+        if request.GET.get('lastLoadedPostId', None)!=None:
+            cutoff=Post.objects.get(id=request.GET['lastLoadedPostId'])
+            #Check if cutoff is the last Post being sent
+            if cutoff==all_posts.last():
+                return Response("No posts older than lastLoadedPostId", status=status.HTTP_404_NOT_FOUND)
+            
             send_posts=[]
             for post in all_posts:
                 if post.created_at<cutoff.created_at:
                     send_posts.append(post)
-                    if len(send_posts)>count:
+                    if len(send_posts)>batchSize:
                         break
             posts=send_posts
         else: #If not send the 10 most recent posts
-            posts = all_posts[0:count+1]
+            posts = all_posts[0:batchSize+1]
 
         #Serialize the data before sending it
-        try:
-            serializer = PostSerializer(posts, context={'request': request}, many=True)
-            return Response(serializer.data)
+        try:            
+            post_serializer = PostSerializer(posts, context={'request': request}, many=True)
+            data={'posts':post_serializer.data, 'lastPostId':all_posts.last().id}
+            return Response(data)
         except:
             return Response("no posts found", status=status.HTTP_404_NOT_FOUND)
 
