@@ -1,4 +1,4 @@
 export interface QuizSubmissionDTO {
   score: number | null;
-  questions: Array<Array<String | Number>>;
+  questions: Array<Array<number | string>>;
 }

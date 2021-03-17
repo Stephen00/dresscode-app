@@ -10,4 +10,5 @@ export interface IQuiz {
   tags: ITag[];
   slug: string;
   answers: Map<Number, String>;
+  score: Number | null;
 }

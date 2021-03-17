@@ -5,14 +5,13 @@ import AnswerOption from "../answer-option-layout/answer-option-layout";
 import { Prompt } from "react-router";
 import PostStore from "../../app/stores/postStore";
 import { observer } from "mobx-react-lite";
-import { IQuiz } from "../../app/models/quiz";
 
 const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
   const postStore = useContext(PostStore);
   const { submitQuiz, selectedPost } = postStore;
   const [quizNotFinished, setQuizNotFinished] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
-  const [userAnswers, setUserAnswers] = useState<Map<Number, String>>(
+  const [userAnswers, setUserAnswers] = useState<Map<number, string>>(
     new Map()
   );
 
@@ -34,12 +33,16 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
     setUserAnswers(updatedUserAnswers);
 
     setQuizNotFinished(
-      userAnswers.size > 0 && updatedUserAnswers.size < quiz.questions.length
+      updatedUserAnswers.size > 0 &&
+        updatedUserAnswers.size < quiz.questions.length
     );
 
     // quiz is ready for submission
     if (updatedUserAnswers.size === quiz.questions.length) {
-      submitQuiz(updatedUserAnswers).then();
+      submitQuiz(updatedUserAnswers).then(() => {
+        setSubmitted(true);
+        console.log(quiz.score);
+      });
     }
   }
 
@@ -68,7 +71,7 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
     <div className="quiz-container">
       <Prompt
         when={quizNotFinished}
-        message="You have unsaved changes, are you sure you want to leave?"
+        message="You haven't finished the quiz! Are you sure you want to leave?"
       />
       {quiz.questions.map((q, i) => (
         <div
@@ -84,7 +87,9 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
       {submitted && (
         <div className="after-submission-section">
           <div>Thank you for your answer!</div>
-          <div>Result: 10/15</div>
+          <div>
+            Result: {quiz.score}/ {quiz.questions.length}
+          </div>
         </div>
       )}
     </div>

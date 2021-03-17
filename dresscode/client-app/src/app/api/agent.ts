@@ -52,11 +52,12 @@ const Polls = {
 };
 
 const Quizzes = {
-  submit: (slug: string, answers: QuizSubmissionDTO) => requests.put(`/discover/quizzes/${slug}/answer`, answers),
+  submit: (slug: string, answers: QuizSubmissionDTO) =>
+    requests.put(`/discover/quizzes/${slug}/answer/`, answers),
 };
 
 export default {
   Posts,
   Polls,
-  Quizzes
+  Quizzes,
 };

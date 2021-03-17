@@ -50,19 +50,30 @@ class PostStore {
     }
   };
 
-  @action submitQuiz = async (answers: Map<Number, String>) => {
+  @action submitQuiz = async (answers: Map<number, string>) => {
     try {
-      const requestBody: QuizSubmissionDTO = { score: null, questions: [] };
-      answers.forEach((value, key) => requestBody.questions.push([key, value]));
-      console.log(requestBody);
-      let res = await agent.Quizzes.submit(
-        this.selectedPost?.content.slug!!,
-        requestBody
-      );
-      runInAction(() => {
-        (this.selectedPost
-          ?.content as IQuiz).answers = (res as QuizSubmissionDTO).questions;
+      const requestBody: QuizSubmissionDTO = {
+        score: null,
+        questions: [],
+      };
+      answers.forEach((a, q) => {
+        requestBody.questions.push([q, a]);
       });
+      console.log(requestBody);
+      // let res = await agent.Quizzes.submit(
+      //   this.selectedPost?.content.slug!!,
+      //   requestBody
+      // );
+      // runInAction(() => {
+      //   console.log(res);
+      //   (this.selectedPost?.content as IQuiz).answers = new Map();
+      //   (res as QuizSubmissionDTO).questions.forEach((a, q) => {
+      //     (this.selectedPost?.content as IQuiz).answers.set(q, a);
+      //   });
+      //   console.log((this.selectedPost?.content as IQuiz).answers);
+      //   (this.selectedPost
+      //     ?.content as IQuiz).score = (res as QuizSubmissionDTO).score;
+      // });
     } catch (error) {
       console.log(error);
     }
