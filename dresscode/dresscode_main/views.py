@@ -15,7 +15,6 @@ def infinite_scroll(request, ct=None, lastLoadedPostId=None, batchSize=10):
     all_posts=Post.objects.all().order_by('-created_at')
     if ct:
         all_posts=all_posts.filter(content_type=ct)
-        print(all_posts)
     
     #Check if something has been already sent, if so use it as an offset and send the next 10 posts
     if lastLoadedPostId!=None:
@@ -26,7 +25,6 @@ def infinite_scroll(request, ct=None, lastLoadedPostId=None, batchSize=10):
         
         send_posts=[]
         for post in all_posts:
-            print(post)
             if post.created_at<cutoff.created_at:
                 send_posts.append(post)
                 if len(send_posts) >= batchSize:
@@ -47,6 +45,8 @@ def infinite_scroll(request, ct=None, lastLoadedPostId=None, batchSize=10):
 @api_view(['GET'])
 def home(request):
     if request.method == 'GET':
+        if len(Post.objects.all())<=0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         batchSize=int(request.GET.get('batchSize', 10))
         lastLoadedPostId=request.GET.get('lastLoadedPostId', None)
         return infinite_scroll(request, None, lastLoadedPostId, batchSize)
@@ -111,6 +111,8 @@ def get_all_tags(request):
 @api_view(['GET'])
 def discover_quizzes(request):
    if request.method == 'GET':
+        if len(Quiz.objects.all())<=0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         try:
             ct=get_content_type_for_model(Quiz.objects.first())
             batchSize=int(request.GET.get('batchSize', 10))
@@ -124,6 +126,8 @@ def discover_quizzes(request):
 @api_view(['GET'])
 def discover_polls(request):
     if request.method == 'GET':
+        if len(Poll.objects.all())<=0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         try:
             ct=get_content_type_for_model(Poll.objects.first())
             batchSize=int(request.GET.get('batchSize', 10))
@@ -135,6 +139,8 @@ def discover_polls(request):
 @api_view(['GET'])
 def discover_articles(request):
    if request.method == 'GET':
+        if len(Article.objects.all())<=0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         try:
             ct=get_content_type_for_model(Article.objects.first())
             batchSize=int(request.GET.get('batchSize', 10))
@@ -146,6 +152,8 @@ def discover_articles(request):
 @api_view(['GET'])
 def discover_posts(request):
     if request.method == 'GET':
+        if len(Post.objects.all())<=0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         try:
             ct=None
             batchSize=int(request.GET.get('batchSize', 10))
