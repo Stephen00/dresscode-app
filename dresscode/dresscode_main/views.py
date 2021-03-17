@@ -24,7 +24,7 @@ def home(request):
             cutoff=Post.objects.get(id=request.GET['lastLoadedPostId'])
             #Check if cutoff is the last Post being sent
             if cutoff==all_posts.last():
-                return Response("No posts older than lastLoadedPostId", status=status.HTTP_404_NOT_FOUND)
+                return Response("No posts older than lastLoadedPostId", status=status.HTTP_200_OK)
             
             send_posts=[]
             for post in all_posts:
@@ -39,8 +39,8 @@ def home(request):
         #Serialize the data before sending it
         try:            
             post_serializer = PostSerializer(posts, context={'request': request}, many=True)
-            data={'posts':post_serializer.data, 'lastPostId':all_posts.last().id}
-            return Response(data)
+            data={'posts':post_serializer.data, 'lastPostId':all_posts.last().id,}
+            return Response(data, status=status.HTTP_200_OK)
         except:
             return Response("no posts found", status=status.HTTP_404_NOT_FOUND)
 
