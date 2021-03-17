@@ -126,25 +126,25 @@ def main():
     print("Articles made")
 
     polls = [
-        {'media': None, 'question': "What is your favourite programming language?", 
+        {'question': "What is your favourite programming language?", 
          'answer1': 'Python', 'answer2': "Java", 'answer3': "C++", 'vote1': 7, 'vote2': 9, 'vote3': 11, 
          'tags':[]},
-        {'media': None, 'question': "What is your least favourite programming language?", 
+        {'question': "What is your least favourite programming language?", 
          'answer1': 'AJAX', 'answer2': "JavaScript", 'answer3': "Sigma16", 'vote1': 32, 'vote2': 19, 'vote3': 21,
          'tags':[]},
-        {'media': None, 'question': "Should children learn coding in primary school?",
+        {'question': "Should children learn coding in primary school?",
          'answer1': 'Yes, definitely', 'answer2': "Yes, but just the basics", 'answer3': "No.", 'vote1': 92, 'vote2': 119, 'vote3': 11,
          'tags':[]},
-        {'media': None, 'question': "OOP, declarative programming or functional programming?",
+        {'question': "OOP, declarative programming or functional programming?",
          'answer1': 'OOP', 'answer2': "Declarative Programming", 'answer3': "Functional Programming", 'vote1': 1, 'vote2': 1, 'vote3': 1,
          'tags':[]},
-        {'media': None, 'question': "What is your favourite Operating System?",
+        {'question': "What is your favourite Operating System?",
          'answer1': 'Linux', 'answer2': "Mac IOS", 'answer3': "Windows", 'vote1': 0, 'vote2': 0, 'vote3': 0,
          'tags':[]}
     ]
 
     for poll in polls:
-        p = Poll.objects.get_or_create(media=poll['media'], question=poll['question'], answer1=poll['answer1'], answer2=poll['answer2'], answer3=poll['answer3'], vote1=poll['vote1'], vote2=poll['vote2'], vote3=poll['vote3'])[0]
+        p = Poll.objects.get_or_create(question=poll['question'], answer1=poll['answer1'], answer2=poll['answer2'], answer3=poll['answer3'], vote1=poll['vote1'], vote2=poll['vote2'], vote3=poll['vote3'])[0]
         p.save()
         for tag in poll['tags']:
             p.tags.add(tag)

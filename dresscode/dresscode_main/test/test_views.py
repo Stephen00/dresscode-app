@@ -91,7 +91,7 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_custom_discover_poll_view_status_200(self):
-        p = Poll.objects.create(media=None, question="What is your favourite programming language?",
+        p = Poll.objects.create(question="What is your favourite programming language?",
                                 answer1='Python', answer2="Java", answer3="C++", vote1=7,
                                 vote2=9, vote3=11)
         p.save()

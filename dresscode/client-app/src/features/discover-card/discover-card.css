@@ -55,3 +55,13 @@ span {
 .fa-2x {
   font-size: 1.6rem;
 }
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.fa-heart :hover,
+.fa-star :hover {
+  cursor: pointer;
+}
