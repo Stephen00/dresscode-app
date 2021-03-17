@@ -10,13 +10,13 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
   const postStore = useContext(PostStore);
   const { submitQuiz, selectedPost } = postStore;
   const [quizNotFinished, setQuizNotFinished] = useState<boolean>(false);
-  const [submitted, setSubmitted] = useState<boolean>(false);
   const [userAnswers, setUserAnswers] = useState<Map<number, string>>(
     new Map()
   );
 
   // Covers the effect of componentDidMount and componentDidUpdate
   useEffect(() => {
+    console.log(quiz.score);
     if (quizNotFinished) {
       window.onbeforeunload = () => true;
     } else {
@@ -39,15 +39,12 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
 
     // quiz is ready for submission
     if (updatedUserAnswers.size === quiz.questions.length) {
-      submitQuiz(updatedUserAnswers).then(() => {
-        setSubmitted(true);
-        console.log(quiz.score);
-      });
+      submitQuiz(updatedUserAnswers);
     }
   }
 
   // Mapping from question pk to components containing the answers to the question
-  const options: Map<Number, JSX.Element[]> = new Map();
+  const options: Map<Number, any> = new Map();
   quiz.questions.forEach((q) => {
     options.set(q.pk, []);
     q.answers.forEach((option, optionIndex) => {
@@ -57,11 +54,15 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
           <AnswerOption
             postType="quiz"
             postIndex={q.pk}
-            isAnswered={userAnswers.has(q.pk)}
+            isParentQuestionAnswered={userAnswers.has(q.pk)}
             key={optionIndex}
             optionIndex={optionIndex}
             option={option}
             onOptionSelected={onQuestionAnswered}
+            isCorrectAnswer={
+              quiz.answers ? quiz.answers.get(q.pk) === option : false
+            }
+            isQuizSubmitted={quiz.score ? true : false}
           />
         );
     });
@@ -84,11 +85,11 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
           <div>{options.get(q.pk)}</div>
         </div>
       ))}
-      {submitted && (
+      {quiz.score && (
         <div className="after-submission-section">
-          <div>Thank you for your answer!</div>
+          <div>Thank you for your answers!</div>
           <div>
-            Result: {quiz.score}/ {quiz.questions.length}
+            Result: {quiz.score}/{quiz.questions.length}
           </div>
         </div>
       )}

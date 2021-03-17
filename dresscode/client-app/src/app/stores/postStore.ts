@@ -60,20 +60,20 @@ class PostStore {
         requestBody.questions.push([q, a]);
       });
       console.log(requestBody);
-      // let res = await agent.Quizzes.submit(
-      //   this.selectedPost?.content.slug!!,
-      //   requestBody
-      // );
-      // runInAction(() => {
-      //   console.log(res);
-      //   (this.selectedPost?.content as IQuiz).answers = new Map();
-      //   (res as QuizSubmissionDTO).questions.forEach((a, q) => {
-      //     (this.selectedPost?.content as IQuiz).answers.set(q, a);
-      //   });
-      //   console.log((this.selectedPost?.content as IQuiz).answers);
-      //   (this.selectedPost
-      //     ?.content as IQuiz).score = (res as QuizSubmissionDTO).score;
-      // });
+      let res = await agent.Quizzes.submit(
+        this.selectedPost?.content.slug!!,
+        requestBody
+      );
+      runInAction(() => {
+        console.log(res);
+        let quiz = this.selectedPost?.content as IQuiz;
+        quiz.score = (res as QuizSubmissionDTO).score;
+        quiz.answers = new Map();
+        (res as QuizSubmissionDTO).questions.forEach((pair) => {
+          quiz.answers!!.set(pair[0] as number, pair[1] as string);
+        });
+        console.log(quiz.answers);
+      });
     } catch (error) {
       console.log(error);
     }
