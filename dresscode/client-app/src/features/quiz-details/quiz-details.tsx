@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./quiz-details.css";
 import { QuizComponentProps } from "../../views/commonProps";
 import AnswerOption from "../answer-option-layout/answer-option-layout";
 import { Prompt } from "react-router";
+import PostStore from "../../app/stores/postStore";
+import { observer } from "mobx-react-lite";
+import { IQuiz } from "../../app/models/quiz";
 
 const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
+  const postStore = useContext(PostStore);
+  const { submitQuiz, selectedPost } = postStore;
   const [quizNotFinished, setQuizNotFinished] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
-  const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([
-    false,
-    false,
-    false,
-  ]);
+  const [userAnswers, setUserAnswers] = useState<Map<Number, String>>(
+    new Map()
+  );
 
   // Covers the effect of componentDidMount and componentDidUpdate
   useEffect(() => {
@@ -22,24 +25,27 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
     }
   });
 
-  function onQuestionAnswered(optionIndex: number, questionIndex: number) {
-    let updatedAnswered = [...answeredQuestions];
-    updatedAnswered[questionIndex] = true;
-    setAnsweredQuestions(updatedAnswered);
+  function onQuestionAnswered(optionIndex: number, questionId: number) {
+    let selectedAnswer = quiz.questions.filter((q) => q.pk === questionId)[0]
+      .answers[optionIndex];
+    let updatedUserAnswers = new Map();
+    userAnswers.forEach((value, key) => updatedUserAnswers.set(key, value));
+    updatedUserAnswers.set(questionId, selectedAnswer);
+    setUserAnswers(updatedUserAnswers);
 
-    let updatedQuizNotFinished = updatedAnswered.some((q) => q === true);
-    setQuizNotFinished(updatedQuizNotFinished);
+    setQuizNotFinished(
+      userAnswers.size > 0 && updatedUserAnswers.size < quiz.questions.length
+    );
 
-    let readyForSubmission = updatedAnswered.every((q) => q === true);
-
-    if (readyForSubmission) {
-      setQuizNotFinished(false);
+    // quiz is ready for submission
+    if (updatedUserAnswers.size === quiz.questions.length) {
+      submitQuiz(updatedUserAnswers).then();
     }
   }
 
   // Mapping from question pk to components containing the answers to the question
-  const options: Map<Number, JSX.Element[]> = new Map(); 
-  quiz.questions.forEach((q, questionIndex) => {
+  const options: Map<Number, JSX.Element[]> = new Map();
+  quiz.questions.forEach((q) => {
     options.set(q.pk, []);
     q.answers.forEach((option, optionIndex) => {
       options
@@ -47,13 +53,12 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
         ?.push(
           <AnswerOption
             postType="quiz"
-            postIndex={questionIndex}
-            isAnswered={answeredQuestions[questionIndex]}
+            postIndex={q.pk}
+            isAnswered={userAnswers.has(q.pk)}
             key={optionIndex}
             optionIndex={optionIndex}
             option={option}
             onOptionSelected={onQuestionAnswered}
-            isCorrectAnswer={submitted}
           />
         );
     });
@@ -69,13 +74,11 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
         <div
           key={i}
           className={`question-component-section ${q.pk} ${
-            answeredQuestions[i] ? "answered" : ""
+            userAnswers.has(q.pk) ? "answered" : ""
           }`}
         >
           <div className="quiz-question">{q.question}</div>
-          <div className={` ${submitted ? "answered" : ""}`}>
-            {options.get(q.pk)}
-          </div>
+          <div>{options.get(q.pk)}</div>
         </div>
       ))}
       {submitted && (
@@ -88,4 +91,4 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
   );
 };
 
-export default QuizDetails;
+export default observer(QuizDetails);

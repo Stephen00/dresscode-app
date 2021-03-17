@@ -9,4 +9,5 @@ export interface IQuiz {
   questions: IQuestion[];
   tags: ITag[];
   slug: string;
+  answers: Map<Number, String>;
 }

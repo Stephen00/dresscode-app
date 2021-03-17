@@ -3,6 +3,8 @@ import { IPost } from "../models/post";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
 import agent from "../api/agent";
 import { action, configure, observable, runInAction } from "mobx";
+import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
+import { IQuiz } from "../models/quiz";
 
 configure({ enforceActions: "always" });
 
@@ -43,6 +45,24 @@ class PostStore {
         selectedAnswer: selectedAnswer,
       };
       await agent.Polls.vote(requestBody as PollVoteDTO);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  @action submitQuiz = async (answers: Map<Number, String>) => {
+    try {
+      const requestBody: QuizSubmissionDTO = { score: null, questions: [] };
+      answers.forEach((value, key) => requestBody.questions.push([key, value]));
+      console.log(requestBody);
+      let res = await agent.Quizzes.submit(
+        this.selectedPost?.content.slug!!,
+        requestBody
+      );
+      runInAction(() => {
+        (this.selectedPost
+          ?.content as IQuiz).answers = (res as QuizSubmissionDTO).questions;
+      });
     } catch (error) {
       console.log(error);
     }

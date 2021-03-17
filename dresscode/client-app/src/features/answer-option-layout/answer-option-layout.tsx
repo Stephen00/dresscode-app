@@ -4,13 +4,13 @@ import { Col, Row, Button } from "react-bootstrap";
 
 interface AnswerOptionProps {
   optionIndex: number;
-  postType: string;
-  postIndex: number;
-  isAnswered: boolean;
   option: string;
+  postIndex: number;
+  postType: string;
   onOptionSelected: (optionIndex: number, postIndex: number) => void;
   optionCounts?: number | undefined;
   totalVotes?: number | undefined;
+  isAnswered: boolean;
   isCorrectAnswer?: boolean;
 }
 

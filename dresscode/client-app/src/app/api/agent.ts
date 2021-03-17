@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../../history";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
+import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
 import { IPost } from "../models/post";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000";
@@ -50,7 +51,12 @@ const Polls = {
   vote: (vote: PollVoteDTO) => requests.put(`/discover/polls/vote/`, vote),
 };
 
+const Quizzes = {
+  submit: (slug: string, answers: QuizSubmissionDTO) => requests.put(`/discover/quizzes/${slug}/answer`, answers),
+};
+
 export default {
   Posts,
   Polls,
+  Quizzes
 };
