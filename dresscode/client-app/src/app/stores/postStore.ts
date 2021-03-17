@@ -6,10 +6,15 @@ import { action, configure, observable, runInAction, computed } from "mobx";
 import { IArticle } from "../../app/models/article";
 import { IQuiz } from "../../app/models/quiz";
 import { IPoll } from "../../app/models/poll";
+import { history } from "./../../history";
 
 configure({ enforceActions: "always" });
 
 class PostStore {
+  constructor() {
+    this.handleUrlChanged();
+  }
+
   @observable searchValue: string = ""; 
   @observable posts: IPost[] | undefined;
   @observable filteredPosts: IPost[] | undefined;
@@ -18,6 +23,14 @@ class PostStore {
   @observable quizzes: IPost[] | undefined;
   @observable selectedPost: IPost | undefined;
   @observable loadingInitial = false;
+
+  @action handleUrlChanged () {
+    history.listen((location) => {
+      if (location.pathname !== "/latest") {
+        this.setSearchValue("")
+      }
+    });
+  }
 
   @action loadAllPosts = async () => {
     this.loadingInitial = true;
@@ -133,10 +146,13 @@ class PostStore {
     return pathList[2];
   };
 
-  @action getSearchValue = (value: string) => {
-    this.searchValue = value;
+  @action getSearchValue = () => {
     this.showFilteredResults();
   };
+
+  @action setSearchValue = (value: string) => {
+    this.searchValue = value;
+  }
 
   @action showFilteredResults = async () => {
     if (this.searchValue === "") {
