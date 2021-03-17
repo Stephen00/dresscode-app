@@ -17,6 +17,8 @@ def home(request):
         all_posts=Post.objects.all().order_by('-created_at')
         #Select all posts and order them by date
         
+        count=int(request.GET.get('count', 10))
+        
         #Check if something has been already sent, if so use it as an offset and send the next 10 posts
         if request.GET.get('lastPostId', None)!=None:
             cutoff=Post.objects.get(id=request.GET['lastPostId'])        
@@ -24,11 +26,11 @@ def home(request):
             for post in all_posts:
                 if post.created_at<cutoff.created_at:
                     send_posts.append(post)
-                    if len(send_posts)>10:
+                    if len(send_posts)>count:
                         break
             posts=send_posts
         else: #If not send the 10 most recent posts
-            posts = all_posts[0:11]
+            posts = all_posts[0:count+1]
 
         #Serialize the data before sending it
         try:
