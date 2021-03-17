@@ -15,7 +15,6 @@ def infinite_scroll(request, ct=None, lastLoadedPostId=None, batchSize=10):
     all_posts=Post.objects.all().order_by('-created_at')
     if ct:
         all_posts=all_posts.filter(content_type=ct)
-        print(all_posts)
     
     #Check if something has been already sent, if so use it as an offset and send the next 10 posts
     if lastLoadedPostId!=None:
@@ -37,7 +36,8 @@ def infinite_scroll(request, ct=None, lastLoadedPostId=None, batchSize=10):
     #Serialize the data before sending it
     try:            
         post_serializer = PostSerializer(posts, context={'request': request}, many=True)
-        data={'posts':post_serializer.data, 'lastPostId':all_posts.last().id,}
+        data=post_serializer.data
+        #data={'posts':post_serializer.data, 'lastPostId':all_posts.last().id,}
         return Response(data, status=status.HTTP_200_OK)
     except:
         return Response("No posts found", status=status.HTTP_404_NOT_FOUND)
