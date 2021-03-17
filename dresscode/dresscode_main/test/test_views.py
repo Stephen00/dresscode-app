@@ -7,6 +7,13 @@ from dresscode_main.models import *
 class TestViews(TestCase):
 
     def test_home_view_status_200(self):
+        a = Article.objects.create(media=None, title="Why Java is awesome",
+                                   text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sem "
+                                        "mattis, consequat mi quis, vulputate felis. Phasellus vitae lobortis "
+                                        "diam. Proin dapibus est sapien, eget bibendum lacus vehicula at. "
+                                        "Maecenas nisl diam, placerat vel quam in, interdum maximus arcu. Aenean "
+                                        "quis leo in orci laoreet ullamcorper at nec lectus.")
+        a.save()
         response = self.client.get(reverse('home'))
         self.assertEquals(response.status_code, 200)
 
