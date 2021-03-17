@@ -30,7 +30,7 @@ def home(request):
             for post in all_posts:
                 if post.created_at<cutoff.created_at:
                     send_posts.append(post)
-                    if len(send_posts)>batchSize:
+                    if len(send_posts) >= batchSize:
                         break
             posts=send_posts
         else: #If not send the 10 most recent posts

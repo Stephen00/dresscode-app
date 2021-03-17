@@ -11,19 +11,12 @@ const DiscoverArticle: React.FC<RouteComponentProps<DiscoverProps>> = ({
   match,
 }) => {
   const postStore = useContext(PostStore);
-  const {
-    articles,
-    loadingInitial,
-    loadPostsOfType: loadPosts,
-    removePostsOfType: removeAllPosts,
-  } = postStore;
+  const { posts, loadingInitial, loadPosts, removeAllPosts } = postStore;
 
   useEffect(() => {
-    if (!articles) {
-      loadPosts(match.path);
-    }
+    loadPosts(match.path);
     return () => {
-      removeAllPosts(match.path);
+      removeAllPosts();
     };
   }, []);
 
@@ -31,13 +24,13 @@ const DiscoverArticle: React.FC<RouteComponentProps<DiscoverProps>> = ({
     return <LoadingComponent />;
   }
 
-  if (!articles) {
+  if (!posts) {
     return <NoPosts callerType="overview" />;
   }
 
   return (
     <Fragment>
-      {articles?.map((article) => (
+      {posts?.map((article) => (
         <DiscoverCard post={article} key={article.id} />
       ))}
     </Fragment>

@@ -3,36 +3,35 @@ import PostStore from "../../app/stores/postStore";
 import { observer } from "mobx-react-lite";
 import DiscoverCard from "../../features/discover-card/discover-card";
 import "./home-page.css";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import InfiniteScroll from "react-infinite-scroller";
-import { createFalse } from "typescript";
 
 const HomePage: React.FC = () => {
   const postStore = useContext(PostStore);
   const {
     loadingInitial,
     posts,
-    loadAllPosts,
+    loadPosts,
     removeAllPosts,
     hasMorePosts,
     lastPostId,
+    removeLastLoadedPost,
   } = postStore;
   const [loadingNext, setLoadingNext] = useState(false);
 
   const handleGetNext = () => {
     setLoadingNext(true);
-    loadAllPosts().then(() => {
+    loadPosts().then(() => {
       setLoadingNext(false);
     });
   };
 
   useEffect(() => {
-    if (!posts) {
-      loadAllPosts();
-    }
+    loadPosts();
     return () => {
       removeAllPosts();
+      removeLastLoadedPost();
     };
   }, []);
 

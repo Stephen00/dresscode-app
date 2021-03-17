@@ -93,6 +93,10 @@ class Quiz(models.Model):
         if mk_post == True:
             post = Post(content=self)
             post.save()
+        for q in self.questions.all():
+            for tag in q.tags.all():
+                if tag not in self.tags.all():
+                    self.tags.add(tag)
 
     def __str__(self):
         return "Quiz " + str(self.id)

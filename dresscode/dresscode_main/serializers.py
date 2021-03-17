@@ -48,17 +48,14 @@ class QuizQuestionSerializer(serializers.ModelSerializer):
         return obj.get_randomised_answers()
 
 class QuizSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True)
     questions = QuizQuestionSerializer(many=True)
-    media=MediaSerializer()
+    media = MediaSerializer()
     
     class Meta:
         model = Quiz
         depth=1
         fields = ('pk', 'media', 'title', 'questions', 'tags', 'slug',)
-
-
-
+    
 class PostContentRelatedField(serializers.RelatedField):
     """
     A custom field to use for the `content_object` generic relationship in post.

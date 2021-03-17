@@ -3,7 +3,8 @@ import { IPost } from "../models/post";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
 import { Posts, Polls } from "../api/agent";
 import { action, computed, configure, observable, runInAction } from "mobx";
-import { IPostsWrapper } from "../models/DTOs/PostsWrapper";
+import { ReactionDTO } from "../models/DTOs/reactionDTO";
+import { IPostsWrapper } from "../models/DTOs/postsWrapper";
 
 configure({ enforceActions: "always" });
 
@@ -11,34 +12,46 @@ const BATCH_SIZE = 5;
 
 class PostStore {
   @observable posts: IPost[] | undefined;
-  @observable articles: IPost[] | undefined;
-  @observable polls: IPost[] | undefined;
-  @observable quizzes: IPost[] | undefined;
   @observable selectedPost: IPost | undefined;
   @observable loadingInitial = false;
-
   @observable lastPostId: number | undefined;
   @observable lastLoadedPostId: number | undefined;
 
-  @computed get hasMorePosts() {
-    return (
-      !this.posts ||
-      !this.lastPostId ||
-      this.lastPostId !== this.posts[this.posts?.length - 1].id
-    );
+  @computed get hasMorePosts(): boolean {
+    return this.lastLoadedPostId !== this.lastPostId;
   }
 
-  @action loadAllPosts = async () => {
+  @action removeLastLoadedPost = () => {
+    this.lastLoadedPostId = undefined;
+    this.lastPostId = undefined;
+  };
+
+  @action loadPosts = async (path?: string) => {
     this.loadingInitial = true;
     try {
       let res: IPostsWrapper | undefined = undefined;
       console.log(this.lastLoadedPostId);
-      if (this.lastLoadedPostId) {
-        res = await Posts.list(BATCH_SIZE, this.lastLoadedPostId);
+      if (path) {
+        let contentType = this.pathToContentType(path);
+        if (this.lastLoadedPostId) {
+          res = await Posts.listOfType(
+            contentType,
+            BATCH_SIZE,
+            this.lastLoadedPostId
+          );
+        } else {
+          res = await Posts.list(BATCH_SIZE);
+        }
       } else {
-        res = await Posts.list(BATCH_SIZE);
+        if (this.lastLoadedPostId) {
+          res = await Posts.list(BATCH_SIZE, this.lastLoadedPostId);
+        } else {
+          res = await Posts.list(BATCH_SIZE);
+        }
       }
+
       const { posts, lastPostId } = res;
+
       runInAction(() => {
         if (res) {
           posts.forEach((post) => {
@@ -53,6 +66,8 @@ class PostStore {
           }
         }
         this.loadingInitial = false;
+        console.log(this.posts);
+        console.log(this.lastLoadedPostId);
       });
     } catch (error) {
       runInAction(() => {
@@ -73,34 +88,48 @@ class PostStore {
     }
   };
 
-  @action loadPostsOfType = async (path: string) => {
-    this.loadingInitial = true;
+  @action reactToPost = async (
+    postId: number,
+    reaction: string,
+    caller: string
+  ) => {
     try {
-      let res: IPost[] | undefined = undefined;
-      let contentType = this.pathToContentType(path);
-      res = await Posts.listOfType(contentType);
+      let post: IPost | undefined;
+      if (caller !== "details") {
+        post = this.posts!!.filter((post) => {
+          return post.id === postId;
+        })[0];
+      } else {
+        post = this.selectedPost;
+      }
 
-      runInAction(() => {
-        if (res) {
-          res.forEach((post) => {
-            post.created_at = new Date(post.created_at);
+      const requestBody = {
+        postId: postId,
+      };
+
+      switch (reaction) {
+        case "heart":
+          await Posts.heart(requestBody as ReactionDTO);
+          runInAction(() => {
+            post!!.reaction1_counter += 1;
           });
-
-          if (contentType === "articles") {
-            this.articles = res;
-          } else if (contentType === "quizzes") {
-            this.quizzes = res;
-          } else if (contentType === "polls") {
-            this.polls = res;
-          }
-
-          this.loadingInitial = false;
-        }
-      });
+          break;
+        case "star":
+          await Posts.star(requestBody as ReactionDTO);
+          runInAction(() => {
+            post!!.reaction2_counter += 1;
+          });
+          break;
+        case "share":
+          await Posts.share(requestBody as ReactionDTO);
+          runInAction(() => {
+            post!!.reaction3_counter += 1;
+          });
+          break;
+      }
+      console.log(post);
     } catch (error) {
-      runInAction(() => {
-        this.loadingInitial = false;
-      });
+      console.log(error);
     }
   };
 
@@ -122,17 +151,6 @@ class PostStore {
       runInAction(() => {
         this.loadingInitial = false;
       });
-    }
-  };
-
-  @action removePostsOfType = (path: string) => {
-    let contentType = this.pathToContentType(path);
-    if (contentType === "articles") {
-      this.articles = undefined;
-    } else if (contentType === "quizzes") {
-      this.quizzes = undefined;
-    } else if (contentType === "polls") {
-      this.polls = undefined;
     }
   };
 

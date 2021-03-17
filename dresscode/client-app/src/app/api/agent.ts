@@ -2,7 +2,8 @@ import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../../history";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
-import { IPostsWrapper } from "../models/DTOs/PostsWrapper";
+import { IPostsWrapper } from "../models/DTOs/postsWrapper";
+import { ReactionDTO } from "../models/DTOs/reactionDTO";
 import { IPost } from "../models/post";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000";
@@ -38,16 +39,35 @@ const requests = {
 };
 
 export const Posts = {
-  list: ( count?:number, lastPostId?: number): Promise<IPostsWrapper> =>
-    requests.get(lastPostId ? `/?lastPostId=${lastPostId}&count=${count}` : "/"),
-  listOfType: (contentType: string): Promise<IPost[]> =>
-    requests.get(`/discover/${contentType}/`),
+  list: (
+    batchSize?: number,
+    lastLoadedPostId?: number
+  ): Promise<IPostsWrapper> => {
+    // I know this looks ugly
+    // but JS doesn't support conditional concatination with a ternaty operatior
+    let path = "/";
+    if (lastLoadedPostId || batchSize) path += "?";
+    if (lastLoadedPostId) path += `lastLoadedPostId=${lastLoadedPostId}`;
+    if (lastLoadedPostId && batchSize) path += "&";
+    if (batchSize) path += `batchSize=${batchSize}`;
+
+    return requests.get(path);
+  },
+  listOfType: (
+    contentType: string,
+    count?: number,
+    lastPostId?: number
+  ): Promise<IPostsWrapper> =>
+    requests.get(
+      `/discover/${contentType}/?lastPostId=${lastPostId}&count=${count}`
+    ),
   details: (slug: string, contentType: string): Promise<IPost> =>
     requests.get(`/discover/${contentType}/${slug}/`),
-  update: (article: IPost, contentType: string) =>
-    requests.put(`/discover/${contentType}/${article.content.slug}/`, article),
+  heart: (reaction: ReactionDTO) => requests.put("/heart/", reaction),
+  star: (reaction: ReactionDTO) => requests.put("/star/", reaction),
+  share: (reaction: ReactionDTO) => requests.put("/share/", reaction),
 };
 
 export const Polls = {
-  vote: (vote: PollVoteDTO) => requests.put(`/discover/polls/vote/`, vote),
+  vote: (vote: PollVoteDTO) => requests.put("/discover/polls/vote/", vote),
 };
