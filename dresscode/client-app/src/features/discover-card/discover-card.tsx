@@ -107,7 +107,10 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
               </i>
             </Col>
             <Col xs={4} className="icon-style">
-              <i className="far fa-share-square fa-2x disabled">
+              <i
+                className={`far fa-star fa-2x ${isReactedTo ? "disabled" : ""}`}
+                onClick={() => onReactionChange("share")}
+              >
                 <span>{post.reaction3_counter}</span>
               </i>
             </Col>

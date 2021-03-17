@@ -15,7 +15,7 @@ class testAttributes(TestCase):
         c_tag = Tag.objects.get(tag="C")
 
         # Create test poll
-        p = Poll.objects.create(media=None, question="What is your favourite programming language?",
+        p = Poll.objects.create(question="What is your favourite programming language?",
                                 answer1 = 'Python', answer2 = "Java", answer3 = "C", answer4 = "C++", answer5 = "C#", vote1 = 7,
                                          vote2 = 9, vote3 = 11, vote4=0)
         p.save()
@@ -74,7 +74,7 @@ class testAttributes(TestCase):
         self.assertEquals(test_full_poll.vote5, 1)
 
     def testEmptyPollReaction(self):
-        empty_p = Poll.objects.create(media=None, question="What is your least favourite programming language?",
+        empty_p = Poll.objects.create(question="What is your least favourite programming language?",
             answer1 = 'Python', answer2 = "Java", vote1 = 7, vote2 = 9, vote3 = 11, vote4=0)
         empty_p.save()
         self.assertEquals(empty_p.vote1, 7)
