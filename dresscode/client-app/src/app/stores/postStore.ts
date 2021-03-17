@@ -33,9 +33,9 @@ class PostStore {
       let res: IPost[] | undefined = undefined;
       console.log(this.lastLoadedPostId);
       if (this.lastLoadedPostId) {
-        res = await Posts.list(this.lastLoadedPostId, BATCH_SIZE);
+        res = await Posts.list(BATCH_SIZE, this.lastLoadedPostId);
       } else {
-        res = await Posts.list();
+        res = await Posts.list(BATCH_SIZE);
       }
       // const {posts, lastPostId} = res
       runInAction(() => {
