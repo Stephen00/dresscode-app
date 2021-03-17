@@ -19,20 +19,21 @@ def infinite_scroll(request, ct=None, lastLoadedPostId=None, batchSize=10):
     
     #Check if something has been already sent, if so use it as an offset and send the next 10 posts
     if lastLoadedPostId!=None:
-        cutoff=lastLoadedPostId
+        cutoff=all_posts.filter(id=lastLoadedPostId)[0]
         #Check if cutoff is the last Post being sent
         if cutoff==all_posts.last():
             return Response("No posts older than lastLoadedPostId", status=status.HTTP_200_OK)
         
         send_posts=[]
         for post in all_posts:
+            print(post)
             if post.created_at<cutoff.created_at:
                 send_posts.append(post)
                 if len(send_posts) >= batchSize:
                     break
         posts=send_posts
     else: #If not send the 10 most recent posts
-        posts = all_posts[0:batchSize+1]
+        posts = all_posts[0:batchSize]
 
     #Serialize the data before sending it
     try:            

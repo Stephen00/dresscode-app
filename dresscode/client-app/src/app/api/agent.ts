@@ -40,27 +40,26 @@ const requests = {
 
 export const Posts = {
   list: (
-    batchSize?: number,
+    batchSize: number,
     lastLoadedPostId?: number
   ): Promise<IPostsWrapper> => {
     // I know this looks ugly
     // but JS doesn't support conditional concatination with a ternaty operatior
-    let path = "/";
-    if (lastLoadedPostId || batchSize) path += "?";
-    if (lastLoadedPostId) path += `lastLoadedPostId=${lastLoadedPostId}`;
-    if (lastLoadedPostId && batchSize) path += "&";
-    if (batchSize) path += `batchSize=${batchSize}`;
+    let path = `/?batchSize=${batchSize}`;
+    if (lastLoadedPostId) path += `&lastLoadedPostId=${lastLoadedPostId}`;
 
     return requests.get(path);
   },
   listOfType: (
     contentType: string,
-    count?: number,
-    lastPostId?: number
-  ): Promise<IPostsWrapper> =>
-    requests.get(
-      `/discover/${contentType}/?lastPostId=${lastPostId}&count=${count}`
-    ),
+    batchSize: number,
+    lastLoadedPostId?: number
+  ): Promise<IPostsWrapper> => {
+    let path = `/discover/${contentType}/?batchSize=${batchSize}`;
+    if (lastLoadedPostId) path += `&lastLoadedPostId=${lastLoadedPostId}`;
+
+    return requests.get(path);
+  },
   details: (slug: string, contentType: string): Promise<IPost> =>
     requests.get(`/discover/${contentType}/${slug}/`),
   heart: (reaction: ReactionDTO) => requests.put("/heart/", reaction),

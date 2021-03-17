@@ -8,7 +8,7 @@ import { IPostsWrapper } from "../models/DTOs/postsWrapper";
 
 configure({ enforceActions: "always" });
 
-const BATCH_SIZE = 5;
+const BATCH_SIZE = 8;
 
 class PostStore {
   @observable posts: IPost[] | undefined;
@@ -30,7 +30,6 @@ class PostStore {
     this.loadingInitial = true;
     try {
       let res: IPostsWrapper | undefined = undefined;
-      console.log(this.lastLoadedPostId);
       if (path) {
         let contentType = this.pathToContentType(path);
         if (this.lastLoadedPostId) {
@@ -40,7 +39,7 @@ class PostStore {
             this.lastLoadedPostId
           );
         } else {
-          res = await Posts.list(BATCH_SIZE);
+          res = await Posts.listOfType(contentType, BATCH_SIZE);
         }
       } else {
         if (this.lastLoadedPostId) {
@@ -66,8 +65,6 @@ class PostStore {
           }
         }
         this.loadingInitial = false;
-        console.log(this.posts);
-        console.log(this.lastLoadedPostId);
       });
     } catch (error) {
       runInAction(() => {
