@@ -11,16 +11,44 @@ from .serializers import *
 # Return the serialized content, otherwise return a 204 or 404 error
 
 
+def infinite_scroll(request, ct=None, lastLoadedPostId=None, batchSize=10):
+    all_posts=Post.objects.all().order_by('-created_at')
+    if ct:
+        all_posts=all_posts.filter(content_type=ct)
+        print(all_posts)
+    
+    #Check if something has been already sent, if so use it as an offset and send the next 10 posts
+    if lastLoadedPostId!=None:
+        cutoff=lastLoadedPostId
+        #Check if cutoff is the last Post being sent
+        if cutoff==all_posts.last():
+            return Response("No posts older than lastLoadedPostId", status=status.HTTP_200_OK)
+        
+        send_posts=[]
+        for post in all_posts:
+            if post.created_at<cutoff.created_at:
+                send_posts.append(post)
+                if len(send_posts) >= batchSize:
+                    break
+        posts=send_posts
+    else: #If not send the 10 most recent posts
+        posts = all_posts[0:batchSize+1]
+
+    #Serialize the data before sending it
+    try:            
+        post_serializer = PostSerializer(posts, context={'request': request}, many=True)
+        data={'posts':post_serializer.data, 'lastPostId':all_posts.last().id,}
+        return Response(data, status=status.HTTP_200_OK)
+    except:
+        return Response("No posts found", status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['GET'])
 def home(request):
     if request.method == 'GET':
-        try:
-            post = Post.objects.all().order_by('-created_at')
-            serializer = PostSerializer(post, context={'request': request}, many=True)
-            return Response(serializer.data)
-        except:
-            return Response("no posts found", status=status.HTTP_404_NOT_FOUND)
-
+        batchSize=int(request.GET.get('batchSize', 10))
+        lastLoadedPostId=request.GET.get('lastLoadedPostId', None)
+        return infinite_scroll(request, None, lastLoadedPostId, batchSize)
 
 @api_view(['GET'])
 def get_custom_article(request, article_slug):
@@ -45,7 +73,7 @@ def get_custom_quiz(request, quiz_slug):
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except:
-            return Response("Quiz " + quiz_slug + " doesn't exist", status=status.HTTP_204_NO_CONTENT)
+            return Response("Quiz " + quiz_slug + " doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -79,78 +107,51 @@ def get_all_tags(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def discover_quizzes(request):
-    if request.method == 'GET':
+   if request.method == 'GET':
         try:
-            CT = get_content_type_for_model(Quiz.objects.first())
-            data = Post.objects.filter(content_type=CT)
-            serializer = PostSerializer(data, context={'request': request}, many=True)
-            return Response(serializer.data)
+            ct=get_content_type_for_model(Quiz.objects.first())
+            batchSize=int(request.GET.get('batchSize', 10))
+            lastLoadedPostId=request.GET.get('lastLoadedPostId', None)        
         except:
-            return Response("No quizzes found", status=status.HTTP_204_NO_CONTENT)
-
-    elif request.method == 'POST':
-        serializer = QuizSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response("No Quizzes found", status=status.HTTP_404_NOT_FOUND)
+            
+        return infinite_scroll(request, ct, lastLoadedPostId, batchSize)
 
 
-@api_view(['GET',])
+@api_view(['GET'])
 def discover_polls(request):
     if request.method == 'GET':
         try:
-            CT = get_content_type_for_model(Poll.objects.first())
-            data = Post.objects.filter(content_type=CT)
-            serializer = PostSerializer(data, context={'request': request}, many=True)
-            return Response(serializer.data)
+            ct=get_content_type_for_model(Poll.objects.first())
+            batchSize=int(request.GET.get('batchSize', 10))
+            lastLoadedPostId=request.GET.get('lastLoadedPostId', None)
+            return infinite_scroll(request, ct, lastLoadedPostId, batchSize)        
         except:
-            return Response("No polls found", status=status.HTTP_204_NO_CONTENT)
+            return Response("No polls found", status=status.HTTP_404_NOT_FOUND)
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def discover_articles(request):
-    if request.method == 'GET':
+   if request.method == 'GET':
         try:
-            CT = get_content_type_for_model(Article.objects.first())
-            data = Post.objects.filter(content_type=CT)
-            serializer = PostSerializer(data, context={'request': request}, many=True)
-            return Response(serializer.data)
+            ct=get_content_type_for_model(Article.objects.first())
+            batchSize=int(request.GET.get('batchSize', 10))
+            lastLoadedPostId=request.GET.get('lastLoadedPostId', None)
+            return infinite_scroll(request, ct, lastLoadedPostId, batchSize)
         except:
-            return Response("no quiz found", status=status.HTTP_204_NO_CONTENT)
+            return Response("No articles found", status=status.HTTP_404_NOT_FOUND)
 
-    elif request.method == 'POST':
-        serializer = ArticleSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def discover_posts(request):
     if request.method == 'GET':
-        data = Post.objects.all()
         try:
-            Post.objects.first()
+            ct=None
+            batchSize=int(request.GET.get('batchSize', 10))
+            lastLoadedPostId=request.GET.get('lastLoadedPostId', None)
+            return infinite_scroll(request, ct, lastLoadedPostId, batchSize)
         except:
-            return Response("no posts found", status=status.HTTP_204_NO_CONTENT)
-
-        serializer = PostSerializer(data, context={'request': request}, many=True)
-
-        return Response(serializer.data)
-
-    elif request.method == 'POST':
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+            return Response("No posts found", status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
 def add_heart_reaction(request):
@@ -192,18 +193,28 @@ def add_poll_vote(request):
         return Response(status=status.HTTP_200_OK)
     
 
-
-# needs more work:
-@api_view(['GET', 'POST'])
-def answer_quiz(request, slug):
+@api_view(['POST'])
+def answer_quiz(request, quiz_slug):
     if request.method == 'POST':
-        quiz = get_object_or_404(Quiz, slug=slug)
-        questions = quiz.questions.all()  # might need to pass pk of some sort here or in next line
-        for question in questions:
-            guess = "C#"  # place holder; not sure how to get guess
-            if question.check_answer(guess):
-                quiz.score()  # need to update models to include way to evaluate quiz
-        quiz.save()
-        msg = "Quiz result: " + quiz.score.get()
-        messages.info(request, msg)
-        return redirect("discover/quizzes/", slug=slug)
+        data=request.data
+        """ Data takes this format:
+        {
+            "questions" : [[questionId, "answer"], [questionId, "answer"], ..., [questionId, "answer"]]
+        }
+        """
+        quiz = get_object_or_404(Quiz, slug=quiz_slug)
+        print("Quiz found")
+        quiz_questions = quiz.questions.all()  # might need to pass pk of some sort here or in next line
+        score=0
+        questions=[]
+        for q in quiz_questions:
+            questions.append([q.id, q.answer])
+        
+        for question_answer_tuple in data['questions']:
+            question=get_object_or_404(QuizQuestion, id=question_answer_tuple[0])
+            if question not in quiz_questions: #Check to ensure user is not inserting answers to other quizzes to steal marks
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            if question.check_answer(question_answer_tuple[1]):
+                score+=1  # need to update models to include way to evaluate quiz
+        return Response(status=status.HTTP_200_OK, data={'score':score, 'questions':questions})
+
