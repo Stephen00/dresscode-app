@@ -9,7 +9,7 @@ import { observer } from "mobx-react-lite";
 
 const NavBar = () => {
   const postStore = useContext(PostStore);
-  const { searchValue, getSearchValue, setSearchValue } = postStore;
+  const { searchValue, showFilteredResults, setSearchValue } = postStore;
 
   const getSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     let pathList = window.location.pathname.split("/")
@@ -17,7 +17,7 @@ const NavBar = () => {
       history.push("/latest");
     }
     setSearchValue(event.target.value);
-    getSearchValue()
+    showFilteredResults()
   }
 
   return (

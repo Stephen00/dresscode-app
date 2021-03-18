@@ -146,10 +146,6 @@ class PostStore {
     return pathList[2];
   };
 
-  @action getSearchValue = () => {
-    this.showFilteredResults();
-  };
-
   @action setSearchValue = (value: string) => {
     this.searchValue = value;
   }
