@@ -1,27 +1,45 @@
-import React, { useEffect, Fragment, useContext } from "react";
+import React, { useEffect, useContext, Fragment } from "react";
 import PostStore from "../../app/stores/postStore";
 import { observer } from "mobx-react-lite";
 import DiscoverCard from "../../features/discover-card/discover-card";
-
 import "./home-page.css";
+import CatPicture from "../../assets/cat.png";
 
 const HomePage: React.FC = () => {
   const postStore = useContext(PostStore);
-  const { posts, loadPosts, removeAllPosts } = postStore;
+  const { loadPosts, removeAllPosts, filteredPosts } = postStore;
 
   useEffect(() => {
-    loadPosts();
+    if (!filteredPosts) {
+      loadPosts();
+    }
     return () => {
       removeAllPosts();
     };
   }, []);
 
   return (
-    <Fragment key="homepage">
-      {posts?.map((post) => (
-        <DiscoverCard post={post} key={post.id} />
-      ))}
-    </Fragment>
+    <div>
+      {filteredPosts?.length ? 
+        <div>
+          <Fragment key="homepage">
+          {filteredPosts?.map((post) => (
+              <DiscoverCard post={post} key={post.id} />
+          ))}
+        </Fragment>
+        </div>
+        :
+        <div className="empty-section-config">
+          <img
+            src={CatPicture}
+            alt="no picture found"
+            className="empty-section-image"
+          />
+          <h1 className="text-config">No Post Found</h1>
+        </div>
+      }
+    </div>
+    
   );
 };
 

@@ -23,3 +23,7 @@
 .navbar-light .navbar-nav .nav-link.active {
   color: #ed6b4b !important;
 }
+
+#nav-search-input::placeholder {
+  color: #74529e;
+}

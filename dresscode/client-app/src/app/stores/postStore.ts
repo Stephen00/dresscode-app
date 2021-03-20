@@ -4,15 +4,31 @@ import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
 import agent from "../api/agent";
 import { action, configure, observable, runInAction } from "mobx";
 import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
+import { IArticle } from "../models/article";
 import { IQuiz } from "../models/quiz";
+import { IPoll } from "../models/poll";
 import { ReactionDTO } from "../models/DTOs/reactionDTO";
-
+import { history } from "./../../history";
 configure({ enforceActions: "always" });
 
 class PostStore {
+  constructor() {
+    this.handleUrlChanged();
+  }
+
+  @observable searchValue: string = ""; 
+  @observable filteredPosts: IPost[] | undefined;
   @observable posts: IPost[] | undefined;
   @observable selectedPost: IPost | undefined;
   @observable loadingInitial = false;
+
+  @action handleUrlChanged () {
+    history.listen((location) => {
+      if (location.pathname !== "/latest") {
+        this.setSearchValue("")
+      }
+    });
+  }  
 
   @action loadPosts = async (path?: string) => {
     this.loadingInitial = true;
@@ -31,6 +47,7 @@ class PostStore {
             post.created_at = new Date(post.created_at);
           });
           this.posts = res;
+          this.filteredPosts = [...this.posts]
           this.loadingInitial = false;
         }
       });
@@ -162,6 +179,65 @@ class PostStore {
       return pathList[1];
     }
     return pathList[2];
+  };
+
+  @action setSearchValue = (value: string) => {
+    this.searchValue = value;
+  }
+
+  @action showFilteredResults = async () => {
+    if (this.searchValue === "") {
+      this.loadPosts();
+      this.filteredPosts =  this.posts
+    } else {
+      this.toFilterPost();
+    }
+  };
+
+  @action toFilterPost = async () => {
+    this.filteredPosts =  this.posts?.filter(post => {
+      this.searchValue = this.searchValue.toLowerCase()
+      let tempPost = post.content;
+      let tags = tempPost.tags.map(obj => obj.tag);
+
+      if (this.helperFunction (tags)) {
+        return post;
+      } else if (tempPost.title.toLowerCase().indexOf(this.searchValue) > -1) {
+        return post;
+      } else if (post.content_type === "articles") {
+        if ((tempPost as IArticle).text.toLowerCase().indexOf(this.searchValue) > -1) {
+          return post;
+        }
+      } else if (post.content_type === "polls") {
+        const answers = [
+          (tempPost as IPoll).answer1,
+          (tempPost as IPoll).answer2,
+          (tempPost as IPoll).answer3,
+          (tempPost as IPoll).answer4,
+        ].filter(Boolean);
+
+        if (this.helperFunction (answers)) {
+          return post;
+        }
+      } else if (post.content_type === "quizzes") {
+        let questions = (post.content as IQuiz).questions.map(obj => obj.question);
+
+        if (this.helperFunction (questions)) {
+          return post;
+        }
+      }
+    })
+  }
+
+  helperFunction (array: (string | undefined)[]) : Boolean {
+    let isFound: Boolean = false;
+    array!!.some(object => {
+      if (object!!.toLowerCase().indexOf(this.searchValue) > -1) {
+        isFound = true;
+        return true;
+      }
+    })
+    return isFound
   }
 }
 
