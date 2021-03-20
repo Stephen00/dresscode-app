@@ -11,19 +11,12 @@ const DiscoverQuiz: React.FC<RouteComponentProps<DiscoverProps>> = ({
   match,
 }) => {
   const postStore = useContext(PostStore);
-  const {
-    quizzes,
-    loadingInitial,
-    loadPostsOfType: loadPosts,
-    removePostsOfType: removeAllPosts,
-  } = postStore;
+  const { posts, loadingInitial, loadPosts, removeAllPosts } = postStore;
 
   useEffect(() => {
-    if (!quizzes) {
-      loadPosts(match.path);
-    }
+    loadPosts(match.path);
     return () => {
-      removeAllPosts(match.path);
+      removeAllPosts();
     };
   }, []);
 
@@ -31,13 +24,13 @@ const DiscoverQuiz: React.FC<RouteComponentProps<DiscoverProps>> = ({
     return <LoadingComponent />;
   }
 
-  if (!quizzes) {
+  if (!posts) {
     return <NoPosts callerType="overview" />;
   }
 
   return (
     <Fragment>
-      {quizzes?.map((quiz) => (
+      {posts?.map((quiz) => (
         <DiscoverCard post={quiz} key={quiz.id} />
       ))}
     </Fragment>

@@ -7,11 +7,11 @@ import CatPicture from "../../assets/cat.png";
 
 const HomePage: React.FC = () => {
   const postStore = useContext(PostStore);
-  const { loadAllPosts, removeAllPosts, filteredPosts } = postStore;
+  const { loadPosts, removeAllPosts, filteredPosts } = postStore;
 
   useEffect(() => {
     if (!filteredPosts) {
-      loadAllPosts();
+      loadPosts();
     }
     return () => {
       removeAllPosts();

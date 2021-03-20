@@ -2,12 +2,13 @@ import { createContext } from "react";
 import { IPost } from "../models/post";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
 import agent from "../api/agent";
-import { action, configure, observable, runInAction, computed } from "mobx";
-import { IArticle } from "../../app/models/article";
-import { IQuiz } from "../../app/models/quiz";
-import { IPoll } from "../../app/models/poll";
+import { action, configure, observable, runInAction } from "mobx";
+import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
+import { IArticle } from "../models/article";
+import { IQuiz } from "../models/quiz";
+import { IPoll } from "../models/poll";
+import { ReactionDTO } from "../models/DTOs/reactionDTO";
 import { history } from "./../../history";
-
 configure({ enforceActions: "always" });
 
 class PostStore {
@@ -16,11 +17,8 @@ class PostStore {
   }
 
   @observable searchValue: string = ""; 
-  @observable posts: IPost[] | undefined;
   @observable filteredPosts: IPost[] | undefined;
-  @observable articles: IPost[] | undefined;
-  @observable polls: IPost[] | undefined;
-  @observable quizzes: IPost[] | undefined;
+  @observable posts: IPost[] | undefined;
   @observable selectedPost: IPost | undefined;
   @observable loadingInitial = false;
 
@@ -30,14 +28,19 @@ class PostStore {
         this.setSearchValue("")
       }
     });
-  }
+  }  
 
-  @action loadAllPosts = async () => {
+  @action loadPosts = async (path?: string) => {
     this.loadingInitial = true;
+    console.log("loading new posts");
+    let res: IPost[] | undefined = undefined;
     try {
-      let res: IPost[] | undefined = undefined;
-      res = await agent.Posts.list();
-
+      if (path) {
+        let contentType = this.pathToContentType(path);
+        res = await agent.Posts.listOfType(contentType);
+      } else {
+        res = await agent.Posts.list();
+      }
       runInAction(() => {
         if (res) {
           res.forEach((post) => {
@@ -67,34 +70,77 @@ class PostStore {
     }
   };
 
-  @action loadPostsOfType = async (path: string) => {
-    this.loadingInitial = true;
+  @action submitQuiz = async (answers: Map<number, string>) => {
     try {
-      let res: IPost[] | undefined = undefined;
-      let contentType = this.pathToContentType(path);
-      res = await agent.Posts.listOfType(contentType);
-
+      const requestBody: QuizSubmissionDTO = {
+        score: null,
+        questions: [],
+      };
+      answers.forEach((a, q) => {
+        requestBody.questions.push([q, a]);
+      });
+      console.log(requestBody);
+      let res = await agent.Quizzes.submit(
+        this.selectedPost?.content.slug!!,
+        requestBody
+      );
       runInAction(() => {
-        if (res) {
-          res.forEach((post) => {
-            post.created_at = new Date(post.created_at);
-          });
-
-          if (contentType === "articles") {
-            this.articles = res;
-          } else if (contentType === "quizzes") {
-            this.quizzes = res;
-          } else if (contentType === "polls") {
-            this.polls = res;
-          }
-
-          this.loadingInitial = false;
-        }
+        console.log(res);
+        let quiz = this.selectedPost?.content as IQuiz;
+        quiz.score = (res as QuizSubmissionDTO).score;
+        quiz.answers = new Map();
+        (res as QuizSubmissionDTO).questions.forEach((pair) => {
+          quiz.answers!!.set(pair[0] as number, pair[1] as string);
+        });
+        console.log(quiz.answers);
       });
     } catch (error) {
-      runInAction(() => {
-        this.loadingInitial = false;
-      });
+      console.log(error);
+    }
+  };
+
+  @action reactToPost = async (
+    postId: number,
+    reaction: string,
+    caller: string
+  ) => {
+    try {
+      let post: IPost | undefined;
+      if (caller !== "details") {
+        post = this.posts!!.filter((post) => {
+          return post.id === postId;
+        })[0];
+      } else {
+        post = this.selectedPost;
+      }
+
+      const requestBody = {
+        postId: postId,
+      };
+
+      switch (reaction) {
+        case "heart":
+          await agent.Posts.heart(requestBody as ReactionDTO);
+          runInAction(() => {
+            post!!.reaction1_counter += 1;
+          });
+          break;
+        case "star":
+          await agent.Posts.star(requestBody as ReactionDTO);
+          runInAction(() => {
+            post!!.reaction2_counter += 1;
+          });
+          break;
+        case "share":
+          await agent.Posts.share(requestBody as ReactionDTO);
+          runInAction(() => {
+            post!!.reaction3_counter += 1;
+          });
+          break;
+      }
+      console.log(post);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -116,17 +162,6 @@ class PostStore {
       runInAction(() => {
         this.loadingInitial = false;
       });
-    }
-  };
-
-  @action removePostsOfType = (path: string) => {
-    let contentType = this.pathToContentType(path);
-    if (contentType === "articles") {
-      this.articles = undefined;
-    } else if (contentType === "quizzes") {
-      this.quizzes = undefined;
-    } else if (contentType === "polls") {
-      this.polls = undefined;
     }
   };
 
@@ -152,7 +187,7 @@ class PostStore {
 
   @action showFilteredResults = async () => {
     if (this.searchValue === "") {
-      this.loadAllPosts();
+      this.loadPosts();
       this.filteredPosts =  this.posts
     } else {
       this.toFilterPost();

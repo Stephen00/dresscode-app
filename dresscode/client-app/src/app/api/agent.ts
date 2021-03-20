@@ -2,6 +2,8 @@ import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../../history";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
+import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
+import { ReactionDTO } from "../models/DTOs/reactionDTO";
 import { IPost } from "../models/post";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000";
@@ -42,15 +44,22 @@ const Posts = {
     requests.get(`/discover/${contentType}/`),
   details: (slug: string, contentType: string): Promise<IPost> =>
     requests.get(`/discover/${contentType}/${slug}/`),
-  update: (article: IPost, contentType: string) =>
-    requests.put(`/discover/${contentType}/${article.content.slug}/`, article),
+  heart: (reaction: ReactionDTO) => requests.put("/heart/", reaction),
+  star: (reaction: ReactionDTO) => requests.put("/star/", reaction),
+  share: (reaction: ReactionDTO) => requests.put("/share/", reaction),
 };
 
 const Polls = {
-  vote: (vote: PollVoteDTO) => requests.put(`/discover/polls/vote/`, vote),
+  vote: (vote: PollVoteDTO) => requests.put("/discover/polls/vote/", vote),
+};
+
+const Quizzes = {
+  submit: (slug: string, answers: QuizSubmissionDTO) =>
+    requests.put(`/discover/quizzes/${slug}/answer/`, answers),
 };
 
 export default {
   Posts,
   Polls,
+  Quizzes,
 };

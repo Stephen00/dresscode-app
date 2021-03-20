@@ -11,19 +11,12 @@ const DiscoverPollPage: React.FC<RouteComponentProps<DiscoverProps>> = ({
   match,
 }) => {
   const postStore = useContext(PostStore);
-  const {
-    polls,
-    loadingInitial,
-    loadPostsOfType: loadPosts,
-    removePostsOfType: removeAllPosts,
-  } = postStore;
+  const { posts, loadingInitial, loadPosts, removeAllPosts } = postStore;
 
   useEffect(() => {
-    if (!polls) {
-      loadPosts(match.path);
-    }
+    loadPosts(match.path);
     return () => {
-      removeAllPosts(match.path);
+      removeAllPosts();
     };
   }, []);
 
@@ -31,13 +24,13 @@ const DiscoverPollPage: React.FC<RouteComponentProps<DiscoverProps>> = ({
     return <LoadingComponent />;
   }
 
-  if (!polls) {
+  if (!posts) {
     return <NoPosts callerType="overview" />;
   }
 
   return (
     <Fragment>
-      {polls?.map((poll) => (
+      {posts?.map((poll) => (
         <DiscoverCard post={poll} key={poll.id} />
       ))}
     </Fragment>
