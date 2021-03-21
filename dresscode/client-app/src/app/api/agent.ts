@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../../history";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
+import { IPostsWrapper } from "../models/DTOs/postsWrapper";
 import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
 import { ReactionDTO } from "../models/DTOs/reactionDTO";
 import { IPost } from "../models/post";
@@ -38,10 +39,28 @@ const requests = {
   put: (url: string, body: {}) => axios.post(url, body).then(responseBody),
 };
 
-const Posts = {
-  list: (): Promise<IPost[]> => requests.get("/"),
-  listOfType: (contentType: string): Promise<IPost[]> =>
-    requests.get(`/discover/${contentType}/`),
+export const Posts = {
+  list: (
+    batchSize: number,
+    lastLoadedPostId?: number
+  ): Promise<IPostsWrapper> => {
+    // I know this looks ugly
+    // but JS doesn't support conditional concatination with a ternaty operatior
+    let path = `/?batchSize=${batchSize}`;
+    if (lastLoadedPostId) path += `&lastLoadedPostId=${lastLoadedPostId}`;
+
+    return requests.get(path);
+  },
+  listOfType: (
+    contentType: string,
+    batchSize: number,
+    lastLoadedPostId?: number
+  ): Promise<IPostsWrapper> => {
+    let path = `/discover/${contentType}/?batchSize=${batchSize}`;
+    if (lastLoadedPostId) path += `&lastLoadedPostId=${lastLoadedPostId}`;
+
+    return requests.get(path);
+  },
   details: (slug: string, contentType: string): Promise<IPost> =>
     requests.get(`/discover/${contentType}/${slug}/`),
   heart: (reaction: ReactionDTO) => requests.put("/heart/", reaction),
@@ -49,17 +68,12 @@ const Posts = {
   share: (reaction: ReactionDTO) => requests.put("/share/", reaction),
 };
 
-const Polls = {
+export const Polls = {
   vote: (vote: PollVoteDTO) => requests.put("/discover/polls/vote/", vote),
 };
 
-const Quizzes = {
+export const Quizzes = {
   submit: (slug: string, answers: QuizSubmissionDTO) =>
     requests.put(`/discover/quizzes/${slug}/answer/`, answers),
 };
 
-export default {
-  Posts,
-  Polls,
-  Quizzes,
-};

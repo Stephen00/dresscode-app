@@ -1,55 +1,90 @@
 import { createContext } from "react";
 import { IPost } from "../models/post";
 import { PollVoteDTO } from "../models/DTOs/pollVoteDTO";
-import agent from "../api/agent";
-import { action, configure, observable, runInAction } from "mobx";
+import { Posts, Polls, Quizzes } from "../api/agent";
+import { action, computed, configure, observable, runInAction } from "mobx";
 import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
 import { IArticle } from "../models/article";
 import { IQuiz } from "../models/quiz";
 import { IPoll } from "../models/poll";
 import { ReactionDTO } from "../models/DTOs/reactionDTO";
+import { IPostsWrapper } from "../models/DTOs/postsWrapper";
 import { history } from "./../../history";
+
 configure({ enforceActions: "always" });
+
+const BATCH_SIZE = 8;
 
 class PostStore {
   constructor() {
     this.handleUrlChanged();
   }
 
-  @observable searchValue: string = ""; 
+  @observable searchValue: string = "";
   @observable filteredPosts: IPost[] | undefined;
   @observable posts: IPost[] | undefined;
   @observable selectedPost: IPost | undefined;
   @observable loadingInitial = false;
+  @observable lastPostId: number | undefined;
+  @observable lastLoadedPostId: number | undefined;
 
-  @action handleUrlChanged () {
+  @computed get hasMorePosts(): boolean {
+    return this.lastLoadedPostId !== this.lastPostId;
+  }
+
+  @action removeLastLoadedPost = () => {
+    this.lastLoadedPostId = undefined;
+    this.lastPostId = undefined;
+  };
+
+  @action handleUrlChanged() {
     history.listen((location) => {
       if (location.pathname !== "/latest") {
-        this.setSearchValue("")
+        this.setSearchValue("");
       }
     });
-  }  
+  }
 
   @action loadPosts = async (path?: string) => {
     this.loadingInitial = true;
-    console.log("loading new posts");
-    let res: IPost[] | undefined = undefined;
     try {
+      let res: IPostsWrapper | undefined = undefined;
       if (path) {
         let contentType = this.pathToContentType(path);
-        res = await agent.Posts.listOfType(contentType);
+        if (this.lastLoadedPostId) {
+          res = await Posts.listOfType(
+            contentType,
+            BATCH_SIZE,
+            this.lastLoadedPostId
+          );
+        } else {
+          res = await Posts.listOfType(contentType, BATCH_SIZE);
+        }
       } else {
-        res = await agent.Posts.list();
+        if (this.lastLoadedPostId) {
+          res = await Posts.list(BATCH_SIZE, this.lastLoadedPostId);
+        } else {
+          res = await Posts.list(BATCH_SIZE);
+        }
       }
+
+      const { posts, lastPostId } = res;
+
       runInAction(() => {
         if (res) {
-          res.forEach((post) => {
+          posts.forEach((post) => {
             post.created_at = new Date(post.created_at);
           });
-          this.posts = res;
-          this.filteredPosts = [...this.posts]
-          this.loadingInitial = false;
+          this.lastPostId = lastPostId;
+          this.lastLoadedPostId = posts[posts.length - 1].id;
+          if (!this.posts) {
+            this.posts = posts;
+          } else {
+            this.posts = this.posts.concat(posts);
+          }
+          this.filteredPosts = [...this.posts];
         }
+        this.loadingInitial = false;
       });
     } catch (error) {
       runInAction(() => {
@@ -64,7 +99,7 @@ class PostStore {
         pollId: pollId,
         selectedAnswer: selectedAnswer,
       };
-      await agent.Polls.vote(requestBody as PollVoteDTO);
+      await Polls.vote(requestBody as PollVoteDTO);
     } catch (error) {
       console.log(error);
     }
@@ -80,7 +115,7 @@ class PostStore {
         requestBody.questions.push([q, a]);
       });
       console.log(requestBody);
-      let res = await agent.Quizzes.submit(
+      let res = await Quizzes.submit(
         this.selectedPost?.content.slug!!,
         requestBody
       );
@@ -120,19 +155,19 @@ class PostStore {
 
       switch (reaction) {
         case "heart":
-          await agent.Posts.heart(requestBody as ReactionDTO);
+          await Posts.heart(requestBody as ReactionDTO);
           runInAction(() => {
             post!!.reaction1_counter += 1;
           });
           break;
         case "star":
-          await agent.Posts.star(requestBody as ReactionDTO);
+          await Posts.star(requestBody as ReactionDTO);
           runInAction(() => {
             post!!.reaction2_counter += 1;
           });
           break;
         case "share":
-          await agent.Posts.share(requestBody as ReactionDTO);
+          await Posts.share(requestBody as ReactionDTO);
           runInAction(() => {
             post!!.reaction3_counter += 1;
           });
@@ -149,7 +184,7 @@ class PostStore {
     try {
       let res: IPost | undefined = undefined;
       let contentType = this.pathToContentType(path);
-      res = await agent.Posts.details(slug, contentType);
+      res = await Posts.details(slug, contentType);
 
       runInAction(() => {
         if (res) {
@@ -167,6 +202,8 @@ class PostStore {
 
   @action removeAllPosts = () => {
     this.posts = undefined;
+    this.filteredPosts = undefined;
+    this.lastLoadedPostId = undefined;
   };
 
   @action removeSelectedPost = () => {
@@ -179,33 +216,36 @@ class PostStore {
       return pathList[1];
     }
     return pathList[2];
-  };
+  }
 
   @action setSearchValue = (value: string) => {
     this.searchValue = value;
-  }
+  };
 
   @action showFilteredResults = async () => {
     if (this.searchValue === "") {
       this.loadPosts();
-      this.filteredPosts =  this.posts
+      this.filteredPosts = this.posts;
     } else {
       this.toFilterPost();
     }
   };
 
   @action toFilterPost = async () => {
-    this.filteredPosts =  this.posts?.filter(post => {
-      this.searchValue = this.searchValue.toLowerCase()
+    this.filteredPosts = this.posts?.filter((post) => {
+      this.searchValue = this.searchValue.toLowerCase();
       let tempPost = post.content;
-      let tags = tempPost.tags.map(obj => obj.tag);
+      let tags = tempPost.tags.map((obj) => obj.tag);
 
-      if (this.helperFunction (tags)) {
+      if (this.helperFunction(tags)) {
         return post;
       } else if (tempPost.title.toLowerCase().indexOf(this.searchValue) > -1) {
         return post;
       } else if (post.content_type === "articles") {
-        if ((tempPost as IArticle).text.toLowerCase().indexOf(this.searchValue) > -1) {
+        if (
+          (tempPost as IArticle).text.toLowerCase().indexOf(this.searchValue) >
+          -1
+        ) {
           return post;
         }
       } else if (post.content_type === "polls") {
@@ -216,28 +256,30 @@ class PostStore {
           (tempPost as IPoll).answer4,
         ].filter(Boolean);
 
-        if (this.helperFunction (answers)) {
+        if (this.helperFunction(answers)) {
           return post;
         }
       } else if (post.content_type === "quizzes") {
-        let questions = (post.content as IQuiz).questions.map(obj => obj.question);
+        let questions = (post.content as IQuiz).questions.map(
+          (obj) => obj.question
+        );
 
-        if (this.helperFunction (questions)) {
+        if (this.helperFunction(questions)) {
           return post;
         }
       }
-    })
-  }
+    });
+  };
 
-  helperFunction (array: (string | undefined)[]) : Boolean {
+  helperFunction(array: (string | undefined)[]): Boolean {
     let isFound: Boolean = false;
-    array!!.some(object => {
+    array!!.some((object) => {
       if (object!!.toLowerCase().indexOf(this.searchValue) > -1) {
         isFound = true;
         return true;
       }
-    })
-    return isFound
+    });
+    return isFound;
   }
 }
 
