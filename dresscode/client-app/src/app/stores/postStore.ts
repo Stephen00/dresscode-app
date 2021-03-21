@@ -20,7 +20,7 @@ class PostStore {
     this.handleUrlChanged();
   }
 
-  @observable searchValue: string = ""; 
+  @observable searchValue: string = "";
   @observable filteredPosts: IPost[] | undefined;
   @observable posts: IPost[] | undefined;
   @observable selectedPost: IPost | undefined;
@@ -37,13 +37,13 @@ class PostStore {
     this.lastPostId = undefined;
   };
 
-  @action handleUrlChanged () {
+  @action handleUrlChanged() {
     history.listen((location) => {
       if (location.pathname !== "/latest") {
-        this.setSearchValue("")
+        this.setSearchValue("");
       }
     });
-  }  
+  }
 
   @action loadPosts = async (path?: string) => {
     this.loadingInitial = true;
@@ -82,7 +82,7 @@ class PostStore {
           } else {
             this.posts = this.posts.concat(posts);
           }
-          this.filteredPosts = [...this.posts]
+          this.filteredPosts = [...this.posts];
         }
         this.loadingInitial = false;
       });
@@ -202,6 +202,7 @@ class PostStore {
 
   @action removeAllPosts = () => {
     this.posts = undefined;
+    this.filteredPosts = undefined;
     this.lastLoadedPostId = undefined;
   };
 
@@ -215,33 +216,36 @@ class PostStore {
       return pathList[1];
     }
     return pathList[2];
-  };
+  }
 
   @action setSearchValue = (value: string) => {
     this.searchValue = value;
-  }
+  };
 
   @action showFilteredResults = async () => {
     if (this.searchValue === "") {
       this.loadPosts();
-      this.filteredPosts =  this.posts
+      this.filteredPosts = this.posts;
     } else {
       this.toFilterPost();
     }
   };
 
   @action toFilterPost = async () => {
-    this.filteredPosts =  this.posts?.filter(post => {
-      this.searchValue = this.searchValue.toLowerCase()
+    this.filteredPosts = this.posts?.filter((post) => {
+      this.searchValue = this.searchValue.toLowerCase();
       let tempPost = post.content;
-      let tags = tempPost.tags.map(obj => obj.tag);
+      let tags = tempPost.tags.map((obj) => obj.tag);
 
-      if (this.helperFunction (tags)) {
+      if (this.helperFunction(tags)) {
         return post;
       } else if (tempPost.title.toLowerCase().indexOf(this.searchValue) > -1) {
         return post;
       } else if (post.content_type === "articles") {
-        if ((tempPost as IArticle).text.toLowerCase().indexOf(this.searchValue) > -1) {
+        if (
+          (tempPost as IArticle).text.toLowerCase().indexOf(this.searchValue) >
+          -1
+        ) {
           return post;
         }
       } else if (post.content_type === "polls") {
@@ -252,28 +256,30 @@ class PostStore {
           (tempPost as IPoll).answer4,
         ].filter(Boolean);
 
-        if (this.helperFunction (answers)) {
+        if (this.helperFunction(answers)) {
           return post;
         }
       } else if (post.content_type === "quizzes") {
-        let questions = (post.content as IQuiz).questions.map(obj => obj.question);
+        let questions = (post.content as IQuiz).questions.map(
+          (obj) => obj.question
+        );
 
-        if (this.helperFunction (questions)) {
+        if (this.helperFunction(questions)) {
           return post;
         }
       }
-    })
-  }
+    });
+  };
 
-  helperFunction (array: (string | undefined)[]) : Boolean {
+  helperFunction(array: (string | undefined)[]): Boolean {
     let isFound: Boolean = false;
-    array!!.some(object => {
+    array!!.some((object) => {
       if (object!!.toLowerCase().indexOf(this.searchValue) > -1) {
         isFound = true;
         return true;
       }
-    })
-    return isFound
+    });
+    return isFound;
   }
 }
 

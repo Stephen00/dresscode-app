@@ -12,7 +12,6 @@ const HomePage: React.FC = () => {
   const postStore = useContext(PostStore);
   const {
     loadingInitial,
-    posts,
     loadPosts,
     removeAllPosts,
     hasMorePosts,
@@ -30,9 +29,7 @@ const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!filteredPosts) {
-      loadPosts();
-    }
+    loadPosts();
     return () => {
       removeAllPosts();
       removeLastLoadedPost();
