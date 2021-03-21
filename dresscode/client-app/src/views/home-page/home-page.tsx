@@ -6,6 +6,7 @@ import "./home-page.css";
 import { Spinner } from "react-bootstrap";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import InfiniteScroll from "react-infinite-scroller";
+import CatPicture from "../../assets/cat.png";
 
 const HomePage: React.FC = () => {
   const postStore = useContext(PostStore);
@@ -17,6 +18,7 @@ const HomePage: React.FC = () => {
     hasMorePosts,
     lastPostId,
     removeLastLoadedPost,
+    filteredPosts,
   } = postStore;
   const [loadingNext, setLoadingNext] = useState(false);
 
@@ -28,7 +30,9 @@ const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    loadPosts();
+    if (!filteredPosts) {
+      loadPosts();
+    }
     return () => {
       removeAllPosts();
       removeLastLoadedPost();
@@ -51,9 +55,24 @@ const HomePage: React.FC = () => {
         // because we use useEffect for the initial batch of posts
         initialLoad={false}
       >
-        {posts?.map((post) => (
-          <DiscoverCard post={post} key={post.id} />
-        ))}
+        {filteredPosts?.length ? (
+          <div>
+            <Fragment key="homepage">
+              {filteredPosts?.map((post) => (
+                <DiscoverCard post={post} key={post.id} />
+              ))}
+            </Fragment>
+          </div>
+        ) : (
+          <div className="empty-section-config">
+            <img
+              src={CatPicture}
+              alt="no picture found"
+              className="empty-section-image"
+            />
+            <h1 className="text-config">No posts found</h1>
+          </div>
+        )}
       </InfiniteScroll>
 
       {loadingNext && (

@@ -25,6 +25,10 @@ div[aria-disabled="true"] {
   opacity: 0.7;
 }
 
+.fa-check {
+  color: white;
+}
+
 .fa-check:hover,
 .hovering {
   color: #f9b222;

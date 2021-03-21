@@ -1,10 +1,25 @@
-import React from "react";
-import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Nav, Navbar, Container, NavDropdown, Form, FormControl, Button, InputGroup } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import "./NavBar.css";
+import PostStore from "../../app/stores/postStore";
+import { history } from "../../history";
+import { observer } from "mobx-react-lite";
 
 const NavBar = () => {
+  const postStore = useContext(PostStore);
+  const { searchValue, showFilteredResults, setSearchValue } = postStore;
+
+  const getSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let pathList = window.location.pathname.split("/")
+    if (pathList[1] !== "latest") {
+      history.push("/latest");
+    }
+    setSearchValue(event.target.value);
+    showFilteredResults()
+  }
+
   return (
     <Navbar collapseOnSelect fixed="top" expand="lg">
       <LinkContainer to="/latest">
@@ -20,11 +35,8 @@ const NavBar = () => {
       <Container>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <LinkContainer to="/latest">
-              <Nav.Link>Latest</Nav.Link>
-            </LinkContainer>
-
-            <NavDropdown title="Discover" id="basic-nav-dropdown">
+            <Nav.Item><NavLink className="nav-link" exact to="/latest">Home</NavLink></Nav.Item>
+            <NavDropdown  title="Discover" id="basic-nav-dropdown">
               <LinkContainer to="/discover/articles">
                 <Nav.Link>Articles</Nav.Link>
               </LinkContainer>
@@ -35,20 +47,28 @@ const NavBar = () => {
                 <Nav.Link>Polls</Nav.Link>
               </LinkContainer>
             </NavDropdown>
-
-            <LinkContainer to="/people">
-              <Nav.Link>People</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/more">
-              <Nav.Link as={Link} to="/more">
-                More
-              </Nav.Link>
-            </LinkContainer>
+            <Nav.Item><NavLink className="nav-link" exact to="/people">People</NavLink></Nav.Item>
+            <Nav.Item><NavLink className="nav-link" exact to="/more">More</NavLink></Nav.Item>
           </Nav>
+          <Form inline>
+            <InputGroup >
+              <InputGroup.Prepend>
+                <InputGroup.Text>
+                <i className="fas fa-search"></i></InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                value={searchValue}
+                id="nav-search-input"
+                className="search-input-section"
+                placeholder="search ..."
+                onChange={getSearch}
+              />
+            </InputGroup>
+          </Form>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 };
 
-export default NavBar;
+export default observer(NavBar);
