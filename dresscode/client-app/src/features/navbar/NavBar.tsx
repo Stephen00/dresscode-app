@@ -48,7 +48,7 @@ const NavBar = () => {
               </LinkContainer>
             </NavDropdown>
             <Nav.Item><NavLink className="nav-link" exact to="/people">People</NavLink></Nav.Item>
-            <Nav.Item><NavLink className="nav-link" exact to="/more">more</NavLink></Nav.Item>
+            <Nav.Item><NavLink className="nav-link" exact to="/more">More</NavLink></Nav.Item>
           </Nav>
           <Form inline>
             <InputGroup >

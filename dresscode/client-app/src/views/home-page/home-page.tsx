@@ -1,45 +1,83 @@
-import React, { useEffect, useContext, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useContext } from "react";
 import PostStore from "../../app/stores/postStore";
 import { observer } from "mobx-react-lite";
 import DiscoverCard from "../../features/discover-card/discover-card";
 import "./home-page.css";
+import { Spinner } from "react-bootstrap";
+import LoadingComponent from "../../app/layout/LoadingComponent";
+import InfiniteScroll from "react-infinite-scroller";
 import CatPicture from "../../assets/cat.png";
 
 const HomePage: React.FC = () => {
   const postStore = useContext(PostStore);
-  const { loadPosts, removeAllPosts, filteredPosts } = postStore;
+  const {
+    loadingInitial,
+    loadPosts,
+    removeAllPosts,
+    hasMorePosts,
+    lastPostId,
+    removeLastLoadedPost,
+    filteredPosts,
+  } = postStore;
+  const [loadingNext, setLoadingNext] = useState(false);
+
+  const handleGetNext = () => {
+    setLoadingNext(true);
+    loadPosts().then(() => {
+      setLoadingNext(false);
+    });
+  };
 
   useEffect(() => {
-    if (!filteredPosts) {
-      loadPosts();
-    }
+    loadPosts();
     return () => {
       removeAllPosts();
+      removeLastLoadedPost();
     };
   }, []);
 
+  // lastPostId is set after the first request
+  // Now the loading indicator for the whole page
+  // will only be displayed on the initial load
+  if (loadingInitial && !lastPostId) {
+    return <LoadingComponent />;
+  }
+
   return (
-    <div>
-      {filteredPosts?.length ? 
-        <div>
-          <Fragment key="homepage">
-          {filteredPosts?.map((post) => (
-              <DiscoverCard post={post} key={post.id} />
-          ))}
-        </Fragment>
+    <Fragment key="homepage">
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={handleGetNext}
+        hasMore={!loadingNext && hasMorePosts}
+        // because we use useEffect for the initial batch of posts
+        initialLoad={false}
+      >
+        {filteredPosts?.length ? (
+          <div>
+            <Fragment key="homepage">
+              {filteredPosts?.map((post) => (
+                <DiscoverCard post={post} key={post.id} />
+              ))}
+            </Fragment>
+          </div>
+        ) : (
+          <div className="empty-section-config">
+            <img
+              src={CatPicture}
+              alt="no picture found"
+              className="empty-section-image"
+            />
+            <h1 className="text-config">No posts found</h1>
+          </div>
+        )}
+      </InfiniteScroll>
+
+      {loadingNext && (
+        <div className="spinner-wrapper">
+          <Spinner animation="border" className="spinner" />
         </div>
-        :
-        <div className="empty-section-config">
-          <img
-            src={CatPicture}
-            alt="no picture found"
-            className="empty-section-image"
-          />
-          <h1 className="text-config">No Post Found</h1>
-        </div>
-      }
-    </div>
-    
+      )}
+    </Fragment>
   );
 };
 

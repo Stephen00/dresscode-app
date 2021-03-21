@@ -11,7 +11,7 @@ const LoadingComponent: React.FC = () => {
         transform: "translate(-50%, -50%)",
       }}
     >
-      <Spinner animation="border" />
+      <Spinner animation="border" className="spinner" />
     </div>
   );
 };
