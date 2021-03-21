@@ -4,39 +4,44 @@ import { Col, Row, Button } from "react-bootstrap";
 
 interface AnswerOptionProps {
   optionIndex: number;
-  postType: string;
-  postIndex: number;
-  isAnswered: boolean;
   option: string;
+  postIndex: number;
+  postType: string;
   onOptionSelected: (optionIndex: number, postIndex: number) => void;
   optionCounts?: number | undefined;
   totalVotes?: number | undefined;
-  isCorrectAnswer?: boolean;
+  isParentQuestionAnswered: boolean;
+  isQuizSubmitted: boolean;
+  isCorrectAnswer: boolean;
 }
 
 const AnswerOption: React.FC<AnswerOptionProps> = ({
   optionIndex,
   postIndex,
   postType,
-  isAnswered,
+  isParentQuestionAnswered,
   option,
   optionCounts,
   onOptionSelected,
   totalVotes,
   isCorrectAnswer,
+  isQuizSubmitted,
 }) => {
   const [isChosenOption, setChosenOption] = useState<boolean>(false);
   const [hoveringOver, setHoveringOver] = useState<boolean>(false);
 
   function handleOptionSelected() {
-    if (!isAnswered) {
+    if (!isParentQuestionAnswered) {
       onOptionSelected(optionIndex, postIndex);
       setChosenOption(true);
     }
   }
 
   return (
-    <div key={postIndex * 10 + optionIndex} aria-disabled={isAnswered}>
+    <div
+      key={postIndex * 10 + optionIndex}
+      aria-disabled={isParentQuestionAnswered}
+    >
       <Row className="option-row">
         <Col xs={2} className="option-button-column">
           <Button
@@ -46,14 +51,7 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
             <i
               className={`fas fa-check fa-2x ${
                 hoveringOver ? "hovering" : ""
-              }  ${isChosenOption ? "chosen" : ""} ${
-                postType === "quiz" &&
-                isAnswered &&
-                isCorrectAnswer &&
-                isCorrectAnswer
-                  ? "correct-quiz-answer"
-                  : ""
-              }`}
+              }  ${isChosenOption ? "chosen" : ""} `}
             ></i>
             {/* <i
               className="fas fa-times fa-2x"
@@ -75,12 +73,17 @@ const AnswerOption: React.FC<AnswerOptionProps> = ({
           onClick={() => handleOptionSelected()}
           className={`option-answer-column ${
             hoveringOver ? "hovering-text" : ""
+          } ${
+            postType === "quiz" && isQuizSubmitted && isCorrectAnswer
+              ? "correct-quiz-answer"
+              : ""
           }`}
         >
           {option}
         </Col>
+
         {postType === "poll" &&
-          isAnswered &&
+          isParentQuestionAnswered &&
           optionCounts !== undefined &&
           totalVotes !== undefined && (
             <Col xs={3} className="option-count-column">

@@ -41,5 +41,6 @@ div[aria-disabled="true"] {
 }
 
 .correct-quiz-answer {
-  color: #ed6b4b;
+  color: #f9b222;
+  font-weight: 700;
 }

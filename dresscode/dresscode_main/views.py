@@ -227,4 +227,8 @@ def answer_quiz(request, quiz_slug):
                 return Response(status=status.HTTP_404_NOT_FOUND)
             if question.check_answer(question_answer_tuple[1]):
                 score+=1  # need to update models to include way to evaluate quiz
+<<<<<<< HEAD
         return Response(status=status.HTTP_200_OK, data={'score':score, 'questions':questions})
+=======
+        return Response(status=status.HTTP_200_OK, data={'score':score, 'questions':questions})
+>>>>>>> develop
