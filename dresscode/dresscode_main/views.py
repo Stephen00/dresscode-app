@@ -18,7 +18,7 @@ def infinite_scroll(request, ct=None, lastLoadedPostId=None, batchSize=10):
     
     #Check if something has been already sent, if so use it as an offset and send the next 10 posts
     if lastLoadedPostId!=None:
-        cutoff=lastLoadedPostId
+        cutoff=all_posts.filter(id=lastLoadedPostId)[0]
         #Check if cutoff is the last Post being sent
         if cutoff==all_posts.last():
             return Response("No posts older than lastLoadedPostId", status=status.HTTP_200_OK)
@@ -31,13 +31,12 @@ def infinite_scroll(request, ct=None, lastLoadedPostId=None, batchSize=10):
                     break
         posts=send_posts
     else: #If not send the 10 most recent posts
-        posts = all_posts[0:batchSize+1]
+        posts = all_posts[0:batchSize]
 
     #Serialize the data before sending it
     try:            
         post_serializer = PostSerializer(posts, context={'request': request}, many=True)
-        data=post_serializer.data
-        #data={'posts':post_serializer.data, 'lastPostId':all_posts.last().id,}
+        data={'posts':post_serializer.data, 'lastPostId':all_posts.last().id,}
         return Response(data, status=status.HTTP_200_OK)
     except:
         return Response("No posts found", status=status.HTTP_404_NOT_FOUND)
@@ -46,6 +45,8 @@ def infinite_scroll(request, ct=None, lastLoadedPostId=None, batchSize=10):
 @api_view(['GET'])
 def home(request):
     if request.method == 'GET':
+        if len(Post.objects.all())<=0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         batchSize=int(request.GET.get('batchSize', 10))
         lastLoadedPostId=request.GET.get('lastLoadedPostId', None)
         return infinite_scroll(request, None, lastLoadedPostId, batchSize)
@@ -110,6 +111,8 @@ def get_all_tags(request):
 @api_view(['GET'])
 def discover_quizzes(request):
    if request.method == 'GET':
+        if len(Quiz.objects.all())<=0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         try:
             ct=get_content_type_for_model(Quiz.objects.first())
             batchSize=int(request.GET.get('batchSize', 10))
@@ -123,6 +126,8 @@ def discover_quizzes(request):
 @api_view(['GET'])
 def discover_polls(request):
     if request.method == 'GET':
+        if len(Poll.objects.all())<=0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         try:
             ct=get_content_type_for_model(Poll.objects.first())
             batchSize=int(request.GET.get('batchSize', 10))
@@ -134,6 +139,8 @@ def discover_polls(request):
 @api_view(['GET'])
 def discover_articles(request):
    if request.method == 'GET':
+        if len(Article.objects.all())<=0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         try:
             ct=get_content_type_for_model(Article.objects.first())
             batchSize=int(request.GET.get('batchSize', 10))
@@ -145,6 +152,8 @@ def discover_articles(request):
 @api_view(['GET'])
 def discover_posts(request):
     if request.method == 'GET':
+        if len(Post.objects.all())<=0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         try:
             ct=None
             batchSize=int(request.GET.get('batchSize', 10))
@@ -162,7 +171,7 @@ def add_heart_reaction(request):
         post.save()
         return Response(status=status.HTTP_200_OK)
 
-# Add reactions to the designated post by obtaining the object's slug
+# Add reactions to the designated post by obtaining the object's id
 @api_view(['POST'])
 def add_star_reaction(request):
     if request.method == 'POST':
@@ -193,6 +202,8 @@ def add_poll_vote(request):
         return Response(status=status.HTTP_200_OK)
     
 
+
+# needs more work:
 @api_view(['POST'])
 def answer_quiz(request, quiz_slug):
     if request.method == 'POST':
@@ -217,4 +228,3 @@ def answer_quiz(request, quiz_slug):
             if question.check_answer(question_answer_tuple[1]):
                 score+=1  # need to update models to include way to evaluate quiz
         return Response(status=status.HTTP_200_OK, data={'score':score, 'questions':questions})
-
