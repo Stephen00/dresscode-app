@@ -66,21 +66,32 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
             <div className="social-icons">
               <FacebookShareButton
                 url={window.location.href}
-                title={selectedPost.content.title}
+                quote={ "Dresscode - ".concat(selectedPost.content.title) }
+				hashtag="#dresscode"
               >
-                <i className="fab fa-facebook fa-2x" />
+                <i 
+					className="fab fa-facebook fa-2x"
+					onClick={() => onReactionChange("share")}
+				/>
               </FacebookShareButton>
               <TwitterShareButton
                 url={window.location.href}
                 title={selectedPost.content.title}
               >
-                <i className="fab fa-twitter fa-2x" />
+                <
+					i className="fab fa-twitter fa-2x" 
+					onClick={() => onReactionChange("share")}
+				/>
               </TwitterShareButton>
               <LinkedinShareButton
                 url={window.location.href}
+				source={window.location.href}
                 title={selectedPost.content.title}
               >
-                <i className="fab fa-linkedin fa-2x" />
+                <i 
+					className="fab fa-linkedin fa-2x"  
+					onClick={() => onReactionChange("share")}
+				/>
               </LinkedinShareButton>
             </div>
           </Col>

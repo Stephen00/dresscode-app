@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import "./discover-card.css";
 import { Card, Col, Row } from "react-bootstrap";
+import { FacebookShareButton, FacebookIcon } from "react-share";
 import { formatDistance } from "date-fns";
 import { IPoll } from "../../app/models/poll";
 import DiscoverPoll from "../../features/discover-poll/discover-poll";
@@ -16,6 +17,8 @@ type ConditionalLinkProps = {
   to: string;
   condition: boolean;
 };
+
+var base_link = window.location.host;
 
 const ConditionalLink = ({ children, to, condition }: ConditionalLinkProps) =>
   !!condition && to ? (
@@ -106,14 +109,28 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
                 <span>{post.reaction2_counter}</span>
               </i>
             </Col>
-            <Col xs={4} className="icon-style">
-              <i
-                className={`far fa-star fa-2x ${isReactedTo ? "disabled" : ""}`}
-                onClick={() => onReactionChange("share")}
-              >
-                <span>{post.reaction3_counter}</span>
-              </i>
-            </Col>
+			
+			<div> 
+			  { (post.content_type != "polls")
+			    ?   <Col xs={4} className="icon-style">
+					  <FacebookShareButton 
+						url={ base_link.concat("/",post.content_type,"/",post.content.slug) }
+						quote={ "Dresscode - ".concat(post.content.title) }
+						hashtag="#dresscode"
+						className={"socialMediaButton"}>
+						 <i 
+							className={`far fa-share-square fa-2x ${isReactedTo ? "disabled" : ""}`}
+							onClick={() => onReactionChange("share")} 
+						 > 
+							<span>{post.reaction3_counter}</span>
+						 </i>
+					  </FacebookShareButton>
+					</Col>
+				: <Col xs={4} className="icon-style"> </Col>
+			  }
+			</div>
+			
+
           </Row>
         </Card.Body>
       </Card>
