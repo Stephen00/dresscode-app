@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Nav, Navbar, Container, NavDropdown, Form, FormControl, Button, InputGroup } from "react-bootstrap";
+import React, { useContext } from "react";
+import { Nav, Navbar, Container, NavDropdown, Form, FormControl, InputGroup } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import "./NavBar.css";

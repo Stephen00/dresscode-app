@@ -26,11 +26,6 @@
   margin: 5% auto;
 }
 
-.profile-image-div {
-  display: block;
-  max-width: 5rem;
-}
-
 .social-icons {
   float: right;
   margin-top: 1em;
@@ -40,13 +35,8 @@
   margin-top: 1em;
 }
 
-.tags-div {
-  float: right;
-  margin-top: 1em;
-}
-
-.icons-div {
-  margin-top: 1em;
+.reactions-row {
+  padding: 7% 0;
 }
 
 .far,
@@ -56,24 +46,23 @@
   color: #74529e;
 }
 
-.after-content-row {
-  margin: 7% 0;
-  align-items: center;
+.tags-label {
+  margin: 2% 0;
+  font-weight: 600;
 }
 
-.list-group-item {
-  background-color: #74529e !important;
-  border-radius: 10px !important;
-  color: #f9b222 !important;
+.tag {
+  background-color: #74529e;
+  border-radius: 10px;
+  color: #f9b222;
   font-weight: 700;
-  padding: 0 5%;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
+  padding: 10px 15px;
+  margin: 0.5%;
+  white-space: nowrap;
 }
 
-.list-group-item:hover {
-  color: #ed6b4b !important;
+.tag:hover {
+  color: #ed6b4b;
 }
 
 .disabled {
