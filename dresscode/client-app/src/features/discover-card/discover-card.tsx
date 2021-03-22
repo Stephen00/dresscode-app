@@ -39,7 +39,9 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
   const [isReactedTo, setReactedTo] = useState<boolean>(false);
 
   const onReactionChange = (reaction: string) => {
-    setReactedTo(true);
+    if (reaction !== "share") {
+      setReactedTo(true);
+    }
     reactToPost(post.id, reaction, "discover");
   };
 
