@@ -7,7 +7,11 @@ import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
 import { ReactionDTO } from "../models/DTOs/reactionDTO";
 import { IPost } from "../models/post";
 
-axios.defaults.baseURL = "http://127.0.0.1:8000";
+export const proxy = "https://dresscode-server.herokuapp.com";
+axios.defaults.baseURL = proxy;
+
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 axios.interceptors.response.use(undefined, (error) => {
   if (error.message === "Network Error" && !error.response) {

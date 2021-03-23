@@ -11,6 +11,7 @@ import { IArticle } from "../../app/models/article";
 import PostStore from "../../app/stores/postStore";
 import { observer } from "mobx-react-lite";
 import { IQuiz } from "../../app/models/quiz";
+import { proxy } from "../../app/api/agent";
 
 type ConditionalLinkProps = {
   children: any;
@@ -68,7 +69,7 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
               <div className="image-section">
                 <img
                   alt=""
-                  src={`http://localhost:8000${
+                  src={`${proxy}${
                     (post.content as IArticle).media!!.image
                   }`}
                   className="overview-image"
@@ -82,7 +83,7 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
               <div className="image-section">
                 <img
                   alt=""
-                  src={`http://localhost:8000${
+                  src={`${proxy}${
                     (post.content as IQuiz).media!!.image
                   }`}
                   className="overview-image"

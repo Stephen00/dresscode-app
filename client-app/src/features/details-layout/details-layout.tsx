@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from "react";
 import PostStore from "../../app/stores/postStore";
 import { observer } from "mobx-react-lite";
 import "./details-layout.css";
-import { Col, ListGroup, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { format } from "date-fns";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { DetailsProps } from "../../views/commonProps";
@@ -15,6 +15,8 @@ import {
   LinkedinShareButton,
   TwitterShareButton,
 } from "react-share";
+
+import { proxy } from "../../app/api/agent";
 
 const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
   const postStore = useContext(PostStore);
@@ -100,7 +102,7 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
             <Row>
               <div className="image-div">
                 <img
-                  src={`http://localhost:8000${
+                  src={`${proxy}${
                     (selectedPost.content as IQuiz).media!!.image
                   }`}
                   alt="post"
@@ -116,7 +118,7 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
             <Row>
               <div className="image-div">
                 <img
-                  src={`http://localhost:8000${
+                  src={`${proxy}${
                     (selectedPost.content as IArticle).media!!.image
                   }`}
                   alt="post"

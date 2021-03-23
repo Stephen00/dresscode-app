@@ -11,7 +11,7 @@ const Error404Page = () => {
     <div className="error-page-config">
       <img
         src={CatPicture}
-        alt="Cute cat picture"
+        alt="Cute cat"
         className="error-page-image"
       />
       <h1 className="text-config">Page not found</h1>
