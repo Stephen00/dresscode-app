@@ -168,6 +168,5 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 
 #Heroku settings config
-if 'HEROKU' in os.environ:
-    import django_heroku
-    django_heroku.settings(locals())
+import django_heroku
+django_heroku.settings(locals())
