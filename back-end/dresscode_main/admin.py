@@ -73,7 +73,7 @@ class QuizQuestionAdmin(admin.ModelAdmin):
 
 
 class QuizAdmin(admin.ModelAdmin):
-    list_display = ('has_questions', 'tagged_as')
+    list_display = ('title', 'has_questions', 'tagged_as', )
     list_filter = ('tags__tag',)
     search_fields = ('questions__question',)
 
@@ -83,10 +83,11 @@ class QuizAdmin(admin.ModelAdmin):
     def tagged_as(self, obj):
         return " / \n".join([tag.tag for tag in obj.tags.all()])
 
-    filter_horizontal = ('questions',)
-
     # Individual Instance visuals
     fieldsets = (
+        ('Title', {
+            'fields': ('title',),
+        }),
         ('Questions', {
             'fields': ('questions',),
         }),
@@ -94,8 +95,22 @@ class QuizAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         }),
     )
+    actions = ['delete_selected_quiz']
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
+    def delete_selected_quiz(self, request, queryset):
+        for obj in queryset:
+            CT = get_content_type_for_model(obj)
+            p = Post.objects.get(content_type=CT, object_id=obj.pk)
+            p.delete()
+            obj.delete()
     
-    filter_horizontal = ('tags',)
+    filter_horizontal = ('tags', 'questions')
 
     # Override Model Save
     def save_model(self, request, obj, form, change):
@@ -122,6 +137,20 @@ class PollAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         }),
     )
+    actions = ['delete_selected_poll']
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
+    def delete_selected_poll(self, request, queryset):
+        for obj in queryset:
+            CT = get_content_type_for_model(obj)
+            p = Post.objects.get(content_type=CT, object_id=obj.pk)
+            p.delete()
+            obj.delete()
     
     filter_horizontal = ('tags',)
 
@@ -170,6 +199,21 @@ class ArticleAdmin(admin.ModelAdmin):
             'fields': ('tags',),
         }),
     )
+
+    actions = ['delete_selected_article']
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
+    def delete_selected_article(self, request, queryset):
+        for obj in queryset:
+            CT = get_content_type_for_model(obj)
+            p = Post.objects.get(content_type=CT, object_id=obj.pk)
+            p.delete()
+            obj.delete()
     
     filter_horizontal = ('tags',)
 
