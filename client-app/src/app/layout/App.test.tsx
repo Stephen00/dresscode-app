@@ -15,12 +15,12 @@ test("test entering bad route", () => {
     </Router>
   );
 
-  expect(screen.getByText("404 page not found")).toBeInTheDocument();
+  expect(screen.getByText("Go to the latest posts")).toBeInTheDocument();
 });
 
 test("test homepage button in error page", () => {
   render(<ErrorPage />);
 
-  userEvent.click(screen.getByText("Go to Home Page"));
+  userEvent.click(screen.getByText("Go to the latest posts"));
   expect(document.getElementById("homepage")).toBeInTheDocument;
 });

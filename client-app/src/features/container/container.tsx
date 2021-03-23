@@ -1,8 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { Container } from "semantic-ui-react";
 import "./container.css";
-
 import Article from "../../views/article-page/article-page";
 import Quiz from "../../views/quiz-page/quiz-page";
 import Poll from "../../views/poll-page/poll-page";
@@ -14,6 +12,7 @@ import Home from "../../views/home-page/home-page";
 import More from "../../views/more-page/more-page";
 import People from "../../views/people-page/people-page";
 import { observer } from "mobx-react-lite";
+import { Container } from "react-bootstrap";
 
 const AppContainer: React.FC = () => {
   return (

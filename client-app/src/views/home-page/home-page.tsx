@@ -6,7 +6,7 @@ import "./home-page.css";
 import { Spinner } from "react-bootstrap";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import InfiniteScroll from "react-infinite-scroller";
-import CatPicture from "../../assets/cat.png";
+import NoPosts from "../../features/no-posts/no-posts";
 
 const HomePage: React.FC = () => {
   const postStore = useContext(PostStore);
@@ -53,22 +53,11 @@ const HomePage: React.FC = () => {
         initialLoad={false}
       >
         {filteredPosts?.length ? (
-          <div>
-            <Fragment key="homepage">
-              {filteredPosts?.map((post) => (
-                <DiscoverCard post={post} key={post.id} />
-              ))}
-            </Fragment>
-          </div>
+          filteredPosts?.map((post) => (
+            <DiscoverCard post={post} key={post.id} />
+          ))
         ) : (
-          <div className="empty-section-config">
-            <img
-              src={CatPicture}
-              alt="no picture found"
-              className="empty-section-image"
-            />
-            <h1 className="text-config">No posts found</h1>
-          </div>
+          <NoPosts callerType="home" />
         )}
       </InfiniteScroll>
 

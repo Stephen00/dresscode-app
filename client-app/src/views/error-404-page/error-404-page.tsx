@@ -11,12 +11,12 @@ const Error404Page = () => {
     <div className="error-page-config">
       <img
         src={CatPicture}
-        alt="no picture found"
+        alt="Cute cat picture"
         className="error-page-image"
       />
-      <h1 className="text-config">404 page not found</h1>
-      <Button variant="info" onClick={navigateTo}>
-        <i className="fas fa-home icon-config"></i>Go to Home Page
+      <h1 className="text-config">Page not found</h1>
+      <Button className="navigation-button" onClick={navigateTo}>
+        <i className="fas fa-home icon-config"></i>Go to the latest posts
       </Button>
     </div>
   );

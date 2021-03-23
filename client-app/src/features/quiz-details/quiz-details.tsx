@@ -8,7 +8,7 @@ import { observer } from "mobx-react-lite";
 
 const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
   const postStore = useContext(PostStore);
-  const { submitQuiz, selectedPost } = postStore;
+  const { submitQuiz } = postStore;
   const [quizNotFinished, setQuizNotFinished] = useState<boolean>(false);
   const [userAnswers, setUserAnswers] = useState<Map<number, string>>(
     new Map()
@@ -16,7 +16,6 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
 
   // Covers the effect of componentDidMount and componentDidUpdate
   useEffect(() => {
-    console.log(quiz.score);
     if (quizNotFinished) {
       window.onbeforeunload = () => true;
     } else {
