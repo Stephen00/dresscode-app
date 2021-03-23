@@ -100,6 +100,8 @@ class Quiz(models.Model):
                     self.tags.add(tag)
 
     def __str__(self):
+        if self.title:
+            return self.title
         return "Quiz " + str(self.id)
 
 class Poll(models.Model):
