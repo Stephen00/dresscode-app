@@ -6,7 +6,7 @@ import random
 class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
-        fields = ('pk', 'image', 'video')
+        fields = ('pk', 'image',)
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
