@@ -26,7 +26,8 @@ SECRET_KEY = '4y(!5my42!#t2p()9vtj*k&ixd64yus3la7_jx4x%h7fla6-20'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#You can remove 'dresscode-server.herokuapp.com' and substitute it for some other HOST
+ALLOWED_HOSTS = ['dresscode-server.herokuapp.com', 'localhost:8000', '127.0.0.1:8000']
 
 
 # Application definition
