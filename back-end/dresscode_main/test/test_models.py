@@ -130,12 +130,12 @@ class testAttributes(TestCase):
         self.assertEquals(full_title, "poll : What is your favourite programming language?")
 
     def testQuizType(self):
-        test_post = Post.objects.all()[5]
+        test_post = Post.objects.all()[3]
         qq_c = test_post.post_type()
         self.assertEquals(qq_c, 'quiz')
 
     def testPostReact(self):
-        test_post = Post.objects.all()[4]
+        test_post = Post.objects.all()[2]
         test_post.heart()
         test_post.star()
         test_post.share()
