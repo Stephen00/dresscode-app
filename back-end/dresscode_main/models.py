@@ -238,3 +238,8 @@ class Post(models.Model):
 
     def share(self):
         self.reaction3_counter += 1
+        
+    def save(self, *args, **kwargs):
+        super(Post, self).save(*args, **kwargs)
+        if self.content is None:
+            self.delete()
