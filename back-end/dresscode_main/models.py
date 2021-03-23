@@ -18,7 +18,6 @@ class Tag(models.Model):
 
 class Media(models.Model):
     image = models.ImageField(blank=True, null=True)
-    video = models.FileField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Media"
@@ -26,8 +25,6 @@ class Media(models.Model):
     def __str__(self):
         if self.image:
             return "Media "+str(self.pk)+": Image:"+" ".join(str(self.image).split(".")[:-1])
-        elif self.video:
-            return "Media "+str(self.pk)+": Video:"+" ".join(str(self.video).split(".")[:-1])
         return str("Media "+str(self.pk)+": NULL")
 
 

@@ -103,7 +103,7 @@ class QuizAdmin(admin.ModelAdmin):
 
 
 class PollAdmin(admin.ModelAdmin):
-    list_display = ('question', 'answer1', 'answer2', 'answer3', 'answer4', 'answer5', 'media', 'tagged_as')
+    list_display = ('question', 'answer1', 'answer2', 'answer3', 'answer4', 'answer5', 'tagged_as')
     search_fields = ('question',)
     list_filter = ('tags__tag',)
 
@@ -131,22 +131,17 @@ class PollAdmin(admin.ModelAdmin):
 
 
 class MediaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'image', 'video')
+    list_display = ('id', 'name', 'image',)
     
     def name(self, obj):
         if obj.image:
             return " ".join(str(obj.image).split(".")[:-1])
-        elif obj.video:
-            return " ".join(str(obj.video).split(".")[:-1])
         return str("NULL")
 
     # Individual Instance visuals
     fieldsets = (
         ('Image', {
             'fields': ('image',),
-        }),
-        ('Video', {
-            'fields': ('video',),
         }),
     )
 
@@ -218,7 +213,7 @@ class UserAdmin(BaseUserAdmin):
             updated
         ) % updated, messages.SUCCESS)
 
-    add_staff_status.short_description = "Add staff status to selected users"
+    add_staff_status.short_description = "Add staff status to selected user(s)"
 
     def remove_staff_status(self, request, queryset):
         if not request.user.is_superuser:
@@ -232,7 +227,7 @@ class UserAdmin(BaseUserAdmin):
                 '%d users were successfully removed as staff.',
                 updated
             ) % updated, messages.SUCCESS)
-    remove_staff_status.short_description = "Remove staff status from selected users"
+    remove_staff_status.short_description = "Remove staff status from selected user(s)"
 
     def staff_group(self, request):
         return ''.join([g.name for g in request.groups.all()]) if request.groups.count() else ''
