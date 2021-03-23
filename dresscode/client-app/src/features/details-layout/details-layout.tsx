@@ -12,7 +12,6 @@ import { IQuiz } from "../../app/models/quiz";
 import QuizDetails from "../quiz-details/quiz-details";
 import {
   FacebookShareButton,
-  FacebookShareCount,
   LinkedinShareButton,
   TwitterShareButton,
 } from "react-share";
@@ -27,8 +26,6 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
     reactToPost,
   } = postStore;
   const [isReactedTo, setReactedTo] = useState<boolean>(false);
-
-  const onShareCountChange = (shareCount: number) => {};
 
   const onReactionChange = (reaction: string) => {
     setReactedTo(true);
@@ -66,32 +63,32 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
             <div className="social-icons">
               <FacebookShareButton
                 url={window.location.href}
-                quote={ "Dresscode - ".concat(selectedPost.content.title) }
-				hashtag="#dresscode"
+                quote={"Dresscode - ".concat(selectedPost.content.title)}
+                hashtag="#dresscode"
               >
-                <i 
-					className="fab fa-facebook fa-2x"
-					onClick={() => onReactionChange("share")}
-				/>
+                <i
+                  className="fab fa-facebook fa-2x"
+                  onClick={() => onReactionChange("share")}
+                />
               </FacebookShareButton>
               <TwitterShareButton
                 url={window.location.href}
                 title={selectedPost.content.title}
               >
-                <
-					i className="fab fa-twitter fa-2x" 
-					onClick={() => onReactionChange("share")}
-				/>
+                <i
+                  className="fab fa-twitter fa-2x"
+                  onClick={() => onReactionChange("share")}
+                />
               </TwitterShareButton>
               <LinkedinShareButton
                 url={window.location.href}
-				source={window.location.href}
+                source={window.location.href}
                 title={selectedPost.content.title}
               >
-                <i 
-					className="fab fa-linkedin fa-2x"  
-					onClick={() => onReactionChange("share")}
-				/>
+                <i
+                  className="fab fa-linkedin fa-2x"
+                  onClick={() => onReactionChange("share")}
+                />
               </LinkedinShareButton>
             </div>
           </Col>
@@ -145,7 +142,7 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
           </Row>
         )}
 
-        <Row className="after-content-row">
+        <Row className="reactions-row">
           <Col md={2} xs={3} className="icon-style">
             <i
               className={`far fa-heart fa-2x ${isReactedTo ? "disabled" : ""}`}
@@ -170,13 +167,13 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
           </Col>
         </Row>
 
-        <Row className="tags-row after-content-row">
-          <span>Tags:</span>
-          <ListGroup horizontal>
-            {selectedPost?.content.tags?.map((tag) => (
-              <ListGroup.Item key={tag.tag}>{tag.tag}</ListGroup.Item>
-            ))}
-          </ListGroup>
+        <Row className="tags-label">Tags:</Row>
+        <Row className="d-flex flex-wrap">
+          {selectedPost?.content.tags?.map((tag) => (
+            <div className="tag" key={tag.tag}>
+              {tag.tag}
+            </div>
+          ))}
         </Row>
       </Col>
       <Col></Col>

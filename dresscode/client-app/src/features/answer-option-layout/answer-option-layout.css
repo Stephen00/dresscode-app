@@ -1,6 +1,6 @@
 .option-checkbox {
-  border: 0px outset white !important;
-  background-color: white !important;
+  border: 0px outset #fffbf6 !important;
+  background-color: #fffbf6 !important;
   height: 40px;
   width: 40px;
   justify-content: center;
@@ -26,7 +26,7 @@ div[aria-disabled="true"] {
 }
 
 .fa-check {
-  color: white;
+  color: #fffbf6;
 }
 
 .fa-check:hover,

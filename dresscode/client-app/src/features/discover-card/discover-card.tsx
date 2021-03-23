@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import "./discover-card.css";
 import { Card, Col, Row } from "react-bootstrap";
-import { FacebookShareButton, FacebookIcon } from "react-share";
+import { FacebookShareButton } from "react-share";
 import { formatDistance } from "date-fns";
 import { IPoll } from "../../app/models/poll";
 import DiscoverPoll from "../../features/discover-poll/discover-poll";
@@ -39,7 +39,9 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
   const [isReactedTo, setReactedTo] = useState<boolean>(false);
 
   const onReactionChange = (reaction: string) => {
-    setReactedTo(true);
+    if (reaction !== "share") {
+      setReactedTo(true);
+    }
     reactToPost(post.id, reaction, "discover");
   };
 
@@ -109,28 +111,26 @@ const DiscoverCard: React.FC<DiscoverCardProps> = ({ post }) => {
                 <span>{post.reaction2_counter}</span>
               </i>
             </Col>
-			
-			<div> 
-			  { (post.content_type != "polls")
-			    ?   <Col xs={4} className="icon-style">
-					  <FacebookShareButton 
-						url={ base_link.concat("/",post.content_type,"/",post.content.slug) }
-						quote={ "Dresscode - ".concat(post.content.title) }
-						hashtag="#dresscode"
-						className={"socialMediaButton"}>
-						 <i 
-							className={`far fa-share-square fa-2x ${isReactedTo ? "disabled" : ""}`}
-							onClick={() => onReactionChange("share")} 
-						 > 
-							<span>{post.reaction3_counter}</span>
-						 </i>
-					  </FacebookShareButton>
-					</Col>
-				: <Col xs={4} className="icon-style"> </Col>
-			  }
-			</div>
-			
 
+            {post.content_type !== "polls" ? (
+              <Col xs={4} className="icon-style">
+                <FacebookShareButton
+                  url={`${base_link}/${post.content_type}/${post.content.slug}`}
+                  quote={"Dresscode - ".concat(post.content.title)}
+                  hashtag="#dresscode"
+                  className={"socialMediaButton"}
+                >
+                  <i
+                    className="far fa-share-square fa-2x"
+                    onClick={() => onReactionChange("share")}
+                  >
+                    <span>{post.reaction3_counter}</span>
+                  </i>
+                </FacebookShareButton>
+              </Col>
+            ) : (
+              <Col xs={4} className="icon-style" />
+            )}
           </Row>
         </Card.Body>
       </Card>

@@ -94,44 +94,33 @@ class PostStore {
   };
 
   @action voteInPoll = async (pollId: number, selectedAnswer: string) => {
-    try {
-      const requestBody = {
-        pollId: pollId,
-        selectedAnswer: selectedAnswer,
-      };
-      await Polls.vote(requestBody as PollVoteDTO);
-    } catch (error) {
-      console.log(error);
-    }
+    const requestBody = {
+      pollId: pollId,
+      selectedAnswer: selectedAnswer,
+    };
+    await Polls.vote(requestBody as PollVoteDTO);
   };
 
   @action submitQuiz = async (answers: Map<number, string>) => {
-    try {
-      const requestBody: QuizSubmissionDTO = {
-        score: null,
-        questions: [],
-      };
-      answers.forEach((a, q) => {
-        requestBody.questions.push([q, a]);
+    const requestBody: QuizSubmissionDTO = {
+      score: null,
+      questions: [],
+    };
+    answers.forEach((a, q) => {
+      requestBody.questions.push([q, a]);
+    });
+    let res = await Quizzes.submit(
+      this.selectedPost?.content.slug!!,
+      requestBody
+    );
+    runInAction(() => {
+      let quiz = this.selectedPost?.content as IQuiz;
+      quiz.score = (res as QuizSubmissionDTO).score;
+      quiz.answers = new Map();
+      (res as QuizSubmissionDTO).questions.forEach((pair) => {
+        quiz.answers!!.set(pair[0] as number, pair[1] as string);
       });
-      console.log(requestBody);
-      let res = await Quizzes.submit(
-        this.selectedPost?.content.slug!!,
-        requestBody
-      );
-      runInAction(() => {
-        console.log(res);
-        let quiz = this.selectedPost?.content as IQuiz;
-        quiz.score = (res as QuizSubmissionDTO).score;
-        quiz.answers = new Map();
-        (res as QuizSubmissionDTO).questions.forEach((pair) => {
-          quiz.answers!!.set(pair[0] as number, pair[1] as string);
-        });
-        console.log(quiz.answers);
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    });
   };
 
   @action reactToPost = async (
@@ -139,43 +128,38 @@ class PostStore {
     reaction: string,
     caller: string
   ) => {
-    try {
-      let post: IPost | undefined;
-      if (caller !== "details") {
-        post = this.posts!!.filter((post) => {
-          return post.id === postId;
-        })[0];
-      } else {
-        post = this.selectedPost;
-      }
+    let post: IPost | undefined;
+    if (caller !== "details") {
+      post = this.posts!!.filter((post) => {
+        return post.id === postId;
+      })[0];
+    } else {
+      post = this.selectedPost;
+    }
 
-      const requestBody = {
-        postId: postId,
-      };
+    const requestBody = {
+      postId: postId,
+    };
 
-      switch (reaction) {
-        case "heart":
-          await Posts.heart(requestBody as ReactionDTO);
-          runInAction(() => {
-            post!!.reaction1_counter += 1;
-          });
-          break;
-        case "star":
-          await Posts.star(requestBody as ReactionDTO);
-          runInAction(() => {
-            post!!.reaction2_counter += 1;
-          });
-          break;
-        case "share":
-          await Posts.share(requestBody as ReactionDTO);
-          runInAction(() => {
-            post!!.reaction3_counter += 1;
-          });
-          break;
-      }
-      console.log(post);
-    } catch (error) {
-      console.log(error);
+    switch (reaction) {
+      case "heart":
+        await Posts.heart(requestBody as ReactionDTO);
+        runInAction(() => {
+          post!!.reaction1_counter += 1;
+        });
+        break;
+      case "star":
+        await Posts.star(requestBody as ReactionDTO);
+        runInAction(() => {
+          post!!.reaction2_counter += 1;
+        });
+        break;
+      case "share":
+        await Posts.share(requestBody as ReactionDTO);
+        runInAction(() => {
+          post!!.reaction3_counter += 1;
+        });
+        break;
     }
   };
 
@@ -222,7 +206,7 @@ class PostStore {
     this.searchValue = value;
   };
 
-  @action showFilteredResults = async () => {
+  @action showFilteredResults = () => {
     if (this.searchValue === "") {
       this.loadPosts();
       this.filteredPosts = this.posts;
@@ -231,7 +215,7 @@ class PostStore {
     }
   };
 
-  @action toFilterPost = async () => {
+  @action toFilterPost = () => {
     this.filteredPosts = this.posts?.filter((post) => {
       this.searchValue = this.searchValue.toLowerCase();
       let tempPost = post.content;

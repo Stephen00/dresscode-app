@@ -6,7 +6,9 @@ interface NoPostProps {
 }
 
 const NoPosts: React.FC<NoPostProps> = ({ callerType }) => {
-  if (callerType === "overview") {
+  if (callerType === "home") {
+    return <h2 className="notfound">No posts found</h2>;
+  } else if (callerType === "overview") {
     return <h2 className="notfound">No posts in this category</h2>;
   }
 
