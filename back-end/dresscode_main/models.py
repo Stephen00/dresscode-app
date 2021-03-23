@@ -4,7 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from tinymce.models import HTMLField
-
+from django.contrib.admin.options import get_content_type_for_model
 from django.template.defaultfilters import slugify
 
 
@@ -82,11 +82,11 @@ class Quiz(models.Model):
     def save(self, *args, **kwargs):
         if self.title == "Quiz":
             self.title = "Quiz " + str(Quiz.objects.count() + 1)
-        try:
-            CT = get_content_type_for_model(self)
-            post = Post.objects.get(object_id=self.pk, content_type=CT)
+        
+        CT = get_content_type_for_model(self)
+        if len(Post.objects.filter(object_id=self.pk, content_type=CT))>0:
             mk_post = False
-        except:
+        else:
             mk_post = True
         super(Quiz, self).save(*args, **kwargs)
         if self.id:
@@ -176,11 +176,10 @@ class Poll(models.Model):
             self.vote5=None
         
         #Check if Post needs to be made
-        try:
-            CT = get_content_type_for_model(self)
-            post = Post.objects.get(object_id=self.pk, content_type=CT)
+        CT = get_content_type_for_model(self)
+        if len(Post.objects.filter(object_id=self.pk, content_type=CT))>0:
             mk_post = False
-        except:
+        else:
             mk_post = True
         #Save Poll object
         super(Poll, self).save(*args, **kwargs)
@@ -197,11 +196,10 @@ class Article(models.Model):
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
-        try:
-            CT = get_content_type_for_model(self)
-            post = Post.objects.get(object_id=self.pk, content_type=CT)
+        CT = get_content_type_for_model(self)
+        if len(Post.objects.filter(object_id=self.pk, content_type=CT))>0:
             mk_post = False
-        except:
+        else:
             mk_post = True
         if self.title:
             self.slug = slugify(self.title)

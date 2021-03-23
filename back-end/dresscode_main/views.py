@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
-
+from django.contrib.admin.options import get_content_type_for_model
 from .serializers import *
 
 # For each post get the get the object and its content type

@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from dresscode_main.models import Tag, Media, Quiz, QuizQuestion, Poll, Article, Post
-
+from django.contrib.admin.options import get_content_type_for_model
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 temp = 'stick-man.png'
