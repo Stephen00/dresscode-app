@@ -80,13 +80,17 @@ class Quiz(models.Model):
         return tags
 
     def save(self, *args, **kwargs):
-        mk_post = True
         if self.title == "Quiz":
             self.title = "Quiz " + str(Quiz.objects.count() + 1)
-        if self.id:
+        try:
+            CT = get_content_type_for_model(self)
+            post = Post.objects.get(object_id=self.pk, content_type=CT)
             mk_post = False
-            self.slug = slugify(self.id)
+        except:
+            mk_post = True
         super(Quiz, self).save(*args, **kwargs)
+        if self.id:
+            self.slug = slugify(self.id)
         if mk_post == True:
             post = Post(content=self)
             post.save()
@@ -171,7 +175,8 @@ class Poll(models.Model):
         
         #Check if Post needs to be made
         try:
-            Poll.objects.get(pk=self.id)
+            CT = get_content_type_for_model(self)
+            post = Post.objects.get(object_id=self.pk, content_type=CT)
             mk_post = False
         except:
             mk_post = True
@@ -191,7 +196,8 @@ class Article(models.Model):
 
     def save(self, *args, **kwargs):
         try:
-            Article.objects.get(pk=self.id)
+            CT = get_content_type_for_model(self)
+            post = Post.objects.get(object_id=self.pk, content_type=CT)
             mk_post = False
         except:
             mk_post = True
@@ -238,8 +244,3 @@ class Post(models.Model):
 
     def share(self):
         self.reaction3_counter += 1
-        
-    def save(self, *args, **kwargs):
-        super(Post, self).save(*args, **kwargs)
-        if self.content is None:
-            self.delete()

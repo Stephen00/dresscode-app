@@ -220,6 +220,17 @@ class ArticleAdmin(admin.ModelAdmin):
     # Override Model Save
     def save_model(self, request, obj, form, change):
         assign_author_to_post(obj, request)
+        
+    def delete_model(self, request, obj, form, change):
+        try:
+            print("This works")
+            CT = get_content_type_for_model(self)
+            p=Post.objects.get(object_id=self.pk, content_type=CT)
+            p.delete()
+        except:
+            print("Not deleted p")
+        self.delete()
+
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -236,9 +247,8 @@ class PostAdmin(admin.ModelAdmin):
     view_content_link.short_description = 'Edit Content'
 
     def save_model(self, request, obj, form, change):
-        if not obj.author:
-            obj.author = request.user
-        obj.save()
+        if obj.content is None:
+            obj.delete()
 
 
 # Define a new User admin
