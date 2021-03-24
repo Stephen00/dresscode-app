@@ -1,0 +1,30 @@
+.poll-component-section {
+  border: 2px solid #74529e;
+  background-color: #74529e;
+  color: #fffbf6;
+  padding: 20px 50px;
+  margin: 0px 7%;
+  border-radius: 25px;
+  font-size: 1.1rem;
+}
+
+@media only screen and (max-width: 1000px) {
+  .poll-component-section {
+    margin: 3%;
+    padding: 20px 30px;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .poll-component-section {
+    margin: 0;
+  }
+}
+
+.after-answer-section {
+  text-align: right;
+}
+
+.answered {
+  cursor: initial;
+}

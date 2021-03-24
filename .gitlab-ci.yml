@@ -4,9 +4,9 @@ test-backend:
     tags:
         - docker
     script:
+        - cd back-end
         - pip install --upgrade pip
         - pip install -r requirements.txt
-        - cd dresscode
         - python manage.py makemigrations
         - python manage.py migrate
         - coverage run manage.py test
@@ -21,7 +21,7 @@ test-frontend:
     tags:
         - docker
     script:
-        - cd dresscode/client-app
+        - cd client-app
         - npm install
         - npm test -- --coverage
 

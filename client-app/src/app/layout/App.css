@@ -1,0 +1,15 @@
+#root {
+  background-color: #fffbf6;
+  padding-top: 59px;
+  min-height: 100vh;
+}
+
+.spinner {
+  color: #74529e;
+  margin: 15px;
+}
+
+.spinner-wrapper {
+  display: flex;
+  justify-content: center;
+}

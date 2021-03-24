@@ -1,0 +1,9 @@
+.empty-section-config {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.empty-section-image {
+    max-width: 40%;
+    max-height: 40%;
+}

@@ -1,0 +1,31 @@
+.error-page-config {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.error-page-image {
+  max-width: 40%;
+  max-height: 40%;
+}
+
+.fas {
+  font-family: "Font Awesome 5 Free" !important;
+}
+
+.navigation-button {
+  background-color: #74529e !important;
+  color:  #fffbf6 !important;
+  font-weight: 700 !important;
+  font-size: 1.2rem !important;
+}
+
+.icon-config {
+  margin-right: 10px;
+  color: #fffbf6;
+}
+
+.text-config {
+  color: #74529e;
+  font-weight: 700;
+  padding: 20px 0;
+}

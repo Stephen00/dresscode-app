@@ -1,0 +1,10 @@
+.pyc
+.DS_Store
+__pycache__/
+*.key
+thumbs.db
+__pycache__
+*/__pycache__
+*/__pycache__/
+.coverage
+db.sqlite3

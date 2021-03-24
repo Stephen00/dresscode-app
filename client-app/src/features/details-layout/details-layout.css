@@ -1,0 +1,76 @@
+.text-colour {
+  color: #74529e;
+}
+
+.title {
+  font-size: 2rem;
+  margin: 7% auto;
+  text-align: center;
+}
+
+.author-date {
+  font-weight: 600;
+}
+
+.post-image {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+.image-div {
+  display: block;
+  max-width: 100%;
+  margin: 5% auto;
+}
+
+.social-icons {
+  float: right;
+  margin-top: 1em;
+}
+
+.post-content {
+  margin-top: 1em;
+}
+
+.reactions-row {
+  padding: 7% 0;
+}
+
+.far,
+.fab,
+.fas {
+  margin: 0 0.3em;
+  color: #74529e;
+}
+
+.tags-label {
+  margin: 2% 0;
+  font-weight: 600;
+}
+
+.tag {
+  background-color: #74529e;
+  border-radius: 10px;
+  color: #f9b222;
+  font-weight: 700;
+  padding: 10px 15px;
+  margin: 0.5%;
+  white-space: nowrap;
+}
+
+.tag:hover {
+  color: #ed6b4b;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.fa-heart :hover,
+.fa-star :hover {
+  cursor: pointer;
+}
