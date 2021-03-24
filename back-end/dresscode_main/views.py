@@ -214,7 +214,6 @@ def answer_quiz(request, quiz_slug):
         }
         """
         quiz = get_object_or_404(Quiz, slug=quiz_slug)
-        print("Quiz found")
         quiz_questions = quiz.questions.all()  # might need to pass pk of some sort here or in next line
         score=0
         questions=[]
