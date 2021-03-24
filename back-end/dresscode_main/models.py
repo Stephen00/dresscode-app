@@ -214,7 +214,6 @@ class Article(models.Model):
 
 class Post(models.Model):
     author = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
-    description = models.TextField(null=True, blank=True)
     reaction1_counter = models.IntegerField(default=0)
     reaction2_counter = models.IntegerField(default=0)
     reaction3_counter = models.IntegerField(default=0)

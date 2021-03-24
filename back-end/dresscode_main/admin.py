@@ -235,7 +235,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 class PostAdmin(admin.ModelAdmin):
     list_display = (
-        'content', 'view_content_link', 'author', 'description', 'created_at', 'updated_at', 'reaction1_counter',
+        'content', 'view_content_link', 'author', 'created_at', 'updated_at', 'reaction1_counter',
         'reaction2_counter', 'reaction3_counter')
     exclude = ('content_type', 'object_id',)
 
