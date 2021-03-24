@@ -105,10 +105,15 @@ class QuizAdmin(admin.ModelAdmin):
 
     def delete_selected_quiz(self, request, queryset):
         for obj in queryset:
-            CT = get_content_type_for_model(obj)
-            p = Post.objects.get(content_type=CT, object_id=obj.pk)
-            p.delete()
-            obj.delete()
+            try:
+                CT = get_content_type_for_model(obj)
+                p = Post.objects.get(content_type=CT, object_id=obj.pk)
+                p.delete()
+                obj.delete()
+            except:
+                obj.delete()
+
+    delete_selected_quiz.short_description = "Delete Selected Quizzes"
     
     filter_horizontal = ('tags', 'questions')
 
@@ -147,10 +152,15 @@ class PollAdmin(admin.ModelAdmin):
 
     def delete_selected_poll(self, request, queryset):
         for obj in queryset:
-            CT = get_content_type_for_model(obj)
-            p = Post.objects.get(content_type=CT, object_id=obj.pk)
-            p.delete()
-            obj.delete()
+            try:
+                CT = get_content_type_for_model(obj)
+                p = Post.objects.get(content_type=CT, object_id=obj.pk)
+                p.delete()
+                obj.delete()
+            except:
+                obj.delete()
+
+    delete_selected_poll.short_description = "Delete Selected Polls"
     
     filter_horizontal = ('tags',)
 
@@ -210,26 +220,21 @@ class ArticleAdmin(admin.ModelAdmin):
 
     def delete_selected_article(self, request, queryset):
         for obj in queryset:
-            CT = get_content_type_for_model(obj)
-            p = Post.objects.get(content_type=CT, object_id=obj.pk)
-            p.delete()
-            obj.delete()
+            try:
+                CT = get_content_type_for_model(obj)
+                p = Post.objects.get(content_type=CT, object_id=obj.pk)
+                p.delete()
+                obj.delete()
+            except:
+                obj.delete()
     
     filter_horizontal = ('tags',)
+
+    delete_selected_article.short_description = "Delete Selected Articles"
 
     # Override Model Save
     def save_model(self, request, obj, form, change):
         assign_author_to_post(obj, request)
-        
-    def delete_model(self, request, obj, form, change):
-        try:
-            print("This works")
-            CT = get_content_type_for_model(self)
-            p=Post.objects.get(object_id=self.pk, content_type=CT)
-            p.delete()
-        except:
-            print("Not deleted p")
-        self.delete()
 
 
 
@@ -238,6 +243,8 @@ class PostAdmin(admin.ModelAdmin):
         'content', 'view_content_link', 'author', 'created_at', 'updated_at', 'reaction1_counter',
         'reaction2_counter', 'reaction3_counter')
     exclude = ('content_type', 'object_id',)
+
+    # actions = ['delete_selected_post']
 
     def view_content_link(self, obj):
         content_type = obj.content_type.name
@@ -250,7 +257,21 @@ class PostAdmin(admin.ModelAdmin):
         obj.save()
         if obj.content is None:
             obj.delete()
-        
+
+    # def get_actions(self, request):
+    #     actions = super().get_actions(request)
+    #     if 'delete_selected' in actions:
+    #         del actions['delete_selected']
+    #     return actions
+    #
+    # def delete_selected_post(self, request, queryset):
+    #     for obj in queryset:
+    #         CT = get_content_type_for_model(obj)
+    #         content = obj.content(content_type=CT, object=obj.pk)
+    #         print(content)
+    #         content.delete()
+    #         obj.delete()
+
 
 
 # Define a new User admin

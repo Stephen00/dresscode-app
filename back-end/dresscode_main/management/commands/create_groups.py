@@ -42,10 +42,3 @@ class Command(BaseCommand):
 
 
 # Assign Staff Permissions here (to-do later)
-
-# Add bob as admin
-bob = User.objects.get(username='bob')
-bob.is_staff = True
-admin = Group.objects.get(name='admin')
-bob.groups.add(admin)
-bob.save()
