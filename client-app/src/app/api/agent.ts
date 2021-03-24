@@ -7,6 +7,10 @@ import { QuizSubmissionDTO } from "../models/DTOs/QuizSubmissionDTO";
 import { ReactionDTO } from "../models/DTOs/reactionDTO";
 import { IPost } from "../models/post";
 
+//This is our proxy, it points to the back-end application
+//To use it please change the url to be the one from which you want to get your information from
+//Local host should be http://localhost:8000 or http://127.0.0.1:8000
+//DO NOT INCLUDE A / at the end
 export const proxy = "https://dresscode-server.herokuapp.com";
 axios.defaults.baseURL = proxy;
 

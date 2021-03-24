@@ -26,7 +26,9 @@ SECRET_KEY = '4y(!5my42!#t2p()9vtj*k&ixd64yus3la7_jx4x%h7fla6-20'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#You can remove 'dresscode-server.herokuapp.com' and substitute it for some other HOST
+#ALLOWED_HOSTS CONTAINS LIST OF PLACES THAT CAN HOST THE BACK-END
+#We need to keep localhost and 127.0.0.1:3000 as those are used for local deployment
+#For online deployment, include host urls of your choosing (Sometimes you might need to include protocol, others you won't, e.g http:// and https://)
 ALLOWED_HOSTS = ['dresscode-server.herokuapp.com', 'localhost:8000', '127.0.0.1', '127.0.0.1:8000']
 
 
@@ -123,7 +125,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-CORS_ORIGIN_ALLOW_ALL = True
+
+#CORS ORIGIN WHITELIST CONTAINS LIST OF PLACES THAT CAN CONNECT TO THE BACK-END AND REQUEST DATA FROM IT
+#Keep localhost and 127.0.0.1:3000 as those are used for local deployment
+#For online deployment, include client-urls of your choosing (Remember to include protocol, e.g http:// and https://)
+CORS_ORIGIN_WHITELIST = [
+    'http://dresscode-client.herokuapp.com', 'https://dresscode-client.herokuapp.com', 'http://localhost:3000', 'http://127.0.0.1:3000'
+]
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -167,6 +176,8 @@ TINYMCE_DEFAULT_CONFIG = {
     'statusbar': True,
 }
 
-#Heroku settings config
+# THESE ARE OUR HEROKU SETTINGS CONFIGURATION
+# HEROKU IS THE HOSTING SERVER WE USED TO DEPLOY THE APPLICATION, YOU DON'T NEED TO USE THE SAME ONE. 
+# IF YOU DON'T WANT TO USE THE SAME HOSTING APPLICATION YOU WILL HAVE TO CHANGE THIS SETTINGS TO THAT PARTICULAR HOST'S IMPLEMENTATION
 import django_heroku
 django_heroku.settings(locals(), test_runner=False)
