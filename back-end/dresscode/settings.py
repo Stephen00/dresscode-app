@@ -155,6 +155,7 @@ TINYMCE_DEFAULT_CONFIG = {
     'custom_undo_redo_levels': 20,
     'selector': 'textarea',
     'theme': 'silver',
+    'height': 450,
     'plugins': '''
             textcolor save link image media preview codesample contextmenu
             table code lists fullscreen  insertdatetime  nonbreaking
