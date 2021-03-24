@@ -89,14 +89,15 @@ class Quiz(models.Model):
         self.slug = slugify(self.pk)
         if self.title == "Quiz":
             self.title = "Quiz " + str(self.id)
+        if self.id==None:
+            self.save()
         if mk_post == True:
             post = Post(content=self)
-            post.save()    
+            post.save()
         for q in self.questions.all():
             for tag in q.tags.all():
                 if tag not in self.tags.all():
                     self.tags.add(tag)
-        super(Quiz, self).save(*args, **kwargs)
 
     def __str__(self):
         if self.title:
