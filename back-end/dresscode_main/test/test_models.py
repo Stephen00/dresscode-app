@@ -40,7 +40,7 @@ class testAttributes(TestCase):
         self.user = User.objects.create_user(username='testuser', password='12345')
 
         # Create test post
-        post = Post(author=self.user, description="This is a test post, here is some text", reaction1_counter=10,
+        post = Post(author=self.user, reaction1_counter=10,
                     reaction2_counter=12, reaction3_counter=4, object_id=p.pk,
                     content_type=ContentType.objects.get_or_create(app_label='dresscode_main', model='Poll')[0])
         post.save()
