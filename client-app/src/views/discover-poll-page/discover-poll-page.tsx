@@ -33,6 +33,7 @@ const DiscoverPollPage: React.FC<RouteComponentProps<DiscoverProps>> = ({
   };
 
   useEffect(() => {
+	// eslint-disable-next-line react-hooks/exhaustive-deps
     loadPosts(match.path);
     return () => {
       removeAllPosts();

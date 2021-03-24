@@ -80,24 +80,23 @@ class Quiz(models.Model):
         return tags
 
     def save(self, *args, **kwargs):
-        if self.title == "Quiz":
-            self.title = "Quiz " + str(Quiz.objects.count() + 1)
-        
         CT = get_content_type_for_model(self)
         if len(Post.objects.filter(object_id=self.pk, content_type=CT))>0:
             mk_post = False
         else:
             mk_post = True
         super(Quiz, self).save(*args, **kwargs)
-        if self.id:
-            self.slug = slugify(self.id)
+        self.slug = slugify(self.pk)
+        if self.title == "Quiz":
+            self.title = "Quiz " + str(self.id)
         if mk_post == True:
             post = Post(content=self)
-            post.save()
+            post.save()    
         for q in self.questions.all():
             for tag in q.tags.all():
                 if tag not in self.tags.all():
                     self.tags.add(tag)
+        super(Quiz, self).save(*args, **kwargs)
 
     def __str__(self):
         if self.title:

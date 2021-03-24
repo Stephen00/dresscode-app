@@ -25,7 +25,7 @@ SECRET_KEY = '4y(!5my42!#t2p()9vtj*k&ixd64yus3la7_jx4x%h7fla6-20'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG shows you error messages if there is something wrong
-DEBUG = False
+DEBUG = True
 
 #ALLOWED_HOSTS CONTAINS LIST OF PLACES THAT CAN HOST THE BACK-END
 #We need to keep localhost and 127.0.0.1:3000 as those are used for local deployment

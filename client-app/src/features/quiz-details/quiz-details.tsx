@@ -16,6 +16,7 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
 
   // Covers the effect of componentDidMount and componentDidUpdate
   useEffect(() => {
+	// eslint-disable-next-line react-hooks/exhaustive-deps
     if (quizNotFinished) {
       window.onbeforeunload = () => true;
     } else {

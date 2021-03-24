@@ -37,6 +37,7 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
   };
 
   useEffect(() => {
+	// eslint-disable-next-line react-hooks/exhaustive-deps
     loadPost(slug, path);
     return () => {
       removeSelectedPost();
