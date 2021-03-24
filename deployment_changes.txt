@@ -1,0 +1,9 @@
+List of deployment changes
+
+se02-main/back-end/dresscode/settings.py
+	Change ALLOWED_HOSTS list to only include the localhosts (localhost/127.0.0.1) and the site you want to deploy from e.g (dresscode.com, dcode.com, www.dresscode.com...)
+	Change CORS_ORIGIN_WHITELIST list to only include the urls of places you want to allow to interact with your site
+	There are heroku set up changes at the end, they are protected by a check and won't execute unless in heroku. If deploying on another host we would need to change it to work with that host
+	
+se02-main/client-app/src/app/api/agent.ts
+	Change proxy to point to the back-end hosting site - For local deployment it should be either http://127.0.0.1:8000 or http://localhost:8000
