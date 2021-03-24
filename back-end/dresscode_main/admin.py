@@ -247,8 +247,10 @@ class PostAdmin(admin.ModelAdmin):
     view_content_link.short_description = 'Edit Content'
 
     def save_model(self, request, obj, form, change):
+        obj.save()
         if obj.content is None:
             obj.delete()
+        
 
 
 # Define a new User admin
