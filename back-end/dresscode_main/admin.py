@@ -115,6 +115,7 @@ class QuizAdmin(admin.ModelAdmin):
     # Override Model Save
     def save_model(self, request, obj, form, change):
         assign_author_to_post(obj, request)
+        obj.save()
 
 
 class PollAdmin(admin.ModelAdmin):

@@ -29,6 +29,7 @@ const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
+	// eslint-disable-next-line react-hooks/exhaustive-deps
     loadPosts();
     return () => {
       removeAllPosts();

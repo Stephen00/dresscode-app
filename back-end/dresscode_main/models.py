@@ -88,9 +88,8 @@ class Quiz(models.Model):
             mk_post = False
         else:
             mk_post = True
+        self.slug = slugify(self.id)
         super(Quiz, self).save(*args, **kwargs)
-        if self.id:
-            self.slug = slugify(self.id)
         if mk_post == True:
             post = Post(content=self)
             post.save()
