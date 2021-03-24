@@ -84,7 +84,7 @@ const QuizDetails: React.FC<QuizComponentProps> = ({ quiz }) => {
           <div>{options.get(q.pk)}</div>
         </div>
       ))}
-      {quiz.score && (
+      {quiz.score !== null && quiz.score !== undefined && (
         <div className="after-submission-section">
           <div>Thank you for your answers!</div>
           <div>

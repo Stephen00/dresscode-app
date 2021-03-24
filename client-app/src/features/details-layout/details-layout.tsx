@@ -30,8 +30,10 @@ const DetailsLayout: React.FC<DetailsProps> = ({ slug, path }) => {
   const [isReactedTo, setReactedTo] = useState<boolean>(false);
 
   const onReactionChange = (reaction: string) => {
-    setReactedTo(true);
-    reactToPost(selectedPost!!.id, reaction, "details");
+	if (reaction!=="share"){
+		setReactedTo(true);
+	}
+	reactToPost(selectedPost!!.id, reaction, "details");
   };
 
   useEffect(() => {
