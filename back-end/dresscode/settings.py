@@ -24,12 +24,13 @@ print(BASE_DIR)
 SECRET_KEY = '4y(!5my42!#t2p()9vtj*k&ixd64yus3la7_jx4x%h7fla6-20'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG shows you error messages if there is something wrong
+DEBUG = False
 
 #ALLOWED_HOSTS CONTAINS LIST OF PLACES THAT CAN HOST THE BACK-END
 #We need to keep localhost and 127.0.0.1:3000 as those are used for local deployment
 #For online deployment, include host urls of your choosing (Sometimes you might need to include protocol, others you won't, e.g http:// and https://)
-ALLOWED_HOSTS = ['dresscode-server.herokuapp.com', 'localhost:8000', '127.0.0.1', '127.0.0.1:8000']
+ALLOWED_HOSTS = ['dresscode-server.herokuapp.com', 'localhost:8000', '127.0.0.1', '127.0.0.1:8000', '127.0.0.1:8000']
 
 
 # Application definition
