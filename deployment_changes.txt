@@ -1,5 +1,9 @@
 List of deployment changes
 
+se02-main/back-end/Procfile
+	If you are not deploying to Heroku, you might have to delete the Procfile file. 
+	Deletion isn't necessary for local deployment, but it might conflict with other hosting services e.g AWS or PythonAnywhere
+
 se02-main/back-end/dresscode/settings.py
 	Change ALLOWED_HOSTS list to only include the localhosts (localhost/127.0.0.1) and the site you want to deploy from e.g (dresscode.com, dcode.com, www.dresscode.com...)
 	Change CORS_ORIGIN_WHITELIST list to only include the urls of places you want to allow to interact with your site
