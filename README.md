@@ -32,21 +32,19 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#contributors">Contributors</a></li>
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#installation">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#initial-setup">Installation</a></li>
+        <li><a href="#database-setup">Database Setup</a></li>
+        <li><a href="#react-client-app-setup">React Client App Setup</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#state-of-project">State of Project</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
 
@@ -66,14 +64,14 @@ The project set out to complete for the customer required the team to design and
 * [Django Rest Framework](https://www.django-rest-framework.org/)
 * [Bootstrap](https://getbootstrap.com)
 
-## Contributers
+## Contributors
 
-- Stephen Graham
-- Martina Borisova
-- Jose Povedano Poyato
-- Thanatad Songpetchmongkol
-- Anna Savova
-- Ross Beech
+- Stephen Graham - 2385583G
+- Martina Borisova - 2382419
+- Jose Povedano Poyato - 2403203P
+- Thanatad Songpetchmongkol - 2605415s
+- Anna Savova - 2327851S
+- Ross Beech - 2141893b
 
 
 
@@ -94,7 +92,7 @@ A video installation of the application can be found [here](https://drive.google
    $ dresscode_env\Scripts\activate.bat
    ```
 
-### Back-end Database Setup
+### Database Setup
 
 3. Run the following commands
    ```sh
@@ -108,67 +106,69 @@ A video installation of the application can be found [here](https://drive.google
    (dresscode_env) python manage.py runserver
    ```
    
-<!-- USAGE EXAMPLES -->
-## Usage
+- Now you can navigate to [http://127.0.0.1:8000/](http://127.0.0.1:8000/) and you should be able to see the serialised data that is handled by django-rest framework
+- You can access the admin panel through [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) 
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+(Note: in order to access the administrator panel you will have to create a superuser with `python manage.py createsuperuser`)
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+#### Testing
+
+The following commands will show you how to test the back-end application with already created unit tests. This makes use of the coverage package to run the tests and monitor the current code coverage of the back-end application.
+
+```sh
+    coverage erase
+    coverge manage.py test
+    coverage report
+   ```
+   you can also run the following for a more detailed and visual report of the code coverage line by line.
+
+   ```sh
+   coverage html
+   ```
+   
+### React Client App Setup
+
+4. Install the required packages
+```sh
+    npm install
+   ```
+5. Start the front-end application server
+```sh
+    npm start
+   ```
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+#### Additional information
+```sh
+    npm test
+   ```
+   
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+```sh
+    npm build
+   ```
+   
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
 
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-<!-- ROADMAP -->
-## Roadmap
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
+## State of project
 
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
+Please note that this version of the source code **IS NOT** being maintained and the members of this project will not address any issues. Please contact dresscode [Toni Scullion](https://www.linkedin.com/in/toni-scullion/detail/contact-info/) for any information regarding the state of the DressCode project. This repository servers only for demonstration and showcasing purposes.
 
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License and Commons Clause License. See `LICENSE` for more information.
 
-
-
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-
-
-<!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
-
-
-
+Project Link: [https://stgit.dcs.gla.ac.uk/tp3-2020-SE02/se02-main](https://stgit.dcs.gla.ac.uk/tp3-2020-SE02/se02-main)
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
