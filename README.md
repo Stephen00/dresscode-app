@@ -3,22 +3,15 @@
 <br />
 <p align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="back-end/media/purple-100.jpg" alt="Logo" width=200 height=200>
   </a>
 
   <h3 align="center">SE02 Team Project 2020-21</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    Third year team project as part of our honours program at UofG
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+    <a href="https://github.com/othneildrew/Best-README-Template"><strong>GitLab Repo</strong></a>
   </p>
 </p>
 
@@ -92,7 +85,7 @@ A video installation of the application can be found [here](https://drive.google
    $ dresscode_env\Scripts\activate.bat
    ```
 
-### Database Setup
+## Database Setup
 
 3. Run the following commands
    ```sh
@@ -111,7 +104,7 @@ A video installation of the application can be found [here](https://drive.google
 
 (Note: in order to access the administrator panel you will have to create a superuser with `python manage.py createsuperuser`)
 
-#### Testing
+### Testing
 
 The following commands will show you how to test the back-end application with already created unit tests. This makes use of the coverage package to run the tests and monitor the current code coverage of the back-end application.
 
@@ -126,7 +119,7 @@ The following commands will show you how to test the back-end application with a
    coverage html
    ```
    
-### React Client App Setup
+## React Client App Setup
 
 4. Install the required packages
 ```sh
@@ -138,7 +131,7 @@ The following commands will show you how to test the back-end application with a
    ```
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-#### Additional information
+### Additional information
 ```sh
     npm test
    ```
@@ -168,7 +161,6 @@ Please note that this version of the source code **IS NOT** being maintained and
 
 Distributed under the MIT License and Commons Clause License. See `LICENSE` for more information.
 
-Project Link: [https://stgit.dcs.gla.ac.uk/tp3-2020-SE02/se02-main](https://stgit.dcs.gla.ac.uk/tp3-2020-SE02/se02-main)
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
